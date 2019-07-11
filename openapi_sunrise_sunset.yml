@@ -11,6 +11,7 @@ info:
 
     # Trip Ninja API URLs
     Production: http://trip-ninja-api.eu-west-1.elasticbeanstalk.com
+
     Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
 
     For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact your account manager to whitelist IPs you
@@ -51,8 +52,8 @@ info:
             }
             response = requests.post(url, headers=headers, data=json.dumps(payload))
   contact:
-    name: API team
-    url: https://sunrise-sunset.org/contact
+    name: Trip Ninja
+    url: https://www.tripninja.io/contact-us
 
 servers:
   - url: http://trip-ninja-api.eu-west-1.elasticbeanstalk.com
@@ -929,5 +930,5 @@ components:
 
 
 externalDocs:
-  description: Documentation and main site
-  url: https://sunrise-sunset.org/api
+    description: Main Site
+    url: https://www.tripninja.io/
