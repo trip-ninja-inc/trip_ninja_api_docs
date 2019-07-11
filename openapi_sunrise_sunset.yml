@@ -39,7 +39,7 @@ info:
     import base64<br  />
     auth = base64.b64encode("USERNAME:PASSWORD")<br  />
     headers = {<br  />
-     'authorization': "Basic "+ auth,<br  />
+        'authorization': "Basic "+ auth,<br  />
     }<br  />
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     </code>
@@ -189,7 +189,29 @@ determining markups for trips."
                         properties:
                             status:
                               type: string
-                              example: "cancelled"
+                              example: "Trip has been cancelled."
+
+  /input-errors:
+        post:
+            summary: "Input Error Codes"
+            description: "List of all input error codes that can be returned under ErrorDetails in a FlexTrip or FareStructure request."
+            operationId: "input-error-codes"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CancelRequest'
+            responses:
+              200:
+                description: Success
+                content:
+                  application/json:
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                              type: string
+                              example: "Trip has been cancelled."
 
 
 components:
