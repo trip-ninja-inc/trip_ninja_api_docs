@@ -26,34 +26,30 @@ info:
     The following diagram shows the typical data flow of API calls to Trip Ninja for a FareStructure integration with both a partner website
     and metasearch as sources.
 
-    ![Workflow diagram]()
+    ![Workflow diagram](https://s3.amazonaws.com/tn-api-docs/workflow.png)
 
     # Authentication
     Trip Ninja uses Basic Authentication standards. Simply encode your username and password string using base64 and pass it in the
     authorization headers. See the python example below on how this is done. In the example, the payload and API endpoint url are not
     shown.
 
-    `import base64
+    Python Example:
 
-    auth = base64.b64encode("USERNAME:PASSWORD")
-
-    headers = {
-     'authorization': "Basic "+ auth,
-    }
-
-    response = requests.post(url, headers=headers, data=json.dumps(payload))`
-  x-code-samples:
-      - lang: 'Python'
-        source: |
-            import base64
-            auth = base64.b64encode("USERNAME:PASSWORD")
-            headers = {
-             'authorization': "Basic "+ auth,
-            }
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
+    <code>
+    import base64<br  />
+    auth = base64.b64encode("USERNAME:PASSWORD")<br  />
+    headers = {<br  />
+     'authorization': "Basic "+ auth,<br  />
+    }<br  />
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+    </code>
   contact:
     name: Trip Ninja
     url: https://www.tripninja.io/contact-us
+
+  x-logo:
+    url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png'
+    altText: Trip Ninja logo
 
 servers:
   - url: http://trip-ninja-api.eu-west-1.elasticbeanstalk.com
