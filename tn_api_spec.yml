@@ -341,6 +341,9 @@ components:
                         IE35:
                             type: string
                             description: baggage must be one of “any”, “1”, “2”
+                        IE36:
+                            type: string
+                            description: include_lcc must be a list of lcc names ('mystifly' / 'tripstack')
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
@@ -803,8 +806,12 @@ components:
               type: integer
           include_lcc:
               description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
-              default: false
-              type: boolean
+              default: []
+              required: false
+              type: array
+              example: ['tripstack']
+              items:
+                type: string
           include_itineraries:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
               default: false
