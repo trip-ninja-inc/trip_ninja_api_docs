@@ -341,9 +341,10 @@ components:
                         IE35:
                             type: string
                             description: baggage must be one of “any”, “1”, “2”
-                        IE36:
+                        IE39:
                             type: string
-                            description: include_lcc must be a list of lcc names ('mystifly' / 'tripstack')
+                            description: |
+                                Provider missing, expected one of "1V, 1G, 1P, 1A, 1S"
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
