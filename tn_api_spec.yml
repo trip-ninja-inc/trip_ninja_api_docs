@@ -910,7 +910,7 @@ components:
                 description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
                 type: string
                 example: 1V
-            PCC:
+            pcc:
                 description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
                 required: true
                 type: string
