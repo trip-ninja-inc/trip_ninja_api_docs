@@ -347,6 +347,8 @@ components:
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
+                    example: |
+                        [LON-CDG, CDG-YUL, YUL-LON]
                 trip_id:
                     type: string
                     description: A unique key used for identification and when booking a trip.
@@ -1041,7 +1043,7 @@ components:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
                     example: |
-                        LON-CDG, CDG-YUL, YUL-LON
+                        [LON-CDG, CDG-YUL, YUL-LON]
                 trip_id:
                     type: string
                     description: A unique key used for identification and when booking a trip.
