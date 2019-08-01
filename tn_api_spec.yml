@@ -722,7 +722,7 @@ components:
                     departure_date:
                         type: string
                         description: "Departure date for this leg, format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
-                        example: "2018-06-20"
+                        example: "2019-06-20"
           travellers:
               description: "Can be integer or array.<br  />Integer = Number of adult travellers<br  />Array = [‘ADT’,’MIL’,’CHD’ ‘INF’]"
               required: true
@@ -748,7 +748,7 @@ components:
                     2) lower look-to-book ratios from the GDS perspective which may lower costs
 
                     3) less accurate pricing data which may cause issues in AirPriceReq when ticketing.
-                    
+
                 Minimum value is 0.04 hours, maximum value is 720 hours.
                 Please discuss with your Trip Ninja Account Manager if you need
                 access to caching outside these limits.
@@ -767,7 +767,19 @@ components:
               type: string
           time_value:
               default: 0
-              description: This parameter helps set the value of a passenger’s time, in terms of the currency selected. It is used to trade off flight prices versus flight durations. The parameter is in units of [currency]/hour. Flight durations are calculated as the difference in minutes from the arrival time of the last flight in a leg to the departure time of the first flight in the leg. True Cost of Flight= [Flight Price] x [time_value/60]*[Flight Duration] The itinerary which provides the lowest True Cost of Flight is what is returned in the response. If you provide a time_value of 0 or do not provide the parameter, it will sort by price.
+              description: |
+                This parameter helps set the value of a passenger’s time, in
+                terms of the currency selected. It is used to trade off flight
+                prices versus flight durations. The parameter is in units of
+                [currency]/hour. Flight durations are calculated as the difference
+                in minutes from the arrival time of the last flight in a leg to
+                the departure time of the first flight in the leg.
+
+                True Cost of Flight = [Flight Price] x [time_value/60]*[Flight Duration]
+
+                The itinerary which provides the lowest True Cost of Flight is
+                what is returned in the response. If you provide a time_value
+                of 0 or do not provide the parameter, it will sort by price.
               required: false
               type: integer
           alliance:
@@ -781,7 +793,7 @@ components:
               required: false
               type: integer
           exclude_carriers:
-              description: Parameter toggles a list of a carriers to exclude from the query results. This option can not be applied together with the alliance option. They are mutually exclusive.
+              description: Parameter toggles a list of carriers to exclude from the query results. This option can not be applied together with the alliance option. They are mutually exclusive.
               required: false
               type: array
               example: []
