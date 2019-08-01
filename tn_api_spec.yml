@@ -451,11 +451,11 @@ components:
                                 properties:
                                     amount:
                                         type: float
-                                        description: Cancellation penalty amount
+                                        description: Change penalty amount
                                         example: 78
                                     percentage:
                                         type: float
-                                        description: Cancellation penalty percentage
+                                        description: Change penalty percentage
                                         example: 0
                             flight_type:
                                 type: string
@@ -775,7 +775,7 @@ components:
                 in minutes from the arrival time of the last flight in a leg to
                 the departure time of the first flight in the leg.
 
-                True Cost of Flight = [Flight Price] x [time_value/60]*[Flight Duration]
+                True Cost of Flight = [Flight Price] * [time_value/60] * [Flight Duration]
 
                 The itinerary which provides the lowest True Cost of Flight is
                 what is returned in the response. If you provide a time_value
@@ -855,6 +855,7 @@ components:
                 example: C
             end_city:
                 type: string
+                default: departure_city
                 description: Used to return to a different city than the departure_city, if none specified will default to always returning to the departure_city.
                 example: LON
             end_city_type:
@@ -888,6 +889,21 @@ components:
                             description: "Number of nights to spend in destination. The nights start counting from the arrival date to the destination, not the departure date of the previous flight.<br  />
                             Example:<br  />
                             Depart New York 2017-10-02 arrive London 2017-10-03, to stay 3 nights. Departure from London is 2017-10-06, not 2017-10-05."
+                        locked:
+                            type: string
+                            default: "None"
+                            description: |
+                                Option to lock a destination as the first or
+                                last to visit in the route. Maximum one destination
+                                can have the value of “Lock First” and maximum
+                                on destination can have the value of “Lock Last”.
+
+                                Example: Departing from New York to visit London,
+                                Berlin, and Paris and returning to New York. If
+                                Paris is labeled as “Lock First”, the itinerary
+                                returned will have New York-> Paris as the first
+                                leg and decide whether it is better to visit
+                                Berlin or London as the next destination.
             provider:
                 description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
                 type: string
@@ -909,7 +925,19 @@ components:
                 type: string
             time_value:
                 default: 0
-                description: This parameter helps set the value of a passenger’s time, in terms of the currency selected. It is used to trade off flight prices versus flight durations. The parameter is in units of [currency]/hour. Flight durations are calculated as the difference in minutes from the arrival time of the last flight in a leg to the departure time of the first flight in the leg. True Cost of Flight= [Flight Price] x [time_value/60]*[Flight Duration] The itinerary which provides the lowest True Cost of Flight is what is returned in the response. If you provide a time_value of 0 or do not provide the parameter, it will sort by price.
+                description: |
+                    This parameter helps set the value of a passenger’s time, in
+                    terms of the currency selected. It is used to trade off flight
+                    prices versus flight durations. The parameter is in units of
+                    [currency]/hour. Flight durations are calculated as the difference
+                    in minutes from the arrival time of the last flight in a leg to
+                    the departure time of the first flight in the leg.
+
+                    True Cost of Flight = [Flight Price] * [time_value/60] * [Flight Duration]
+
+                    The itinerary which provides the lowest True Cost of Flight is
+                    what is returned in the response. If you provide a time_value
+                    of 0 or do not provide the parameter, it will sort by price.
                 required: false
                 type: integer
             one_way:
@@ -1012,6 +1040,8 @@ components:
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
+                    example: |
+                        LON-CDG, CDG-YUL, YUL-LON
                 trip_id:
                     type: string
                     description: A unique key used for identification and when booking a trip.
