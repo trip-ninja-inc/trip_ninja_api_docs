@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "2.19.0"
+  version: "2.22.0"
   title: Trip Ninja API Documentation
   description: |
     ## Introduction
@@ -739,7 +739,19 @@ components:
               example: 2G3C
           max_cache:
               default: 24
-              description: "Hours to retain data queried from provider to be cached for use in future requests. Higher values result in: 1) faster queries as more data is available for re-use, 2) lower look-to-book ratios from the GDS perspective which may lower costs, and 3) less accurate pricing data which may cause issues in AirPriceReq when ticketing. Minimum value is 0.04 hours, maximum value is 720 hours. Please discuss with your Trip Ninja Account Manager if you need access to caching outside these limits."
+              description: |
+                Hours to retain data queried from provider to be cached for use in future requests.
+                Higher values result in:
+
+                    1) faster queries as more data is available for re-use
+
+                    2) lower look-to-book ratios from the GDS perspective which may lower costs
+
+                    3) less accurate pricing data which may cause issues in AirPriceReq when ticketing.
+                    
+                Minimum value is 0.04 hours, maximum value is 720 hours.
+                Please discuss with your Trip Ninja Account Manager if you need
+                access to caching outside these limits.
               required: false
               type: integer
           currency:
