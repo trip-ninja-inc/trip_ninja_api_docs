@@ -313,7 +313,7 @@ components:
                             description: FlexTrip cannot contain gaps in from/to destination pairs
                         IE26:
                             type: string
-                            description: exclude_carriers, alliance and permitted_carrier are mutually exclusive - please choose one
+                            description: exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one
                         IE27:
                             type: string
                             description: num_results should be an integer between 50 and 250
@@ -805,11 +805,11 @@ components:
               example: []
               items:
                   type: string
-          permitted_carrier:
+          permitted_carriers:
               description: Toggles permitted carriers in GDS request *Travelport Only*
               required: false
-              type: string
-              example: AC
+              type: array
+              example: ['AC', WS']
           no_overnight_layovers:
               description: Toggles whether to return results with no overnight layovers *Travelport Only*
               type: boolean
@@ -973,11 +973,11 @@ components:
                 example: []
                 items:
                     type: string
-            permitted_carrier:
+            permitted_carriers:
                 description: Toggles permitted carriers in GDS request *Travelport Only*
                 required: false
-                type: string
-                example: AC
+                type: array
+                example: ['AC', 'WS']
             no_overnight_layovers:
                 description: Toggles whether to return results with no overnight layovers *Travelport Only*
                 type: boolean
