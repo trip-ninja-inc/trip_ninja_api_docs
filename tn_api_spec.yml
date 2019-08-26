@@ -503,6 +503,10 @@ components:
                     type: float
                     description: Fees for the segment *Travelport customers only*
                     example: 0
+                fare_basis_code:
+                    type: string
+                    description: Fare Basis Code for the segment.
+                    example: "QUSDSI0E"
                 cabin_class:
                     type: string
                     description: Cabin class for the entire segment *Travelport customers only*
