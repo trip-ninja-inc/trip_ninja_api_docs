@@ -809,7 +809,7 @@ components:
               description: Toggles permitted carriers in GDS request *Travelport Only*
               required: false
               type: array
-              example: ['AC', WS']
+              example: ['AC', 'WS']
           no_overnight_layovers:
               description: Toggles whether to return results with no overnight layovers *Travelport Only*
               type: boolean
