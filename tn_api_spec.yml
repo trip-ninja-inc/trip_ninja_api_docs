@@ -148,7 +148,7 @@ paths:
                         schema:
                             $ref: '#/components/schemas/FlexTripRequest'
                         examples:
-                            Travellers As Number:
+                            Display Travellers As Number:
                                 value:
                                     departure_city: YHZ
                                     departure_city_type: C
@@ -179,7 +179,7 @@ paths:
                                     region: "americas"
                                     num_results: 50
 
-                            Travellers As Array:
+                            Display Travellers As Array:
                                 value:
                                     departure_city: YHZ
                                     departure_city_type: C
@@ -333,7 +333,7 @@ components:
             currency: USD
             time_value: 0
             max_cache: 24
-            travellers: 1
+            travellers: 2
             provider: 1V
             alliance: ""
             alpha: 0.1
@@ -848,7 +848,7 @@ components:
               description: "Can be integer or array.<br  />Integer = Number of adult travellers<br  />Array = [‘ADT’,’MIL’,’CHD’ ‘INF’]"
               required: true
               type: string
-              example: 1
+              example: 2
           provider:
               description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
               type: string
@@ -986,7 +986,7 @@ components:
             travellers:
                 type: integer
                 description: "Integer = Number of adult travellers<br  />Array = [‘ADT’,’MIL’,’CHD’ ‘INF’]"
-                example: 1
+                example: 2
             cities:
                 type: array
                 description: List of elements containing the destination cities, nights, and locked status. Up to 7 destination cities can be listed.
@@ -1130,7 +1130,7 @@ components:
             currency: USD
             time_value: 0
             max_cache: 24
-            travellers: 1
+            travellers: 2
             provider: 1V
             alliance: ""
             alpha: 0.1
