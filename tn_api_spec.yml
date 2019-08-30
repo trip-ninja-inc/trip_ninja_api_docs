@@ -66,64 +66,6 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/FareStructureRequest'
-                        examples:
-                            Display Travellers As Number:
-                                value:
-                                    flights:
-                                        id: 1
-                                        from_city: YHZ
-                                        start_type: C
-                                        to_city: LON
-                                        end_type: C
-                                        departure_date: "2019-06-20"
-                                    travellers: 2
-                                    provider: 1V
-                                    pcc: 2G3C
-                                    max_cache: 24
-                                    currency: USD
-                                    cabin_class: B
-                                    time_value: 0
-                                    alliance: "*A"
-                                    schema: 40
-                                    exclude_carriers: []
-                                    permitted_carriers: "AC"
-                                    no_overnight_layovers: false
-                                    stops: "Any"
-                                    baggage: "Any"
-                                    refundable: false
-                                    region: "americas"
-                                    num_results: 50
-                                    include_lcc: ["tripstack"]
-                                    include_itineraries: false
-
-                            Display Travellers As Array:
-                                value:
-                                    flights:
-                                        id: 1
-                                        from_city: YHZ
-                                        start_type: C
-                                        to_city: LON
-                                        end_type: C
-                                        departure_date: "2019-06-20"
-                                    travellers: ['ADT','ADT','CHD']
-                                    provider: 1V
-                                    pcc: 2G3C
-                                    max_cache: 24
-                                    currency: USD
-                                    cabin_class: B
-                                    time_value: 0
-                                    alliance: "*A"
-                                    schema: 40
-                                    exclude_carriers: []
-                                    permitted_carriers: "AC"
-                                    no_overnight_layovers: false
-                                    stops: "Any"
-                                    baggage: "Any"
-                                    refundable: false
-                                    region: "americas"
-                                    num_results: 50
-                                    include_lcc: ["tripstack"]
-                                    include_itineraries: false
 
             responses:
               200:
@@ -147,67 +89,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/FlexTripRequest'
-                        examples:
-                            Display Travellers As Number:
-                                value:
-                                    departure_city: YHZ
-                                    departure_city_type: C
-                                    end_city: LON
-                                    end_city_type: C
-                                    departure_date: "2019-06-20"
-                                    travellers: 2
-                                    cities:
-                                        city: YHZ
-                                        city_type: C
-                                        nights: 0
-                                        locked: None
-                                    provider: 1V
-                                    pcc: 2G3C
-                                    max_cache: 24
-                                    currency: USD
-                                    cabin_class: B
-                                    time_value: 0
-                                    one_way: false
-                                    alliance: "*A"
-                                    schema: 40
-                                    exclude_carriers: []
-                                    permitted_carriers: "AC"
-                                    no_overnight_layovers: false
-                                    stops: "Any"
-                                    baggage: "Any"
-                                    refundable: false
-                                    region: "americas"
-                                    num_results: 50
 
-                            Display Travellers As Array:
-                                value:
-                                    departure_city: YHZ
-                                    departure_city_type: C
-                                    end_city: LON
-                                    end_city_type: C
-                                    departure_date: "2019-06-20"
-                                    travellers: ['ADT','ADT','CHD']
-                                    cities:
-                                        city: YHZ
-                                        city_type: C
-                                        nights: 0
-                                        locked: None
-                                    provider: 1V
-                                    pcc: 2G3C
-                                    max_cache: 24
-                                    currency: USD
-                                    cabin_class: B
-                                    time_value: 0
-                                    alliance: "*A"
-                                    schema: 40
-                                    exclude_carriers: []
-                                    permitted_carriers: "AC"
-                                    no_overnight_layovers: false
-                                    stops: "Any"
-                                    baggage: "Any"
-                                    refundable: false
-                                    region: "americas"
-                                    num_results: 50
             responses:
                 200:
                     description: Success
@@ -333,7 +215,7 @@ components:
             currency: USD
             time_value: 0
             max_cache: 24
-            travellers: 2
+            travellers: ['ADT','ADT','CHD']
             provider: 1V
             alliance: ""
             alpha: 0.1
@@ -845,10 +727,10 @@ components:
                         description: "Departure date for this leg, format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                         example: "2019-06-20"
           travellers:
-              description: "Can be integer or array.<br  />Integer = Number of adult travellers<br  />Array = [‘ADT’,’MIL’,’CHD’ ‘INF’]"
+              description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
               required: true
-              type: string
-              example: 2
+              type: array
+              example: ['ADT','ADT','CHD']
           provider:
               description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
               type: string
@@ -984,9 +866,10 @@ components:
                 description: "Departure date for trip<br  />Format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                 example: "2018-06-20"
             travellers:
-                type: integer
-                description: "Integer = Number of adult travellers<br  />Array = [‘ADT’,’MIL’,’CHD’ ‘INF’]"
-                example: 2
+                description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
+                required: true
+                type: array
+                example: ['ADT','ADT','CHD']
             cities:
                 type: array
                 description: List of elements containing the destination cities, nights, and locked status. Up to 7 destination cities can be listed.
@@ -1130,7 +1013,7 @@ components:
             currency: USD
             time_value: 0
             max_cache: 24
-            travellers: 2
+            travellers: ['ADT','ADT','CHD']
             provider: 1V
             alliance: ""
             alpha: 0.1
