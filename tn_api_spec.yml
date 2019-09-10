@@ -70,6 +70,12 @@ paths:
               Flight 1 should be priced as a oneway. [1, 2, 3] would be 3 separate oneways to be priced/ticketed individually.
               [[0, 1], [2, 3]] would be two openjaws, flight 0 and flight 1 priced/ticketed together as one openjaw and flights
               2 and 3 ticketed together as one openjaw.
+
+              Please note that the 'total_cost' field and 'price' fields in the response do not contain the markup amount. The 'total_cost' field is only to display the cheapest trip in the results.
+              The 'price' fields displayed at the itinerary or segment level do not include the markup amount either. When displaying the trip costs using 'include_itineraries' = true, use the 
+              'price' at the itinerary level plus the 'tn_net_fare_markup' amount. If using the segment response type, add the 'price' value for each of the segments chosen for the trip plus the 'tn_net_fare_markup' 
+              amount to get the total trip price.
+
             operationId: FareStructure
             requestBody:
                 content:
