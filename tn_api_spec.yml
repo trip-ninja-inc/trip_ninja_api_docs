@@ -9,7 +9,6 @@ info:
     are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
     and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
     <h2>Trip Ninja API URLs</h2>
-    Production: http://trip-ninja-api.eu-west-1.elasticbeanstalk.com
 
     Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
 
