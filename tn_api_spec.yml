@@ -53,8 +53,6 @@ info:
     altText: Trip Ninja logo
 
 servers:
-  - url: http://trip-ninja-api.eu-west-1.elasticbeanstalk.com
-    description: Production server
   - url: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
     description: Pre-Production server
 
