@@ -862,7 +862,7 @@ components:
                 type: string
           include_itineraries:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
-              default: false
+              default: true
               type: boolean
 
     FlexTripRequest:
