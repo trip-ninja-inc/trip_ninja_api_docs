@@ -47,6 +47,32 @@ info:
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     </pre>
 
+    # Error Codes
+    <table>
+      <tr><td>IE01</td><td>Need minimum 2 destinations</td></tr>
+      <tr><td>IE02</td><td>Duplicate city in list</td></tr>
+      <tr><td>IE09</td><td>Can't run any queries for flight dates in the past</td></tr>
+      <tr><td>IE10</td><td>Incorrect city_type, expected one of ['C', 'A']</td></tr>
+      <tr><td>IE16</td><td>Please provide a PCC</td></tr>
+      <tr><td>IE17</td><td>Invalid carrier</td></tr>
+      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas'</td></tr>
+      <tr><td>IE20</td><td>Incorrect provider, expected one of '1V','1G','1P','1A'</td></tr>
+      <tr><td>IE21</td><td>Wrong currency</td></tr>
+      <tr><td>IE22</td><td>Not a valid cabin option. expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'</td></tr>
+      <tr><td>IE23</td><td>Not a valid alliance. Expected one of *A, *S, *O</td></tr>
+      <tr><td>IE24</td><td>Travellers Type does not meet expected criteria. Should be a list having between 0 and 10 values</td></tr>
+      <tr><td>IE26</td><td>Exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one</td></tr>
+      <tr><td>IE27</td><td>Num_results should be an integer between 50 and 250</td></tr>
+      <tr><td>IE28</td><td>Refundable parameter must be boolean value true or false</td></tr>
+      <tr><td>IE29</td><td>Invalid Traveller type</td></tr>
+      <tr><td>IE30</td><td>Incorrect value for single_pnr, must be boolean</td></tr>
+      <tr><td>IE31</td><td>LCC token not associated with user</td></tr>
+      <tr><td>IE32</td><td>Incorrect value for include_itineraries, must be boolean</td></tr>
+      <tr><td>IE33</td><td>Stops must be one of 'any', 'direct', '1', '2'</td></tr>
+      <tr><td>IE34</td><td>Incorrect value for no_overnight_layovers, must be boolean</td></tr>
+      <tr><td>IE36</td><td>Invalid LCC name</td></tr>
+    <table>
+
   x-logo:
     url: 'https://s3.amazonaws.com/tn-api-docs/tripninja_logo_dev-01.png'
     altText: Trip Ninja logo
@@ -81,13 +107,64 @@ paths:
                             $ref: '#/components/schemas/FareStructureRequest'
 
             responses:
-              200:
-                  description: Success
-                  content:
-                      application/json:
-                          schema:
-                              $ref: '#/components/schemas/FareStructureResponse'
-
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FareStructureResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    trip:
+                                        type: object
+                                        description: Trip Request Object
+                                    FareStructure:
+                                        type: object
+                                        description: Contains the JSON object provided as the response
+                                        properties:
+                                            ErrorDetails:
+                                                type: object
+                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
+                                                properties:
+                                                    IE01:
+                                                        type: string
+                                                        example: General ordered input error
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                        error: 
+                                            type: string
+                                            description: Error Code
+                                            example: "user is not authorized"
+                206:
+                    description: Partial Content (Flight not found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    trip:
+                                        type: object
+                                        description: Contains the JSON object provided as the request
+                                    FareStructure:
+                                        type: object
+                                        description: Contains the JSON object provided as the response
+                                        properties:
+                                            ErrorDetails:
+                                                type: object
+                                                description: Usually an empty string, but will contain a helpful message if something goes wrong! Listed inside are the possible input error codes that can occur.
+                                                example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc." 
+                500:
+                    description: Server Error
 
     /flex-trip-prod/:
         post:
@@ -110,7 +187,88 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/FlexTripResponse'
-
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    trip:
+                                        type: object
+                                        description: Contains the JSON object provided as the request
+                                    FlexTrip:
+                                        type: object
+                                        description: Contains the JSON object of the response.
+                                        properties:
+                                            ErrorDetails:
+                                                type: object
+                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
+                                                properties:
+                                                    IE11:
+                                                        type: string
+                                                        description: An example error code, refer to the error codes section for further details.
+                                                        example: General Input Error.
+                                                    IE24:
+                                                        type: string
+                                                        description: An example error code, refer to the error codes section for further details.
+                                                        example: Too many or too few travellers found.                                                                                            
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                        error: 
+                                            type: string
+                                            description: Error Code
+                                            example: "user is not authorized"
+                206:
+                    description: Partial Content (Flight not found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    FlexTrip:
+                                        type: object
+                                        description: Contains the JSON object of the response.
+                                        properties:
+                                            best_path:
+                                                type: array
+                                                description: 
+                                                example: []
+                                            total_cost:
+                                                type: float
+                                                description: Total cost of cheapest segments recommended, in currency specified.
+                                                example: 0
+                                            segments:
+                                                type: object
+                                                description: List of segments in the itinerary
+                                                example: {}
+                                            ErrorDetails:
+                                                type: object
+                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
+                                                properties:
+                                                    CE01:
+                                                        type: string
+                                                        example: Failed to find flights
+                                            path_sequence:
+                                                type: array
+                                                description: An array of IATA codes representing the chronological order of your trip.
+                                                example: []
+                                            structure: 
+                                                type: array
+                                                description: 
+                                                example: [0, -2]
+                                    trip:
+                                        type: object
+                                        description: Contains the JSON object provided as the request.
+                500:
+                    description: Server Error
+                                
+              
 
     /pre-booking/:
             post:
@@ -135,7 +293,18 @@ paths:
                                         status:
                                             type: string
                                             example: "confirmed"
-
+                    400:
+                        description: Invalid Input
+                        content:
+                            application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            status:
+                                                type: string
+                                                description: States whether request to book was successful.
+                                                example: Not booked                                     
+ 
 
     /booking/:
           post:
@@ -148,18 +317,28 @@ paths:
                           schema:
                               $ref: '#/components/schemas/ReportRequest'
               responses:
-                  200:
-                      description: Success
-                      content:
-                          application/json:
-                              schema:
-                                  type: object
-                                  properties:
-                                      status:
-                                          type: string
-                                          example: "booked"
-
-
+                    200:
+                        description: Success
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        status:
+                                            type: string
+                                            example: "booked"
+                    400:
+                        description: Invalid Input
+                        content:
+                            application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            status:
+                                                type: string
+                                                description: States whether request to book was successful.
+                                                example: Not booked                                     
+  
     /ticketing/:
             post:
                 summary: "Ticketing Report"
@@ -182,8 +361,17 @@ paths:
                                         status:
                                             type: string
                                             example: "ticketed"
-
-
+                    400:
+                        description: Invalid Input
+                        content:
+                            application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            status:
+                                                type: string
+                                                description: States whether request to book was successful.
+                                                example: Not booked       
     /cancel/:
             post:
                 summary: "Cancel Booking Report"
@@ -205,7 +393,18 @@ paths:
                                         status:
                                             type: string
                                             example: "Trip has been cancelled."
-
+                    400:
+                        description: Invalid Input
+                        content:
+                            application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            response:
+                                                type: string
+                                                description: States whether request to cancel was successful.
+                                                example: Could not cancel trip, check your trip_id.                                   
+ 
 
 
 components:
@@ -233,7 +432,7 @@ components:
             alliance: ""
             alpha: 0.1
             schema: 40
-            pcc: 2G3C
+            PCC: 2G3C
         FareStructure:
             type: object
             description: Contains the JSON object of the response.
@@ -250,7 +449,7 @@ components:
                     type: array
                     description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
                 ErrorDetails:
-                    description: Usually an empty string, but will contain a helpful message if something goes wrong! Listed inside are the possible input error codes that can occur.
+                    description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
                     type: object
                     properties:
                         IE01:
@@ -760,7 +959,7 @@ components:
               description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
               type: string
               example: 1V
-          pcc:
+          PCC:
               description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
               required: true
               type: string
@@ -834,11 +1033,11 @@ components:
               default: false
           stops:
               description: Toggles number of stop for GDS request *Travelport Only*
-              default: "Any"
+              default: "any"
               type: string
           baggage:
               description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
-              default: "Any"
+              default: "any"
               type: string
           refundable:
               description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
@@ -933,7 +1132,7 @@ components:
                 description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
                 type: string
                 example: 1V
-            pcc:
+            PCC:
                 description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
                 required: true
                 type: string
@@ -1003,11 +1202,11 @@ components:
                 default: false
             stops:
                 description: Toggles number of stop for GDS request *Travelport Only*
-                default: "Any"
+                default: "any"
                 type: string
             baggage:
                 description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
-                default: "Any"
+                default: "any"
                 type: string
             refundable:
                 description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
@@ -1043,7 +1242,7 @@ components:
             alliance: ""
             alpha: 0.1
             schema: 40
-            pcc: 2G3C
+            PCC: 2G3C
         FlexTrip:
             type: object
             description: Contains the JSON object of the response.
@@ -1061,7 +1260,7 @@ components:
                     description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
                 ErrorDetails:
                     type: string
-                    description: Usually an empty string, but will contain a helpful message if something goes wrong!
+                    description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
