@@ -911,6 +911,8 @@ components:
           - provider
           - pcc
           - currency
+          - source
+          - country_code
       properties:
           flights:
               description: "Array of flight legs input. A minimum of 3 legs (2
@@ -984,6 +986,16 @@ components:
               example: USD
               required: true
               type: string
+          source:
+              description: "Metasearch source (For example: skycanner, kayak)" 
+              example: skyscanner
+              type: string
+              required: true
+          country_code:
+              description: "Country code where search came from (For example: CA, US)"
+              example: CA
+              type: string
+              required: true              
           cabin_class:
               default: E
               description: Parameter toggles the permitted cabin class for your query.
