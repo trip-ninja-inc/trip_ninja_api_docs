@@ -681,6 +681,18 @@ components:
                                 legs:
                                     type: array
                                     description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time. Contains same objects as leg_details below.
+                                fare_basis_code:
+                                    type: string
+                                    description: Fare Basis Code for the segment.
+                                    example: "QUSDSI0E"
+                                fare_rule_key:
+                                    type: string
+                                    description: Fare rule key for the segment
+                                    example:   gws-eJxNjs0KwyAQhB8mzH02QdLeFPNzEaGYEnLp+z9GR02hC7qz+w2j3vuR9uRjov+vAZ\/hLMjvCGSMOmk\/4WQjTNMFkoZX4cI1FdwhFeWGe7dmjC5Oati4WUe1cLU77UGsJ7fM+jSq1AI\/EQ7JHJZjjTS5ZnO8EWfop1+XbyuD
+                                fare_info_ref:
+                                    type: string
+                                    description: Fare Info reference for this segment
+                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==                                
     Segments:
         allOf:
           - $ref: '#/components/schemas/FareStructureResponse/properties/FareStructure/properties'
