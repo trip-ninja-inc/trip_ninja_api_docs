@@ -255,7 +255,7 @@ components:
                             in_flight_services:
                                 type: array
                                 description: List of services offered on flight
-                                example: []
+                                example: ["Entertainment on Demand", "Wi-Fi", "USB Power"]
                             meals:
                                 type: array
                                 description: Details of meals available on flight
