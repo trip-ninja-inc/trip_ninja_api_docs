@@ -115,7 +115,64 @@ paths:
                                         example: 400-121
                                     error_details:
                                         type: array
-                                        example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966']   
+                                        example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966'] 
+
+        get:
+            summary: "List Bookings"
+            description: "Get a list of all bookings for a PCC, travel agency, or agent."
+            operationId: "ListBooking"
+            requestBody:
+                content:
+                    application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    pcc:
+                                        description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                                        required: true
+                                        type: string
+                                        example: 2G3C
+                                    provider: 
+                                        description: Fare provider to use.<br/>“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                        required: true 
+                                        type: string
+                                        example: 1V
+                                    endpoint:
+                                        description: Parameter toggles travelport production and pre-production endpoints
+                                        required: true
+                                        type: string
+                                        example: preprod
+                                    agency:
+                                        description: Travel agency for which to list bookings from.
+                                        required: false  
+                                        type: string
+                                        example: tripninja
+                                    agent_email: 
+                                        description: Email address of the travel agent to list bookings from.
+                                        required: false 
+                                        type: string
+                                        example: agent@travelagency.com
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBookingResponse'
+                400:
+                    description: Unable to get bookings
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: 400-122
+                                    error_details:
+                                        type: array
+                                        example: ['Invalid PCC entered']   
 
                                                                        
 
@@ -282,7 +339,7 @@ components:
                                 example:
                         
 
-        
+    
     
     pricing_breakdown:
         allOf:
@@ -705,6 +762,11 @@ components:
                 required: false 
                 type: string
                 example: agent@travelagency.com
+            agency:
+                description: Travel agency to record the booking under.
+                required: false  
+                type: string
+                example: tripninja
             passengers:
                 description: "An array of passenger details."
                 required: true
@@ -813,3 +875,69 @@ components:
                 type: string
                 description: Ticketing queue on which to place the PNR
                 example: "01"
+
+    ListBookingResponse:
+        title: Response
+        type: object
+        properties:
+            bookings:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        trip_id:
+                            description: A unique key used for identification and when booking a trip.
+                            type: string
+                            example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+                        ur_locator_code:       
+                            type: string
+                            description: Unique Identifier of a Universal Record. 
+                            example: "AXY67G"
+                        ticketed:       
+                            type: boolean
+                            description: Notes whether the booking has been ticketed. 
+                            example: true
+                        trip_type:
+                            description: Trip types, values include "OneWay", "RoundTrip", "FlexTrip" and "FareStructure"
+                            type: string
+                            example: OneWay 
+                        pcc:
+                            description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                            type: string
+                            example: 2G3C
+                        agent_email: 
+                            description: Email address of travel agent who created the booking
+                            type: string
+                            example: agent@tripninja.io
+                        booking_date: 
+                            description: Date on which the booking was made
+                            type: string
+                            example: "2019-07-07"
+                        departure_date: 
+                            description: Date on which the first flight of the trip leaves.
+                            type: string
+                            example: "2019-11-21"
+                        flights: 
+                            description: List of all flights segment IATA codes
+                            type: array
+                            example: ['YHZ-YOW', 'YOW-YYZ', 'YYZ-YHZ']
+                        customer_email: 
+                            description: Email address of customer
+                            type: string
+                            example: customer@email.com
+                        customer_name: 
+                            description: Name of the primary passenger
+                            type: string
+                            example: customer@email.com
+                        total_price: 
+                            description: Total price of the trip including all taxes, fees, and markup.
+                            type: float
+                            example: 399.96
+                        currency: 
+                            description: Currency in which the bookng was made
+                            type: string
+                            example: CAD
+                        payment:       
+                            type: boolean
+                            description: Notes whether the booking included payment information. 
+                            example: true
