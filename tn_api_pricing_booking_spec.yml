@@ -214,6 +214,10 @@ components:
             type: object
             description: Additional details for each segment of the trip such as baggage and inflight services
             properties:
+                segment_id:
+                    type: string
+                    description: Identifier of the segment associated with this info
+                    example: 14c9e2e5c95a5bf0f9f7712de24348e6aba88c32
                 baggage:
                     type: object
                     description: Details of carryon and checked baggage allowances
@@ -640,40 +644,12 @@ components:
         type: object
         required:
             - trip_id
-            - pcc
-            - provider
-            - ur_locator_code
         properties:
             trip_id:
                 type: string
                 required: true
                 description: Trip ID returned in search response
                 example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
-            pcc:
-                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                required: true
-                type: string
-                example: 2G3C
-            provider: 
-                description: Fare provider to use.<br/>“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                required: true 
-                type: string
-                example: 1V
-            region:
-                description: Parameter toggles which travelport endpoint you hit *Travelport Only*
-                required: false  
-                type: string
-                example: americas
-            endpoint:
-                description: Parameter toggles travelport production and pre-production endpoints
-                required: true
-                type: string
-                example: preprod
-            ur_locator_code:
-                type: string
-                required: true
-                description: Universal Record locator code returned from booking creation request.
-                example: AJ6WX7
     
     CreateBookingRequest:
         title: Request
@@ -826,41 +802,14 @@ components:
         type: object
         required:
             - trip_id
-            - pcc
-            - provider
             - queue
-            - ur_locator_code
         properties:
             trip_id:
                 description: A unique key used for identification and when booking a trip.
                 required: true
                 type: string
                 example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-            pcc: 
-                type: string
-                example: "2G3C"
-                required: true
-                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
-            provider: 
-                type: string
-                example: "1V"
-                required: true
-                description: Fare provider to use.<br/>“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-            region: 
-                type: string
-                example: "americas"
-                description: Parameter toggles which travelport endpoint you hit Travelport Only
-            endpoint:
-                description: Parameter toggles travelport production and pre-production endpoints
-                required: true
-                type: string
-                example: preprod     
             queue:       
                 type: string
                 description: Ticketing queue on which to place the PNR
                 example: "01"
-            ur_locator_code:
-                type: string
-                required: true
-                description: Universal Record locator code returned from booking creation request.
-                example: AJ6WX7
