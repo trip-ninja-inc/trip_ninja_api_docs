@@ -601,10 +601,15 @@ components:
             type: string
             example: 1V
         region:
-            description: Parameter toggles which travelport endpoint you hit *Travelport Only*
+            description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
             required: false  
             type: string
             example: americas
+        endpoint:
+            description: Parameter toggles travelport production and pre-production endpoints
+            required: true
+            type: string
+            example: preprod
         traveller_list: 
             description: Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’
             required: true 
@@ -659,6 +664,11 @@ components:
                 required: false  
                 type: string
                 example: americas
+            endpoint:
+                description: Parameter toggles travelport production and pre-production endpoints
+                required: true
+                type: string
+                example: preprod
             ur_locator_code:
                 type: string
                 required: true
@@ -700,6 +710,11 @@ components:
                 type: string
                 example: "americas"
                 description: Parameter toggles which travelport endpoint you hit Travelport Only
+            endpoint:
+                description: Parameter toggles travelport production and pre-production endpoints
+                required: true
+                type: string
+                example: preprod
             add_to_ticketing_queue:
                 type: boolean
                 example: true
@@ -834,7 +849,12 @@ components:
             region: 
                 type: string
                 example: "americas"
-                description: Parameter toggles which travelport endpoint you hit Travelport Only     
+                description: Parameter toggles which travelport endpoint you hit Travelport Only
+            endpoint:
+                description: Parameter toggles travelport production and pre-production endpoints
+                required: true
+                type: string
+                example: preprod     
             queue:       
                 type: string
                 description: Ticketing queue on which to place the PNR
