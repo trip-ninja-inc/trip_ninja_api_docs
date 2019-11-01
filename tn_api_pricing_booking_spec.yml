@@ -992,7 +992,7 @@ components:
                             type: float
                             example: 399.96
                         currency: 
-                            description: Currency in which the bookng was made
+                            description: Currency in which the booking was made
                             type: string
                             example: CAD
                         payment:       
