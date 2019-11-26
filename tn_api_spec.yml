@@ -1313,6 +1313,7 @@ components:
         type: object
         required: 
             trip_id
+            segment_ids
         properties:
             trip_id:
                 type: string
@@ -1327,7 +1328,7 @@ components:
             client_generated_trip:
                 type: boolean
                 default: False
-                description: Denotes a trip in which Trip Ninja flights were not used, but the Trip Ninja supplied markup was applied.
+                description: Denotes a trip in which Trip Ninja flights were not used, but the Trip Ninja supplied markup was applied. If set to True, the 'segment_ids' field must be sent as an empty array.
                 example: False
 
     CancelRequest:
