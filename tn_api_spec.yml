@@ -681,6 +681,14 @@ components:
                                 legs:
                                     type: array
                                     description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time. Contains same objects as leg_details below.
+                                baggage:
+                                    type: object
+                                    description: Contains baggage information *Travelport customers only*
+                                    properties:
+                                        number_of_pieces:
+                                            type: integer
+                                            description: Number of bags allowed.
+                                            example: 0
                                 fare_basis_code:
                                     type: string
                                     description: Fare Basis Code for the segment.
@@ -1303,6 +1311,8 @@ components:
     ReportRequest:
         title: Request
         type: object
+        required: 
+            trip_id
         properties:
             trip_id:
                 type: string
@@ -1314,7 +1324,11 @@ components:
                 items:
                     type: string
                     example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
-
+            client_generated_trip:
+                type: boolean
+                default: False
+                description: Denotes a trip in which Trip Ninja flights were not used, but the Trip Ninja supplied markup was applied.
+                example: False
 
     CancelRequest:
         title: Request
