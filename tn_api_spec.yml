@@ -1063,6 +1063,14 @@ components:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
               default: true
               type: boolean
+          mix_structures:
+              description: Return mix of results with the best multi-pnr structure and single-pnr structure. include_itineraries needs to be passed as True for this to work
+              default: false
+              type: boolean
+          multi_pnr_mix:
+              description: Return mix of single-pnr and all multi-pnr structures. include_itineraries and mix_structures needs to be passed as True for this to work
+              default: false
+              type: boolean
 
     FlexTripRequest:
         title: Request
