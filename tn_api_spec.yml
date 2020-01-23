@@ -526,7 +526,7 @@ components:
                             description: FlexTrip cannot contain gaps in from/to destination pairs
                         IE26:
                             type: string
-                            description: exclude_carriers, alliance and permitted_carrier are mutually exclusive - please choose one
+                            description: exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one
                         IE27:
                             type: string
                             description: num_results should be an integer between 50 and 250
@@ -576,109 +576,131 @@ components:
     Itineraries:
         allOf:
           - $ref: '#/components/schemas/FareStructureResponse/properties/FareStructure/properties'
-          - type: object
+          - type: array
             description: Array of itineraries sorted by weight.
-            properties:
-                weight:
-                    type: float
-                    description: Weight of the segment (time-value considered).
-                    example: 239
-                price:
-                    type: float
-                    description: Price of the segment (fare and tax included).
-                    example: 197.1
-                base_price:
-                    type: float
-                    description: Base price of the segment (tax excluded)
-                    example: 0
-                taxes:
-                    type: float
-                    description: Tax price of the segment
-                    example: 119.1
-                fees:
-                    type: float
-                    description: Fees for the segment *Travelport customers only*
-                    example: 0
-                cabin_class:
-                    type: string
-                    description: Cabin class for the entire segment *Travelport customers only*
-                    example: Economy
-                latest_ticketing_date:
-                    type: date
-                    description: Latest ticketing time
-                    example: "2019-05-07"
-                refundable:
-                    type: boolean
-                    description: Refundable tickets
-                    example: false
-                e_ticketability:
-                    type: boolean
-                    example: true
-                transp_time:
-                    type: integer
-                    description: Total transportation time for the itinerary
-                    example: 425
-                segments:
-                    type: array
-                    description: List of segments in the itinerary
-                    items:
-                        type: object
-                        properties:
-                            segment_origin_full:
-                                type: string
-                                description: "Origin of the segment."
-                                example: "London, United Kingdom (LHR)"
-                            segment_destination_full:
-                                type: string
-                                description: "Destination of the segment."
-                                example: "Berlin, Germany (TXL)"
-                            weight:
-                                type: string
-                                description: Weight of the segment (time-value considered).
-                                example: 96
-                            segment_id:
-                                type: string
-                                description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
-                                example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
-                            price:
-                                type: float
-                                description: Price of the segment (fare and tax included)
-                                example: 72.3
-                            segment_source:
-                                type: string
-                                description: GDS or LCC provider source for segment. Only shown with ‘include_lcc’ request parameter enabled.
-                                example: travelport
-                            cancel_penalty:
-                                type: object
-                                description: Information about cancellation
-                                properties:
-                                    amount:
-                                        type: float
-                                        description: Cancellation penalty amount
-                                        example: 0
-                                    percentage:
-                                        type: float
-                                        description: Cancellation penalty percentage
-                                        example: 100
-                            change_penalty:
-                                type: object
-                                description: Information about changing.
-                                properties:
-                                    amount:
-                                        type: float
-                                        description: Change penalty amount
-                                        example: 78
-                                    percentage:
-                                        type: float
-                                        description: Change penalty percentage
-                                        example: 0
-                            flight_type:
-                                type: string
-                                description: “open_jaw” or “one_way”
-                                example: "open_jaw"
-                            legs:
-                                type: array
-                                description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time. Contains same objects as leg_details below.
+            items:
+                type: object
+                properties:
+                    weight:
+                        type: float
+                        description: Weight of the segment (time-value considered).
+                        example: 239
+                    price:
+                        type: float
+                        description: Price of the segment (fare and tax included).
+                        example: 197.1
+                    base_price:
+                        type: float
+                        description: Base price of the segment (tax excluded)
+                        example: 0
+                    taxes:
+                        type: float
+                        description: Tax price of the segment
+                        example: 119.1
+                    fees:
+                        type: float
+                        description: Fees for the segment *Travelport customers only*
+                        example: 0
+                    cabin_class:
+                        type: string
+                        description: Cabin class for the entire segment *Travelport customers only*
+                        example: Economy
+                    latest_ticketing_date:
+                        type: date
+                        description: Latest ticketing time
+                        example: "2019-05-07"
+                    refundable:
+                        type: boolean
+                        description: Refundable tickets
+                        example: false
+                    e_ticketability:
+                        type: boolean
+                        example: true
+                    transp_time:
+                        type: integer
+                        description: Total transportation time for the itinerary
+                        example: 425
+                    segments:
+                        type: array
+                        description: List of segments in the itinerary
+                        items:
+                            type: object
+                            properties:
+                                segment_origin_full:
+                                    type: string
+                                    description: "Origin of the segment."
+                                    example: "London, United Kingdom (LHR)"
+                                segment_destination_full:
+                                    type: string
+                                    description: "Destination of the segment."
+                                    example: "Berlin, Germany (TXL)"
+                                weight:
+                                    type: string
+                                    description: Weight of the segment (time-value considered).
+                                    example: 96
+                                segment_id:
+                                    type: string
+                                    description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
+                                    example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
+                                price:
+                                    type: float
+                                    description: Price of the segment (fare and tax included)
+                                    example: 72.3
+                                segment_source:
+                                    type: string
+                                    description: GDS or LCC provider source for segment. Only shown with ‘include_lcc’ request parameter enabled.
+                                    example: travelport
+                                cancel_penalty:
+                                    type: object
+                                    description: Information about cancellation
+                                    properties:
+                                        amount:
+                                            type: float
+                                            description: Cancellation penalty amount
+                                            example: 0
+                                        percentage:
+                                            type: float
+                                            description: Cancellation penalty percentage
+                                            example: 100
+                                change_penalty:
+                                    type: object
+                                    description: Information about changing.
+                                    properties:
+                                        amount:
+                                            type: float
+                                            description: Change penalty amount
+                                            example: 78
+                                        percentage:
+                                            type: float
+                                            description: Change penalty percentage
+                                            example: 0
+                                flight_type:
+                                    type: string
+                                    description: “open_jaw” or “one_way”
+                                    example: "open_jaw"
+                                legs:
+                                    type: array
+                                    description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time. Contains same objects as leg_details below.
+                                baggage:
+                                    type: object
+                                    description: Contains baggage information *Travelport customers only*
+                                    properties:
+                                        number_of_pieces:
+                                            type: integer
+                                            description: Number of bags allowed.
+                                            example: 0
+                                fare_basis_code:
+                                    type: string
+                                    description: Fare Basis Code for the segment.
+                                    example: "QUSDSI0E"
+                                fare_rule_key:
+                                    type: string
+                                    description: Fare rule key for the segment
+                                    example:   gws-eJxNjs0KwyAQhB8mzH02QdLeFPNzEaGYEnLp+z9GR02hC7qz+w2j3vuR9uRjov+vAZ\/hLMjvCGSMOmk\/4WQjTNMFkoZX4cI1FdwhFeWGe7dmjC5Oati4WUe1cLU77UGsJ7fM+jSq1AI\/EQ7JHJZjjTS5ZnO8EWfop1+XbyuD
+                                fare_info_ref:
+                                    type: string
+                                    description: Fare Info reference for this segment
+                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==                                
     Segments:
         allOf:
           - $ref: '#/components/schemas/FareStructureResponse/properties/FareStructure/properties'
@@ -909,6 +931,8 @@ components:
           - provider
           - pcc
           - currency
+          - source
+          - country_code
       properties:
           flights:
               description: "Array of flight legs input. A minimum of 3 legs (2
@@ -982,6 +1006,16 @@ components:
               example: USD
               required: true
               type: string
+          source:
+              description: "Metasearch source (For example: skycanner, kayak)" 
+              example: skyscanner
+              type: string
+              required: true
+          country_code:
+              description: "Country code where search came from (For example: CA, US)"
+              example: CA
+              type: string
+              required: true              
           cabin_class:
               default: E
               description: Parameter toggles the permitted cabin class for your query.
@@ -1022,11 +1056,11 @@ components:
               example: []
               items:
                   type: string
-          permitted_carrier:
+          permitted_carriers:
               description: Toggles permitted carriers in GDS request *Travelport Only*
               required: false
-              type: string
-              example: AC
+              type: array
+              example: ["AC"]
           no_overnight_layovers:
               description: Toggles whether to return results with no overnight layovers *Travelport Only*
               type: boolean
@@ -1199,11 +1233,11 @@ components:
                 example: []
                 items:
                     type: string
-            permitted_carrier:
+            permitted_carriers:
                 description: Toggles permitted carriers in GDS request *Travelport Only*
                 required: false
-                type: string
-                example: AC
+                type: array
+                example: ["AC"]
             no_overnight_layovers:
                 description: Toggles whether to return results with no overnight layovers *Travelport Only*
                 type: boolean
@@ -1285,6 +1319,9 @@ components:
     ReportRequest:
         title: Request
         type: object
+        required: 
+            trip_id
+            segment_ids
         properties:
             trip_id:
                 type: string
@@ -1296,7 +1333,11 @@ components:
                 items:
                     type: string
                     example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
-
+            client_generated_trip:
+                type: boolean
+                default: False
+                description: Denotes a trip in which Trip Ninja flights were not used, but the Trip Ninja supplied markup was applied. If set to True, the 'segment_ids' field must be sent as an empty array.
+                example: False
 
     CancelRequest:
         title: Request
