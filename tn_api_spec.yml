@@ -975,11 +975,10 @@ components:
                         description: "Departure date for this leg, format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                         example: "2019-06-20"
                     cabin_class:
-                        default: E
+                        type: string
                         description: "A unique cabin class can be set for each segment of the trip, otherwise it can be set at the root level."
                         example: BC
                         required: false
-                        type: string
           travellers:
               description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
               required: true
@@ -1024,7 +1023,7 @@ components:
               required: true              
           cabin_class:
               default: E
-              description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment"
+              description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment."
               example: E
               required: false
               type: string
