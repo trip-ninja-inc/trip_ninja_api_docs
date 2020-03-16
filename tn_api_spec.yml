@@ -444,7 +444,7 @@ components:
                 tn_net_fare_markup:
                     type: float
                     description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
-                    example: 0.0
+                    example: 25.0
                 structure:
                     type: array
                     description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
@@ -683,7 +683,7 @@ components:
                                     description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time. Contains same objects as leg_details below.
                                 baggage:
                                     type: object
-                                    description: Contains baggage information *Travelport customers only*
+                                    description: Contains baggage information.
                                     properties:
                                         number_of_pieces:
                                             type: integer
@@ -712,7 +712,7 @@ components:
                     description: Additional details *in development for Travelport customers*
                 baggage:
                     type: object
-                    description: Contains baggage information *Travelport customers only*
+                    description: Contains baggage information.
                     properties:
                         number_of_pieces:
                             type: integer
@@ -974,6 +974,11 @@ components:
                         type: string
                         description: "Departure date for this leg, format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                         example: "2019-06-20"
+                    cabin_class:
+                        type: string
+                        description: "A unique cabin class can be set for each segment of the trip, otherwise it can be set at the root level."
+                        example: BC
+                        required: false
           travellers:
               description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
               required: true
@@ -1018,8 +1023,8 @@ components:
               required: true              
           cabin_class:
               default: E
-              description: Parameter toggles the permitted cabin class for your query.
-              example: B
+              description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment."
+              example: E
               required: false
               type: string
           time_value:
@@ -1057,7 +1062,7 @@ components:
               items:
                   type: string
           permitted_carriers:
-              description: Toggles permitted carriers in GDS request *Travelport Only*
+              description: Toggles permitted carriers in GDS request
               required: false
               type: array
               example: ["AC"]
@@ -1206,14 +1211,10 @@ components:
                     of 0 or do not provide the parameter, it will sort by price.
                 required: false
                 type: integer
-            one_way:
-                default: false
-                description: Parameter toggles whether you want to query only one-way flights (default is false)
-                type: boolean
             cabin_class:
                 default: E
                 description: Parameter toggles the permitted cabin class for your query.
-                example: B
+                example: E
                 required: false
                 type: string
             alliance:
