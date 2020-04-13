@@ -232,10 +232,6 @@ components:
             description: A unique key used for identification and when booking a trip.
             type: string
             example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-        confirmation_id:
-            type: string
-            description: "A unique key used to indicate a successful confirmation."
-            example: "5675057ca2cd084edbd498f960b9a202cb530202"
         segments:
             type: array
             description:
@@ -347,7 +343,7 @@ components:
                     fees:
                         type: float
                         description: Confirmed fees for trip *Travelport customers only*
-                        example: 00.00
+                        example: 0.0
                     markup:
                         type: float
                         description: Trip Ninja provided markup amount
@@ -383,6 +379,11 @@ components:
                 required: true
                 type: string
                 example: 1A
+            region:
+                description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
+                required: false
+                type: string
+                example: americas
 
     segments:
         allOf:
@@ -508,11 +509,6 @@ components:
             type: string
             enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
             example: OneWay
-        region:
-            description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
-            required: false  
-            type: string
-            example: americas
         endpoint:
             description: Parameter toggles travelport production and pre-production endpoints
             required: true
