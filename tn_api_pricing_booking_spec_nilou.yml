@@ -554,10 +554,6 @@ components:
         type: object
         required:
             - trip_id
-            - confirmation_id
-            - pcc
-            - provider
-            - endpoint
             - passengers
             - billing
         properties:
@@ -566,30 +562,6 @@ components:
                 description: A unique key used for identification and when booking a trip.
                 required: true                
                 example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-            confirmation_id:
-                type: string
-                required: true
-                description: A unique key returned from a successful price confirmation.
-                example: aacdf5c8bd8cda2543d0a874090c004bab9c3207
-            pcc: 
-                type: string
-                example: "2G3C"
-                required: true
-                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-            provider: 
-                type: string
-                example: "1V"
-                required: true
-                description: Fare provider to use.<br/>“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-            region: 
-                type: string
-                example: "americas"
-                description: Parameter toggles which travelport endpoint you hit Travelport Only
-            endpoint:
-                description: Parameter toggles travelport production and pre-production endpoints
-                required: true
-                type: string
-                example: preprod
             add_to_ticketing_queue:
                 type: boolean
                 example: true
