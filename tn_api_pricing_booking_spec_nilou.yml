@@ -232,6 +232,10 @@ components:
             description: A unique key used for identification and when booking a trip.
             type: string
             example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+        pricing:
+                description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
+                type: object
+                $ref: '#/components/schemas/trip_pricing_breakdown'
         segments:
             type: array
             description:
@@ -247,10 +251,9 @@ components:
                     segment_type:
                         $ref: '#/components/schemas/segment_type'
                     pricing:
-                        description: Array with breakdown of confirmed prices including taxes, fees, and markup for the trip.
-                        type: array
-                        example: []
-                        $ref: '#/components/schemas/pricing_breakdown'
+                        description: Breakdown of confirmed prices including taxes, and fees for the segment.
+                        type: object
+                        $ref: '#/components/schemas/segment_pricing_breakdown'
                     baggage:
                         type: object
                         description: Details of carryon and checked baggage allowances
@@ -316,42 +319,68 @@ components:
 
     
     
-    pricing_breakdown:
+    trip_pricing_breakdown:
         allOf:
           - $ref: '#/components/schemas/PriceConfirmResponse/properties'
-          - type: array
-            description: Array with breakdown of confirmed prices including taxes, fees, and markup for the trip.
-            items:
-                type: object
-                properties:
-                    confirmed_total_price:
-                        type: float
-                        description: Total price of the trip after price confirmation (airfare + taxes + fees). Does not include markup.
-                        example: 105.68
-                    original_total_price:
-                        type: float
-                        description: Original price of trip from search request - does not include markup.
-                        example: 100.61
-                    airfare:
-                        type: float
-                        description: Confirmed airfare price for the trip.
-                        example: 70.04
-                    taxes:
-                        type: float
-                        description: Confirmed taxes for the trip.
-                        example: 30.64
-                    fees:
-                        type: float
-                        description: Confirmed fees for trip *Travelport customers only*
-                        example: 0.0
-                    markup:
-                        type: float
-                        description: Trip Ninja provided markup amount
-                        example: 20.00
-                    currency:
-                        type: string
-                        description: Currency in which trip was priced
-                        example: USD
+          - type: object
+            description: Breakdown of confirmed prices including taxes, fees, and markup for the trip.
+            properties:
+                confirmed_total_price:
+                    type: float
+                    description: Total price of the trip after price confirmation (airfare + taxes + fees). Does not include markup.
+                    example: 455.68
+                original_total_price:
+                    type: float
+                    description: Original price of trip from search request - does not include markup.
+                    example: 455.61
+                airfare:
+                    type: float
+                    description: Confirmed airfare price for the trip.
+                    example: 370.04
+                taxes:
+                    type: float
+                    description: Confirmed taxes for the trip.
+                    example: 85.64
+                fees:
+                    type: float
+                    description: Confirmed fees for trip *Travelport customers only*
+                    example: 0.0
+                markup:
+                    type: float
+                    description: Trip Ninja provided markup amount
+                    example: 20.00
+                currency:
+                    type: string
+                    description: Currency in which trip was priced
+                    example: USD
+
+    segment_pricing_breakdown:
+        allOf:
+          - $ref: '#/components/schemas/PriceConfirmResponse/properties'
+          - type: object
+            description: Breakdown of confirmed prices including taxes, and fees for the segment.
+            properties:
+                confirmed_total_price:
+                    type: float
+                    description: Total price of the segment after price confirmation (airfare + taxes + fees). Does not include markup.
+                    example: 105.68
+                original_total_price:
+                    type: float
+                    description: Original price of segment from search request - does not include markup.
+                    example: 100.61
+                airfare:
+                    type: float
+                    description: Confirmed airfare price for the segment.
+                    example: 70.04
+                taxes:
+                    type: float
+                    description: Confirmed taxes for the segment.
+                    example: 30.64
+                fees:
+                    type: float
+                    description: Confirmed fees for segment *Travelport customers only*
+                    example: 0.0
+
 
     segment_type:
         type: string
