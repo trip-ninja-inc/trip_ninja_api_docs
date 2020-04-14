@@ -236,89 +236,74 @@ components:
                 description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
                 type: object
                 $ref: '#/components/schemas/trip_pricing_breakdown'
-        segments:
-            type: array
-            description:
-            items:
-                type: object
-                properties:
-                    segment_id:
-                        type: string
-                        description: Identifier of the segment associated with this info
-                        example: 14c9e2e5c95a5bf0f9f7712de24348e6aba88c32
-                    data_source:
-                        $ref: '#/components/schemas/data_source'
-                    segment_type:
-                        $ref: '#/components/schemas/segment_type'
-                    pricing:
-                        description: Breakdown of confirmed prices including taxes, and fees for the segment.
-                        type: object
-                        $ref: '#/components/schemas/segment_pricing_breakdown'
-                    baggage:
-                        type: object
-                        description: Details of carryon and checked baggage allowances
-                        properties:
-                            applicable_bags:
-                                type: string
-                                description:
-                                example: "1stChecked"
-                            applicable_carryon_bags:
-                                type: string
-                                description:
-                                example: "1"
-                            baggage_cost:
-                                type: float
-                                description:
-                                example: 30.00
-                            baggage_restrictions:
-                                type: string
-                                description:
-                                example: "UPTO50LB/23KG AND UPTO62LI/158LCM"
-                            carryon_cost:
-                                type: float
-                                description:
-                                example: 0.00
-                            carryon_restrictions:
-                                type: string
-                                description:
-                                example: "CARRYON HAND BAGGAGE ALLOWANCE"
-                    flight_details:
-                        type: array
-                        description: Details of services, meals, terminals for each flight in the segment
-                        items:
-                            type: object
-                            properties:
-                                flight_number:
-                                    type: string
-                                    description: Flight number
-                                    example: "WS368"
-                                in_flight_services:
-                                    type: array
-                                    description: List of services offered on flight
-                                    example: ["Entertainment on Demand", "Wi-Fi", "USB Power"]
-                                meals:
-                                    type: array
-                                    description: Details of meals available on flight
-                                    example: ["FoodForPurchase"]
-                                origin_terminal:
-                                    type: string
-                                    description: Terminal from which the flight departs
-                                    example: 1
-                                destination_terminal:
-                                    type: string
-                                    description: Terminal at which the flight arrives
-                                    example: 3
-                                automated_checkin:
-                                    type: boolean
-                                    description:
-                                    example: false
-                                on_time_performance:
-                                    type: string
-                                    description:
-                                    example:
+        itinerary:
+            $ref: '#/components/schemas/itinerary_response'
 
-    
-    
+
+    baggage:
+        type: object
+        description: Details of carryon and checked baggage allowances
+        properties:
+            applicable_bags:
+                type: string
+                description:
+                example: "1stChecked"
+            applicable_carryon_bags:
+                type: string
+                description:
+                example: "1"
+            baggage_cost:
+                type: float
+                description:
+                example: 30.00
+            baggage_restrictions:
+                type: string
+                description:
+                example: "UPTO50LB/23KG AND UPTO62LI/158LCM"
+            carryon_cost:
+                type: float
+                description:
+                example: 0.00
+            carryon_restrictions:
+                type: string
+                description:
+                example: "CARRYON HAND BAGGAGE ALLOWANCE"
+    flight_details:
+        type: array
+        description: Details of services, meals, terminals for each flight in the segment
+        items:
+            type: object
+            properties:
+                flight_number:
+                    type: string
+                    description: Flight number
+                    example: "WS368"
+                in_flight_services:
+                    type: array
+                    description: List of services offered on flight
+                    example: ["Entertainment on Demand", "Wi-Fi", "USB Power"]
+                meals:
+                    type: array
+                    description: Details of meals available on flight
+                    example: ["FoodForPurchase"]
+                origin_terminal:
+                    type: string
+                    description: Terminal from which the flight departs
+                    example: 1
+                destination_terminal:
+                    type: string
+                    description: Terminal at which the flight arrives
+                    example: 3
+                automated_checkin:
+                    type: boolean
+                    description:
+                    example: false
+                on_time_performance:
+                    type: string
+                    description:
+                    example:
+
+
     trip_pricing_breakdown:
         allOf:
           - $ref: '#/components/schemas/PriceConfirmResponse/properties'
@@ -423,10 +408,15 @@ components:
                 type: object
                 description: The PNR to be priced
                 required:
+                    - pnr_reference
                     - plating_carrier
                     - credentials
                     - segments
                 properties:
+                    pnr_reference:
+                        type: integer
+                        description: pnr reference id within the itinerary. Always starting from 1
+                        example: 1
                     plating_carrier:
                         type: string
                         description: The airline that a ticket will be issued on behalf of.
@@ -518,8 +508,58 @@ components:
                 description: Arrival time of the flight
                 format: 'yyyy-MM-ddTHH:mm:ssZ'
                 example: "2019-04-07T15:10:00.000-04:00"
+#----------------------------------------------------------------------------
+    itinerary_response:
+        allOf:
+            - $ref: #
+            - type: array
+              description: The itinerary chosen for the trip
+              items:
+                  type: object
+                  description: The PNR to be priced
+                  required:
+                      - pnr_reference
+                      - plating_carrier
+                      - credentials
+                      - segments
+                  properties:
+                      pnr_reference:
+                          type: integer
+                          description: pnr reference id within the itinerary. Always starting from 1
+                          example: 1
+                      plating_carrier:
+                          type: string
+                          description: The airline that a ticket will be issued on behalf of.
+                          required: true
+                          example: "WS"
+                      credentials:
+                          $ref: '#/components/schemas/credentials'
+                      pnr_type:
+                          $ref: '#/components/schemas/segment_type'
+                      segments:
+                          type: array
+                          description: The PNRs chosen for the trip
+                          items:
+                              $ref: '#/components/schemas/segment_response'
 
+    segment_response:
+        type: object
+        description: The segment which is a part of an openjaw or a oneway
+        required:
+            - segment_id
+            - baggage
+            - flight_details
+        properties:
+            segment_id:
+                type: string
+                description: Segment_id for the group
+                example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
+            baggage:
+                $ref: '#/components/schemas/baggage'
+            flight_details:
+                $ref: '#/components/schemas/flight_details'
 
+#----------------------------------------------------------------------------
     PriceConfirmRequest:
       title: Request
       type: object
