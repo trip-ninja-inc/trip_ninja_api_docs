@@ -414,26 +414,19 @@ components:
                 type: string
                 example: americas
 
-    segments:
+    itinerary:
         allOf:
           - $ref: #
           - type: array
-            description: The segments chosen for the trip from the include_itineraries = true search response
+            description: The itinerary chosen for the trip
             items:
                 type: object
-                description: The segments chosen for the trip
+                description: The PNR to be priced
                 required:
-                    - segment_id
                     - plating_carrier
-                    - segment_type
-                    - legs
+                    - credentials
+                    - segments
                 properties:
-                    segment_id:
-                        type: string
-                        description: Segment_id for the group
-                        example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
-                    segment_type:
-                        $ref: '#/components/schemas/segment_type'
                     plating_carrier:
                         type: string
                         description: The airline that a ticket will be issued on behalf of.
@@ -441,12 +434,32 @@ components:
                         example: "WS"
                     credentials:
                         $ref: '#/components/schemas/credentials'
-                    flights:
-                        $ref: '#/components/schemas/flights'
+                    pnr_type:
+                        $ref: '#/components/schemas/segment_type'
+                    segments:
+                        type: array
+                        description: The PNRs chosen for the trip
+                        items:
+                            $ref: '#/components/schemas/segment'
+
+    segment:
+        type: object
+        description: The segment which is a part of an openjaw or a oneway
+        required:
+            - segment_id
+            - segment_type
+            - flights
+        properties:
+            segment_id:
+                type: string
+                description: Segment_id for the group
+                example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
+            flights:
+                $ref: '#/components/schemas/flights'
 
     flights:
         type: object
-        description: A list of legs, each leg includes origin, destination, flight number, departure time and arrival time
+        description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
         required:
             - origin
             - departure_time
@@ -463,22 +476,14 @@ components:
                 example: "oHzo6pBAAA/B1d6hPLAAAA=="
             origin:
                 type: string
-                description: IATA code of the leg origin
+                description: IATA code of the flight origin
                 required: true
                 example: CDG
-            origin_name:
-                type: string
-                description: Full name of the leg origin
-                example: "Paris, France (CDG)"
             destination:
                 type: string
-                description: IATA code of the leg destination
+                description: IATA code of the flight destination
                 required: true
                 example: YUL
-            destination_name:
-                type: string
-                description: Full name of the leg destination
-                example: "Montreal, PQ, Canada (YUL)"
             booking_code:
                 type: string
                 description: The airline booking code that describes the flight cabin class
@@ -505,12 +510,12 @@ components:
             departure_time:
                 type: DateTime
                 format: 'yyyy-MM-ddTHH:mm:ssZ'
-                description: Departure time of the leg
+                description: Departure time of the flight
                 required: true
                 example: "2019-04-07T13:15:00.000+02:00"
             arrival_time:
                 type: DateTime
-                description: Arrival time of the leg
+                description: Arrival time of the flight
                 format: 'yyyy-MM-ddTHH:mm:ssZ'
                 example: "2019-04-07T15:10:00.000-04:00"
 
@@ -563,8 +568,8 @@ components:
             required: true 
             type: float
             example: 0
-        segments:
-            $ref: '#/components/schemas/segments'
+        itinerary:
+            $ref: '#/components/schemas/itinerary'
     
     CancelRequest:
         title: Request
