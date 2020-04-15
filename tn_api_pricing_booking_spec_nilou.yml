@@ -408,14 +408,14 @@ components:
                 type: object
                 description: The PNR to be priced
                 required:
-                    - pnr_reference
+                    - itinerary_reference
                     - plating_carrier
                     - credentials
                     - segments
                 properties:
-                    pnr_reference:
+                    itinerary_reference:
                         type: integer
-                        description: pnr reference id within the itinerary. Always starting from 1
+                        description: itinerary reference id within the itinerary. Always starting from 1
                         example: 1
                     plating_carrier:
                         type: string
@@ -424,7 +424,7 @@ components:
                         example: "WS"
                     credentials:
                         $ref: '#/components/schemas/credentials'
-                    pnr_type:
+                    itinerary_type:
                         $ref: '#/components/schemas/segment_type'
                     segments:
                         type: array
@@ -518,14 +518,14 @@ components:
                   type: object
                   description: The PNR to be priced
                   required:
-                      - pnr_reference
+                      - itinerary_reference
                       - plating_carrier
                       - credentials
                       - segments
                   properties:
-                      pnr_reference:
+                      itinerary_reference:
                           type: integer
-                          description: pnr reference id within the itinerary. Always starting from 1
+                          description: itinerary reference id within the itinerary. Always starting from 1
                           example: 1
                       plating_carrier:
                           type: string
@@ -534,7 +534,7 @@ components:
                           example: "WS"
                       credentials:
                           $ref: '#/components/schemas/credentials'
-                      pnr_type:
+                      itinerary_type:
                           $ref: '#/components/schemas/segment_type'
                       segments:
                           type: array
