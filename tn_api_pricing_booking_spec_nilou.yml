@@ -406,7 +406,7 @@ components:
             description: The itinerary chosen for the trip
             items:
                 type: object
-                description: The PNR to be priced
+                description: The itinerary to be priced
                 required:
                     - itinerary_reference
                     - plating_carrier
@@ -428,7 +428,7 @@ components:
                         $ref: '#/components/schemas/segment_type'
                     segments:
                         type: array
-                        description: The PNRs chosen for the trip
+                        description: The segments chosen for the trip
                         items:
                             $ref: '#/components/schemas/segment'
 
@@ -516,7 +516,7 @@ components:
               description: The itinerary chosen for the trip
               items:
                   type: object
-                  description: The PNR to be priced
+                  description: The itinerary to be priced
                   required:
                       - itinerary_reference
                       - plating_carrier
@@ -538,7 +538,7 @@ components:
                           $ref: '#/components/schemas/segment_type'
                       segments:
                           type: array
-                          description: The PNRs chosen for the trip
+                          description: The segments chosen for the trip
                           items:
                               $ref: '#/components/schemas/segment_response'
 
