@@ -445,11 +445,14 @@ components:
                 description: Segment_id for the group
                 example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
             flights:
-                $ref: '#/components/schemas/flights'
+                type: array
+                description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+                items:
+                    $ref: '#/components/schemas/flights'
 
     flights:
         type: object
-        description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+        description: flight information
         required:
             - origin
             - departure_time
