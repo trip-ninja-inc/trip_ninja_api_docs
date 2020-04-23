@@ -576,6 +576,7 @@ components:
           - currency
           - price
           - markup
+          - itineraries
       properties:
         trip_id:
             description: A unique key used for identification and when booking a trip.
@@ -603,6 +604,11 @@ components:
             example: USD
             required: true
             type: string
+        region:
+            description: region
+            example: americas
+            required: false
+            type: string
         price:
             description: Total price of selected flights, not including markup, in currency specified.
             required: true 
@@ -613,7 +619,7 @@ components:
             required: true 
             type: float
             example: 0
-        itinerary:
+        itineraries:
             $ref: '#/components/schemas/itinerary'
     
     CancelRequest:
