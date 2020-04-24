@@ -318,7 +318,7 @@ components:
                     type: float
                     description: Original price of trip from search request - does not include markup.
                     example: 455.61
-                airfare:
+                base_fare:
                     type: float
                     description: Confirmed airfare price for the trip.
                     example: 370.04
