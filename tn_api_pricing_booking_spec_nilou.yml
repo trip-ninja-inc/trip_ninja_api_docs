@@ -607,11 +607,6 @@ components:
             example: USD
             required: true
             type: string
-        region:
-            description: region
-            example: americas
-            required: false
-            type: string
         price:
             description: Total price of selected flights, not including markup, in currency specified.
             required: true 
