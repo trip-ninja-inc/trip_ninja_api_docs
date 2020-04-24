@@ -511,7 +511,7 @@ components:
                 description: Arrival time of the flight
                 format: 'yyyy-MM-ddTHH:mm:ssZ'
                 example: "2019-04-07T15:10:00.000-04:00"
-            branding_identifier:
+            brand_identifier:
                 type: string
                 description: Identifier for the brand
                 required: true
