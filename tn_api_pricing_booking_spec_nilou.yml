@@ -318,7 +318,7 @@ components:
                     type: float
                     description: Original price of trip from search request - does not include markup.
                     example: 455.61
-                airfare:
+                base_fare:
                     type: float
                     description: Confirmed airfare price for the trip.
                     example: 370.04
@@ -445,11 +445,14 @@ components:
                 description: Segment_id for the group
                 example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
             flights:
-                $ref: '#/components/schemas/flights'
+                type: array
+                description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+                items:
+                    $ref: '#/components/schemas/flights'
 
     flights:
         type: object
-        description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+        description: flight information
         required:
             - origin
             - departure_time
@@ -576,6 +579,7 @@ components:
           - currency
           - price
           - markup
+          - itineraries
       properties:
         trip_id:
             description: A unique key used for identification and when booking a trip.
@@ -603,6 +607,11 @@ components:
             example: USD
             required: true
             type: string
+        region:
+            description: region
+            example: americas
+            required: false
+            type: string
         price:
             description: Total price of selected flights, not including markup, in currency specified.
             required: true 
@@ -613,7 +622,7 @@ components:
             required: true 
             type: float
             example: 0
-        itinerary:
+        itineraries:
             $ref: '#/components/schemas/itinerary'
     
     CancelRequest:
