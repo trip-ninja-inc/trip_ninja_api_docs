@@ -502,15 +502,15 @@ components:
                 example: 475
             departure_time:
                 type: DateTime
-                format: 'yyyy-MM-ddTHH:mm:ssZ'
+                format: 'yyyy-MM-ddTHH:mm:ss'
                 description: Departure time of the flight
                 required: true
-                example: "2019-04-07T13:15:00.000+02:00"
+                example: "2019-04-07T13:15:00"
             arrival_time:
                 type: DateTime
                 description: Arrival time of the flight
-                format: 'yyyy-MM-ddTHH:mm:ssZ'
-                example: "2019-04-07T15:10:00.000-04:00"
+                format: 'yyyy-MM-ddTHH:mm:ss'
+                example: "2019-04-07T15:10:00"
             brand_identifier:
                 type: string
                 description: Identifier for the brand
