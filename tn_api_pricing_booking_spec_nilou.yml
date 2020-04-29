@@ -103,6 +103,10 @@ paths:
                                         type: string
                                         description: Unique Identifier of a Universal Record.   
                                         example: 6D6RMG
+                                    pnr_list: 
+                                        type: array
+                                        description: List of PNRs created.   
+                                        example: ['7XYW3G', '7XYP4A']
                 400:
                     description: Unable to create booking
                     content:
