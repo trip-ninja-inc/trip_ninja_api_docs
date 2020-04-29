@@ -597,7 +597,7 @@ components:
             enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
             example: OneWay
         endpoint:
-            description: Parameter toggles travelport production and pre-production endpoints
+            description: Parameter toggles GDS production and pre-production endpoints
             required: true
             type: string
             example: preprod
@@ -643,12 +643,18 @@ components:
             - trip_id
             - passengers
             - billing
+            - endpoint
         properties:
             trip_id:
                 type: string
                 description: A unique key used for identification and when booking a trip.
                 required: true                
                 example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            endpoint:
+                description: Parameter toggles GDS production and pre-production endpoints
+                required: true
+                type: string
+                example: preprod
             add_to_ticketing_queue:
                 type: boolean
                 example: true
