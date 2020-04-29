@@ -716,7 +716,7 @@ components:
                             type: string
                             required: true
                             description: "The customer's phone number."
-                            example: 9022225555
+                            example: "9022225555"
                         passport_country:
                             type: string
                             description: "The customer's passport country of issue."
@@ -765,11 +765,11 @@ components:
                             card_number:
                                 type: string
                                 description: The credit card number.
-                                example: 4520000000000000
+                                example: "4520000000000000"
                             card_cvv:
                                 type: string
                                 description: The three to four digit card security or CVV code.
-                                example: 345
+                                example: "345"
                             card_expiration_date:
                                 type: string
                                 description: The card's expiry date.
