@@ -103,6 +103,10 @@ paths:
                                         type: string
                                         description: Unique Identifier of a Universal Record.   
                                         example: 6D6RMG
+                                    pnr_list: 
+                                        type: array
+                                        description: List of PNRs created.   
+                                        example: ['7XYW3G', '7XYP4A']
                 400:
                     description: Unable to create booking
                     content:
@@ -318,7 +322,7 @@ components:
                     type: float
                     description: Original price of trip from search request - does not include markup.
                     example: 455.61
-                airfare:
+                base_fare:
                     type: float
                     description: Confirmed airfare price for the trip.
                     example: 370.04
@@ -445,11 +449,14 @@ components:
                 description: Segment_id for the group
                 example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
             flights:
-                $ref: '#/components/schemas/flights'
+                type: array
+                description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+                items:
+                    $ref: '#/components/schemas/flights'
 
     flights:
         type: object
-        description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time
+        description: flight information
         required:
             - origin
             - departure_time
@@ -499,15 +506,15 @@ components:
                 example: 475
             departure_time:
                 type: DateTime
-                format: 'yyyy-MM-ddTHH:mm:ssZ'
+                format: 'yyyy-MM-ddTHH:mm:ss'
                 description: Departure time of the flight
                 required: true
-                example: "2019-04-07T13:15:00.000+02:00"
+                example: "2019-04-07T13:15:00"
             arrival_time:
                 type: DateTime
                 description: Arrival time of the flight
-                format: 'yyyy-MM-ddTHH:mm:ssZ'
-                example: "2019-04-07T15:10:00.000-04:00"
+                format: 'yyyy-MM-ddTHH:mm:ss'
+                example: "2019-04-07T15:10:00"
             brand_identifier:
                 type: string
                 description: Identifier for the brand
@@ -576,6 +583,7 @@ components:
           - currency
           - price
           - markup
+          - itineraries
       properties:
         trip_id:
             description: A unique key used for identification and when booking a trip.
@@ -589,7 +597,7 @@ components:
             enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
             example: OneWay
         endpoint:
-            description: Parameter toggles travelport production and pre-production endpoints
+            description: Parameter toggles GDS production and pre-production endpoints
             required: true
             type: string
             example: preprod
@@ -613,7 +621,7 @@ components:
             required: true 
             type: float
             example: 0
-        itinerary:
+        itineraries:
             $ref: '#/components/schemas/itinerary'
     
     CancelRequest:
@@ -635,12 +643,18 @@ components:
             - trip_id
             - passengers
             - billing
+            - endpoint
         properties:
             trip_id:
                 type: string
                 description: A unique key used for identification and when booking a trip.
                 required: true                
                 example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            endpoint:
+                description: Parameter toggles GDS production and pre-production endpoints
+                required: true
+                type: string
+                example: preprod
             add_to_ticketing_queue:
                 type: boolean
                 example: true
@@ -702,7 +716,7 @@ components:
                             type: string
                             required: true
                             description: "The customer's phone number."
-                            example: 9022225555
+                            example: "9022225555"
                         passport_country:
                             type: string
                             description: "The customer's passport country of issue."
@@ -751,11 +765,11 @@ components:
                             card_number:
                                 type: string
                                 description: The credit card number.
-                                example: 4520000000000000
+                                example: "4520000000000000"
                             card_cvv:
                                 type: string
                                 description: The three to four digit card security or CVV code.
-                                example: 345
+                                example: "345"
                             card_expiration_date:
                                 type: string
                                 description: The card's expiry date.
