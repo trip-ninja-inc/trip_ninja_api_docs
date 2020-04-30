@@ -7,7 +7,7 @@ info:
     <h2>Introduction</h2>
     Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
     are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
-    and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
+    and pre-production endpoints - these correspond to the Data Source’s production and pre-production services, and can be used as desired.<br  />
     <h2>Trip Ninja API URLs</h2>
 
     Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
@@ -45,8 +45,16 @@ servers:
     description: Pre-Production server
 
 paths:
-    /price/:
+    /price/{endpoint}/:
         post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Price Confirmation"
             description: Once the desired flights have been selected, call the price confirm endpoint to confirm their availability and prices.
             operationId: PriceConfirm
@@ -77,8 +85,16 @@ paths:
                                         type: array
                                         example: ['Failed segment: 4389048309dfhsjnc3420']
 
-    /book/:
+    /book/{endpoint}/:
         post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Create Booking"
             description: "When a trip is to be booked, send a request to the endpoint /book/ to create the Universal Record and associated PNR's for the trip. The booking can then be placed on the agency's ticketing queue."
             operationId: "CreateBooking"
@@ -122,6 +138,14 @@ paths:
                                         example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966'] 
 
         get:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "List Bookings"
             description: "Get a list of all bookings for a PCC, travel agency, or agent."
             operationId: "ListBooking"
@@ -155,6 +179,14 @@ paths:
                                                                        
 
         delete:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Cancel Booking"
             description: "To cancel a booking, send a request with the trip_id and ur_locator_code."
             operationId: "CancelBooking"
@@ -187,8 +219,16 @@ paths:
                                     error_details:
                                         type: array
                                         example: ['Could not find record matching locator code UX345SE'] 
-    /ticket/:
+    /ticket/{endpoint}/:
         post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Add To Ticketing Queue"
             description: If a trip has been booked, but not yet added to the agency ticketing queue, use this endpoint to add it to their queue.
             operationId: AddBookingToTicketingQueue
@@ -316,7 +356,7 @@ components:
             properties:
                 confirmed_total_price:
                     type: float
-                    description: Total price of the trip after price confirmation (airfare + taxes + fees). Does not include markup.
+                    description: Total price of the trip after price confirmation (base_fare + taxes + fees). Does not include markup.
                     example: 455.68
                 original_total_price:
                     type: float
@@ -324,7 +364,7 @@ components:
                     example: 455.61
                 base_fare:
                     type: float
-                    description: Confirmed airfare price for the trip.
+                    description: Confirmed base_fare price for the trip.
                     example: 370.04
                 taxes:
                     type: float
@@ -351,15 +391,15 @@ components:
             properties:
                 confirmed_total_price:
                     type: float
-                    description: Total price of the segment after price confirmation (airfare + taxes + fees). Does not include markup.
+                    description: Total price of the segment after price confirmation (base_fare + taxes + fees). Does not include markup.
                     example: 105.68
                 original_total_price:
                     type: float
                     description: Original price of segment from search request - does not include markup.
                     example: 100.61
-                airfare:
+                base_fare:
                     type: float
-                    description: Confirmed airfare price for the segment.
+                    description: Confirmed base_fare price for the segment.
                     example: 70.04
                 taxes:
                     type: float
@@ -578,7 +618,6 @@ components:
       required:
           - trip_id
           - trip_type
-          - endpoint
           - traveller_list
           - currency
           - price
@@ -596,11 +635,6 @@ components:
             type: string
             enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
             example: OneWay
-        endpoint:
-            description: Parameter toggles GDS production and pre-production endpoints
-            required: true
-            type: string
-            example: preprod
         traveller_list: 
             description: Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’
             required: true 
@@ -650,11 +684,6 @@ components:
                 description: A unique key used for identification and when booking a trip.
                 required: true                
                 example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-            endpoint:
-                description: Parameter toggles GDS production and pre-production endpoints
-                required: true
-                type: string
-                example: preprod
             add_to_ticketing_queue:
                 type: boolean
                 example: true
@@ -805,11 +834,6 @@ components:
                 required: true
                 type: string
                 example: 2G3C
-            endpoint:
-                description: Parameter toggles travelport production and pre-production endpoints
-                required: true
-                type: string
-                example: preprod
             agency:
                 description: Travel agency for which to list bookings from.
                 required: false  
