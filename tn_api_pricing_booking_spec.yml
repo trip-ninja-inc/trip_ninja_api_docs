@@ -219,7 +219,7 @@ paths:
                                     error_details:
                                         type: array
                                         example: ['Could not find record matching locator code UX345SE']
-    /ticket/{endpoint}/:
+    /queue/{endpoint}/:
         post:
             parameters:
                 - in: path
