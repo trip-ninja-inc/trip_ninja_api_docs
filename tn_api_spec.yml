@@ -1334,11 +1334,6 @@ components:
                 items:
                     type: string
                     example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
-            client_generated_trip:
-                type: boolean
-                default: False
-                description: Denotes a trip in which Trip Ninja flights were not used, but the Trip Ninja supplied markup was applied. If set to True, the 'segment_ids' field must be sent as an empty array.
-                example: False
 
     CancelRequest:
         title: Request
