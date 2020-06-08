@@ -166,6 +166,74 @@ paths:
                 500:
                     description: Server Error
 
+    /search-prod/:
+        post:
+            summary: "Search"
+            description: |
+              This endpoint triggers farestrucutre for any number of city search
+
+            operationId: FareStructure
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/FareStructureRequest'
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SearchResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid alliance. Expected one of *A, *S, *O
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (Flight not found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
+                500:
+                    description: Server Error
+
     /flex-trip-prod/:
         post:
             summary: "FlexTrip"
@@ -409,7 +477,61 @@ paths:
 
 components:
   schemas:
-    FareStructureResponse:
+    SearchResponse:
+      title: Response
+      type: object
+
+      properties:
+        trip:
+          type: object
+          description: Contains the JSON object provided as the request
+          example:
+            endpoint: Prod
+            num_results: 50
+            cabin_class: E
+            exclude_carriers: []
+            region: "americas"
+            refundable: false
+            currency: USD
+            time_value: 0
+            max_cache: 24
+            travellers: ['ADT','ADT','CHD']
+            provider: 1V
+            alliance: ""
+            alpha: 0.1
+            schema: 40
+            PCC: 2G3C
+        FareStructure:
+            type: object
+            description: Contains the JSON object of the response.
+            properties:
+                total_cost:
+                    type: float
+                    description: Total cost of cheapest segments recommended, in currency specified.
+                    example: 693.6
+                tn_net_fare_markup:
+                    type: float
+                    description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+                    example: 25.0
+                structure:
+                    type: array
+                    description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
+                path_sequence:
+                    type: array
+                    description: An array of IATA codes representing the chronological order of your trip.
+                    example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
+                trip_id:
+                    type: string
+                    description: A unique key used for identification and when booking a trip.
+                total_transportation_minutes:
+                    type: integer
+                    description: Total transportation minutes for recommended cheapest segments.
+                itineraries:
+                    $ref: '#/components/schemas/Itineraries'
+                segments:
+                    $ref: '#/components/schemas/Segments'
+
+  FareStructureResponse:
       title: Response
       type: object
 
