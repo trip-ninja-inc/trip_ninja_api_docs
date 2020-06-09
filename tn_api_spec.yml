@@ -542,7 +542,7 @@ components:
             description: Structure of the OPEN_JAW itinerary
             example: [0,1]
           segment_position:
-            type: int
+            type: integer
             description: Position of the current segment in itinerary structure. Starts from 0
             example: 0
           option_id:
@@ -566,7 +566,7 @@ components:
               type of the virtual interlining segment option
             example: OPEN_JAW
           vi_position:
-            type: int
+            type: integer
             description: |
               position if the virtual interlining option in itinerary. Starts from 0
             example: 1
@@ -649,23 +649,20 @@ components:
                 example: WS3 - Published fare
           cabin_class:
             type: String
+            enum: [ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST, PREMIUM_FIRST]
             description: cabin class for the itinerary
             example: Economic Standard
           alliance:
             type: String
-            description: cabin class for the itinerary
             example: Economic Standard
           private_fare:
             type: String
-            description: cabin class for the itinerary
             example: Economic Standard
           priced_passengers:
             type: String
-            description: cabin class for the itinerary
             example: Economic Standard
           segment_time_w_connections:
             type: String
-            description: cabin class for the itinerary
             example: Economic Standard
           flights:
             type: object
@@ -1403,10 +1400,12 @@ components:
               description: Toggles number of stop for GDS request *Travelport Only*
               default: "any"
               type: string
+              enum: ["any", "direct", "1", "2"]
           baggage:
               description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
               default: "any"
               type: string
+              enum: ["any", "1", "2"]
           refundable:
               description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
               default: false
@@ -1415,10 +1414,13 @@ components:
               description: Parameter toggles which travelport endpoint you hit *Travelport Only*
               default: "americas"
               type: string
+              enum: ["emea","apac","americas"]
           num_results:
               description: Parameter sets the number of segments in the response *Travelport Only*
               default: 50
               type: integer
+              minimum: 50
+              maximum: 250
           include_lcc:
               description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
               default: []
@@ -1576,10 +1578,12 @@ components:
                 description: Toggles number of stop for GDS request *Travelport Only*
                 default: "any"
                 type: string
+                enum: ["any", "direct", "1", "2"]
             baggage:
                 description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
                 default: "any"
                 type: string
+                enum: ["any", "1", "2"]
             refundable:
                 description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
                 default: false
@@ -1588,10 +1592,13 @@ components:
                 description: Parameter toggles which travelport endpoint you hit *Travelport Only*
                 default: "americas"
                 type: string
+                enum: ["emea","apac","americas"]
             num_results:
                 description: Parameter sets the number of segments in the response *Travelport Only*
                 default: 50
                 type: integer
+                minimum: 50
+                maximum: 250
     FlexTripResponse:
       title: Response
       type: object
