@@ -172,7 +172,7 @@ paths:
             description: |
               This endpoint triggers farestrucutre for any number of city search
 
-            operationId: FareStructure
+            operationId: Search
             requestBody:
                 content:
                     application/json:
@@ -482,40 +482,14 @@ components:
       type: object
 
       properties:
-        trip:
-          type: object
-          description: Contains the JSON object provided as the request
-          example:
-            endpoint: Prod
-            num_results: 50
-            cabin_class: E
-            exclude_carriers: []
-            region: "americas"
-            refundable: false
-            currency: USD
-            time_value: 0
-            max_cache: 24
-            travellers: ['ADT','ADT','CHD']
-            provider: 1V
-            alliance: ""
-            alpha: 0.1
-            schema: 40
-            PCC: 2G3C
         FareStructure:
             type: object
             description: Contains the JSON object of the response.
             properties:
-                total_cost:
-                    type: float
-                    description: Total cost of cheapest segments recommended, in currency specified.
-                    example: 693.6
-                tn_net_fare_markup:
+                markup:
                     type: float
                     description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
                     example: 25.0
-                structure:
-                    type: array
-                    description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
@@ -523,15 +497,239 @@ components:
                 trip_id:
                     type: string
                     description: A unique key used for identification and when booking a trip.
-                total_transportation_minutes:
-                    type: integer
-                    description: Total transportation minutes for recommended cheapest segments.
                 itineraries:
                     $ref: '#/components/schemas/Itineraries'
                 segments:
-                    $ref: '#/components/schemas/Segments'
+                    $ref: '#/components/schemas/TripOptions'
+                segment_details:
+                    $ref: '#/components/schemas/SegmentDetails'
+                flight_details:
+                    $ref: '#/components/schemas/FlightDetails'
 
-  FareStructureResponse:
+    TripOptions:
+      title: Trip Options
+      type: array
+      items:
+        $ref: '#/components/schemas/SegmentOptions'
+
+    SegmentOptions:
+      title: Segment Options
+      type: array
+      items:
+        type: object
+        properties:
+          segment_detail_ref:
+            type: integer
+            description: reference to segment info in segment_details.
+            example: 1
+          itinerary_type:
+            type: string
+            enum: [ONE_WAY, OPEN_JAW, MULTI_PNR]
+            description: Type of the itinerary option.
+            example: ONE_WAY
+          itinerary_id:
+            type: string
+            description: Links part of the OPEN_JAW itineraries and VI structures together
+            example: ad76ah7dhasd76asb76
+          itinerary_structure:
+            type: string
+            description: Structure of the OPEN_JAW itinerary
+            example: [0,1]
+          segment_position:
+            type: int
+            description: Position of the current segment in itinerary structure
+            example: 0
+          weight:
+            type: float
+            description: Weight of the itinerary (time-value considered).
+            example: 239
+          price:
+            type: float
+            description: Price of the itinerary (fare and tax included).
+            example: 197.1
+          base_price:
+            type: float
+            description: Base price of the itinerary (tax excluded)
+            example: 0
+          taxes:
+            type: float
+            description: Tax price of the itinerary
+            example: 119.1
+          fees:
+            type: float
+            description: Fees for the itinerary
+            example: 0
+          transportation_time:
+            type: integer
+            description: Total transportation time for the itinerary
+            example: 425
+          fare_type:
+            type: string
+            description: Fare Type of the segment
+            example: Published
+          baggage:
+            type: object
+            description: Contains baggage information.
+            properties:
+              number_of_pieces:
+                type: integer
+                description: Number of bags allowed.
+                example: 0
+          additional_details:
+            type: object
+            description: Additional Details
+            properties:
+              e_ticketability:
+                type: boolean
+                example: true
+              latest_ticketing_time:
+                type: string
+                format: date
+                example: "11JUN20"
+              refundable:
+                type: boolean
+                example: true
+              cancel_penalty:
+                type: object
+                description: Information about cancellation
+                properties:
+                  amount:
+                    type: float
+                    description: Cancellation penalty amount
+                    example: 0
+                  percentage:
+                    type: float
+                    description: Cancellation penalty percentage
+                    example: 100
+              change_penalty:
+                  type: object
+                  description: Information about changing.
+                  properties:
+                    amount:
+                      type: float
+                      description: Change penalty amount
+                      example: 78
+                    percentage:
+                      type: float
+                      description: Change penalty percentage
+                      example: 0
+              fare_types_info:
+                type: string
+                example: WS3 - Published fare
+          cabin_class:
+            type: String
+            description: cabin class for the itinerary
+            example: Economic Standard
+          alliance:
+            type: String
+            description: cabin class for the itinerary
+            example: Economic Standard
+          private_fare:
+            type: String
+            description: cabin class for the itinerary
+            example: Economic Standard
+          priced_passengers:
+            type: String
+            description: cabin class for the itinerary
+            example: Economic Standard
+          segment_time_w_connections:
+            type: String
+            description: cabin class for the itinerary
+            example: Economic Standard
+          flights:
+            type: object
+            description: flights information
+            properties:
+              flight_detail_ref:
+                type: integer
+                description: reference to flight info in flight_details
+                example: 1
+              booking_code:
+                type: string
+                minLength: 1
+                maxLength: 1
+                example: B
+              fare_type:
+                type: string
+                example: Published fare
+              fare_basis_code:
+                type: string
+                example: LP7J2LBS
+              cabin_class:
+                type: string
+                example: Economic Standard
+          brands:
+            type: array
+            description: list of branded fares for the current segment
+
+    SegmentDetails:
+      title: Segment Details
+      type: array
+      items:
+        type: object
+        properties:
+          reference:
+            type: integer
+            description: reference to segment in segment_options.
+            example: 1
+          source:
+            type: string
+            description: GDS or LCC provider source for segment.
+            example: travelport
+          origin:
+            type: string
+            description: IATA code of the segment origin
+            example: NYC
+          destination:
+            type: string
+            description: IATA code of the segment destination
+            example: LHR
+
+    FlightDetails:
+      title: Flight Details
+      type: array
+      items:
+        type: object
+        properties:
+          reference:
+            type: integer
+            description: reference to flight in segment_options>flights.
+            example: 1
+          origin:
+            type: string
+            description: IATA code of the segment origin
+            example: NYC
+          destination:
+            type: string
+            description: IATA code of the segment destination
+            example: LHR
+          departure_time:
+            type: string
+            format: date-time
+            description: "Departure date and time with timezone."
+            example: "2020-12-05T20:50:00-05:00"
+          arrival_time:
+            format: date-time
+            description: "Arrival date and time with timezone."
+            example: "2020-12-06T09:10:00+00:00"
+          flight_number:
+            type: integer
+            description: Flight number.
+            example: 530
+          carrier:
+            type: string
+            minLength: 2
+            maxLength: 2
+            description: "Airline carrier of the flight."
+            example: "AC"
+          flight_time:
+            type: integer
+            description: Flight duration in minutes
+            example: 475
+
+
+
+    FareStructureResponse:
       title: Response
       type: object
 
