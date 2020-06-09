@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "2.22.0"
+  version: "3.3.0"
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
@@ -76,6 +76,7 @@ info:
   x-logo:
     url: 'https://s3.amazonaws.com/tn-api-docs/tripninja_logo_dev-01.png'
     altText: Trip Ninja logo
+    href: 'https://www.tripninja.io/'
 
 servers:
   - url: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
