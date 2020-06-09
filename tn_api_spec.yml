@@ -501,8 +501,6 @@ components:
                     $ref: '#/components/schemas/Itineraries'
                 segments:
                     $ref: '#/components/schemas/TripOptions'
-                segment_details:
-                    $ref: '#/components/schemas/SegmentDetails'
                 flight_details:
                     $ref: '#/components/schemas/FlightDetails'
 
@@ -518,10 +516,18 @@ components:
       items:
         type: object
         properties:
-          segment_detail_ref:
-            type: integer
-            description: reference to segment info in segment_details.
-            example: 1
+          source:
+            type: string
+            description: GDS or LCC provider source for segment.
+            example: travelport
+          origin:
+            type: string
+            description: IATA code of the segment origin
+            example: NYC
+          destination:
+            type: string
+            description: IATA code of the segment destination
+            example: LHR
           itinerary_type:
             type: string
             enum: [ONE_WAY, OPEN_JAW, MULTI_PNR]
@@ -529,7 +535,7 @@ components:
             example: ONE_WAY
           itinerary_id:
             type: string
-            description: Links part of the OPEN_JAW itineraries and VI structures together
+            description: Links part of the OPEN_JAW itineraries/VI-structures together
             example: ad76ah7dhasd76asb76
           itinerary_structure:
             type: string
@@ -537,8 +543,33 @@ components:
             example: [0,1]
           segment_position:
             type: int
-            description: Position of the current segment in itinerary structure
+            description: Position of the current segment in itinerary structure. Starts from 0
             example: 0
+          option_id:
+            type: string
+            description: ID mapping VI parts of the option together
+            example: vi65s76sdf9
+          option_part:
+            type: string
+            description: |
+              shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
+            example: 1/2
+          virtual_interline:
+            type: boolean
+            description: |
+              true if option is a vi solution
+            example: true
+          vi_type:
+            type: string
+            enum: [ONE_WAY, OPEN_JAW]
+            description: |
+              type of the virtual interlining segment option
+            example: OPEN_JAW
+          vi_position:
+            type: int
+            description: |
+              position if the virtual interlining option in itinerary. Starts from 0
+            example: 1
           weight:
             type: float
             description: Weight of the itinerary (time-value considered).
@@ -662,28 +693,6 @@ components:
             type: array
             description: list of branded fares for the current segment
 
-    SegmentDetails:
-      title: Segment Details
-      type: array
-      items:
-        type: object
-        properties:
-          reference:
-            type: integer
-            description: reference to segment in segment_options.
-            example: 1
-          source:
-            type: string
-            description: GDS or LCC provider source for segment.
-            example: travelport
-          origin:
-            type: string
-            description: IATA code of the segment origin
-            example: NYC
-          destination:
-            type: string
-            description: IATA code of the segment destination
-            example: LHR
 
     FlightDetails:
       title: Flight Details
