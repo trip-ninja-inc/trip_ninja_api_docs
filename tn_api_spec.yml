@@ -482,7 +482,7 @@ components:
       type: object
 
       properties:
-        FareStructure:
+        fare_structure:
             type: object
             description: Contains the JSON object of the response.
             properties:
