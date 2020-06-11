@@ -653,39 +653,46 @@ components:
             description: cabin class for the itinerary
             example: Economic Standard
           alliance:
-            type: String
-            example: Economic Standard
+            description: Parameter toggles the preferred alliance for your query. If there are results containing flights from the given alliance, only flights from that alliance will be returned. Otherwise it will return flights from any alliance. *Travelport Only*
+            required: false
+            type: string
+            example: "*A"
           private_fare:
-            type: String
-            example: Economic Standard
+            type: boolean
+            description: True if segment is a private fare, otherwise False *Travelport customers only*
+            example: false
           priced_passengers:
-            type: String
-            example: Economic Standard
+            type: array
+            example: ['ADT','INF']
           segment_time_w_connections:
-            type: String
-            example: Economic Standard
+            type: float
+            description: segment travel time accounting for time between flights
+            example: 75.0
           flights:
-            type: object
+            type: array
             description: flights information
-            properties:
-              flight_detail_ref:
-                type: integer
-                description: reference to flight info in flight_details
-                example: 1
-              booking_code:
-                type: string
-                minLength: 1
-                maxLength: 1
-                example: B
-              fare_type:
-                type: string
-                example: Published fare
-              fare_basis_code:
-                type: string
-                example: LP7J2LBS
-              cabin_class:
-                type: string
-                example: Economic Standard
+            items:
+              type: object
+              description: flight information
+              properties:
+                flight_detail_ref:
+                  type: integer
+                  description: reference to flight info in flight_details
+                  example: 1
+                booking_code:
+                  type: string
+                  minLength: 1
+                  maxLength: 1
+                  example: B
+                fare_type:
+                  type: string
+                  example: Published fare
+                fare_basis_code:
+                  type: string
+                  example: LP7J2LBS
+                cabin_class:
+                  type: string
+                  example: Economic Standard
           brands:
             type: array
             description: list of branded fares for the current segment
