@@ -185,7 +185,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/SearchResponse'
+                                $ref: '#/components/schemas/FSSearchResponse'
                 400:
                     description: Invalid Input
                     content:
@@ -254,7 +254,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/FlexTripResponse'
+                                $ref: '#/components/schemas/FlexTripSearchResponse'
                 400:
                     description: Invalid Input
                     content:
@@ -477,10 +477,9 @@ paths:
 
 components:
   schemas:
-    SearchResponse:
+    FSSearchResponse:
       title: Response
       type: object
-
       properties:
         fare_structure:
             type: object
@@ -1606,6 +1605,31 @@ components:
                 type: integer
                 minimum: 50
                 maximum: 250
+
+    FlexTripSearchResponse:
+      title: Response
+      type: object
+      properties:
+        flex_trip:
+          type: object
+          description: Contains the JSON object of the response.
+          properties:
+            markup:
+              type: float
+              description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+              example: 25.0
+            path_sequence:
+              type: array
+              description: An array of IATA codes representing the chronological order of your trip.
+              example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
+            trip_id:
+              type: string
+              description: A unique key used for identification and when booking a trip.
+            segments:
+              $ref: '#/components/schemas/TripOptions'
+            flight_details:
+              $ref: '#/components/schemas/FlightDetails'
+
     FlexTripResponse:
       title: Response
       type: object
