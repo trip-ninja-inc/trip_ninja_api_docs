@@ -552,31 +552,35 @@ components:
             type: integer
             description: Position of the current segment in itinerary structure. Starts from 0
             example: 0
-          option_id:
-            type: string
-            description: ID mapping VI parts of the option together
-            example: vi65s76sdf9
-          option_part:
-            type: string
-            description: |
-              shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
-            example: 1/2
           virtual_interline:
             type: boolean
             description: |
               true if option is a vi solution
             example: true
+          option_id:
+            type: string
+            description: ID mapping VI parts of the option together
+            example: vi65s76sdf9
+            nullable: true
+          option_part:
+            type: string
+            description: |
+              shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
+            example: 1/2
+            nullable: true
           vi_type:
             type: string
             enum: [ONE_WAY, OPEN_JAW]
             description: |
               type of the virtual interlining segment option
             example: OPEN_JAW
+            nullable: true
           vi_position:
             type: integer
             description: |
               position if the virtual interlining option in itinerary. Starts from 0
             example: 1
+            nullable: true
           weight:
             type: float
             description: Weight of the itinerary (time-value considered).
