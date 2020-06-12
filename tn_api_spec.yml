@@ -522,11 +522,19 @@ components:
           origin:
             type: string
             description: IATA code of the segment origin
-            example: NYC
+            example: LHR
+          origin_name:
+            type: string
+            description: Full name of the flight origin
+            example: "London, United Kingdom (LHR)"
           destination:
             type: string
             description: IATA code of the segment destination
-            example: LHR
+            example: CDG
+          destination_name:
+            type: string
+            description: Full name of the flight destination
+            example: "Paris, France (CDG)"
           itinerary_type:
             type: string
             enum: [ONE_WAY, OPEN_JAW, MULTI_PNR]
