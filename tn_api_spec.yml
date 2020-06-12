@@ -167,6 +167,74 @@ paths:
                 500:
                     description: Server Error
 
+    /search-prod/:
+        post:
+            summary: "Search"
+            description: |
+              This endpoint triggers farestrucutre for any number of city search
+
+            operationId: Search
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/FareStructureRequest'
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FSSearchResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid alliance. Expected one of *A, *S, *O
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (Flight not found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
+                500:
+                    description: Server Error
+
     /flex-trip-prod/:
         post:
             summary: "FlexTrip"
@@ -187,7 +255,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/FlexTripResponse'
+                                $ref: '#/components/schemas/FlexTripSearchResponse'
                 400:
                     description: Invalid Input
                     content:
@@ -410,6 +478,290 @@ paths:
 
 components:
   schemas:
+    FSSearchResponse:
+      title: Response
+      type: object
+      properties:
+        fare_structure:
+            type: object
+            description: Contains the JSON object of the response.
+            properties:
+                markup:
+                    type: float
+                    description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+                    example: 25.0
+                path_sequence:
+                    type: array
+                    description: An array of IATA codes representing the chronological order of your trip.
+                    example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
+                trip_id:
+                    type: string
+                    description: A unique key used for identification and when booking a trip.
+                itineraries:
+                    $ref: '#/components/schemas/Itineraries'
+                segments:
+                    $ref: '#/components/schemas/TripOptions'
+                flight_details:
+                    $ref: '#/components/schemas/FlightDetails'
+
+    TripOptions:
+      title: Trip Options
+      type: array
+      items:
+        $ref: '#/components/schemas/SegmentOptions'
+
+    SegmentOptions:
+      title: Segment Options
+      type: array
+      items:
+        type: object
+        properties:
+          source:
+            type: string
+            description: GDS or LCC provider source for segment.
+            example: travelport
+          origin:
+            type: string
+            description: IATA code of the segment origin
+            example: LHR
+          origin_name:
+            type: string
+            description: Full name of the flight origin
+            example: "London, United Kingdom (LHR)"
+          destination:
+            type: string
+            description: IATA code of the segment destination
+            example: CDG
+          destination_name:
+            type: string
+            description: Full name of the flight destination
+            example: "Paris, France (CDG)"
+          itinerary_type:
+            type: string
+            enum: [ONE_WAY, OPEN_JAW, MULTI_PNR]
+            description: Type of the itinerary option.
+            example: ONE_WAY
+          itinerary_id:
+            type: string
+            description: Links part of the OPEN_JAW itineraries/VI-structures together
+            example: ad76ah7dhasd76asb76
+          itinerary_structure:
+            type: string
+            description: Structure of the OPEN_JAW itinerary
+            example: [0,1]
+          segment_position:
+            type: integer
+            description: Position of the current segment in itinerary structure. Starts from 0
+            example: 0
+          virtual_interline:
+            type: boolean
+            description: |
+              true if option is a vi solution
+            example: true
+          option_id:
+            type: string
+            description: ID mapping VI parts of the option together
+            example: vi65s76sdf9
+            nullable: true
+          option_part:
+            type: string
+            description: |
+              shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
+            example: 1/2
+            nullable: true
+          vi_type:
+            type: string
+            enum: [ONE_WAY, OPEN_JAW]
+            description: |
+              type of the virtual interlining segment option
+            example: OPEN_JAW
+            nullable: true
+          vi_position:
+            type: integer
+            description: |
+              position if the virtual interlining option in itinerary. Starts from 0
+            example: 1
+            nullable: true
+          weight:
+            type: float
+            description: Weight of the itinerary (time-value considered).
+            example: 239
+          price:
+            type: float
+            description: Price of the itinerary (fare and tax included).
+            example: 197.1
+          base_price:
+            type: float
+            description: Base price of the itinerary (tax excluded)
+            example: 0
+          taxes:
+            type: float
+            description: Tax price of the itinerary
+            example: 119.1
+          fees:
+            type: float
+            description: Fees for the itinerary
+            example: 0
+          transportation_time:
+            type: integer
+            description: Total transportation time for the itinerary
+            example: 425
+          fare_type:
+            type: string
+            description: Fare Type of the segment
+            example: Published
+          baggage:
+            type: object
+            description: Contains baggage information.
+            properties:
+              number_of_pieces:
+                type: integer
+                description: Number of bags allowed.
+                example: 0
+          additional_details:
+            type: object
+            description: Additional Details
+            properties:
+              e_ticketability:
+                type: boolean
+                example: true
+              latest_ticketing_time:
+                type: string
+                format: date
+                example: "11JUN20"
+              refundable:
+                type: boolean
+                example: true
+              cancel_penalty:
+                type: object
+                description: Information about cancellation
+                properties:
+                  amount:
+                    type: float
+                    description: Cancellation penalty amount
+                    example: 0
+                  percentage:
+                    type: float
+                    description: Cancellation penalty percentage
+                    example: 100
+              change_penalty:
+                  type: object
+                  description: Information about changing.
+                  properties:
+                    amount:
+                      type: float
+                      description: Change penalty amount
+                      example: 78
+                    percentage:
+                      type: float
+                      description: Change penalty percentage
+                      example: 0
+              fare_types_info:
+                type: string
+                example: WS3 - Published fare
+          cabin_class:
+            type: String
+            enum: [ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST, PREMIUM_FIRST]
+            description: cabin class for the itinerary
+            example: Economic Standard
+          alliance:
+            description: Parameter toggles the preferred alliance for your query. If there are results containing flights from the given alliance, only flights from that alliance will be returned. Otherwise it will return flights from any alliance. *Travelport Only*
+            required: false
+            type: string
+            example: "*A"
+          private_fare:
+            type: boolean
+            description: True if segment is a private fare, otherwise False *Travelport customers only*
+            example: false
+          priced_passengers:
+            type: array
+            example: ['ADT','INF']
+          segment_time_w_connections:
+            type: float
+            description: segment travel time accounting for time between flights
+            example: 75.0
+          flights:
+            type: array
+            description: flights information
+            items:
+              type: object
+              description: flight information
+              properties:
+                flight_detail_ref:
+                  type: integer
+                  description: reference to flight info in flight_details
+                  example: 1
+                booking_code:
+                  type: string
+                  minLength: 1
+                  maxLength: 1
+                  example: B
+                fare_type:
+                  type: string
+                  example: Published fare
+                fare_basis_code:
+                  type: string
+                  example: LP7J2LBS
+                cabin_class:
+                  type: string
+                  example: Economic Standard
+          brands:
+            type: array
+            description: list of branded fares for the current segment
+
+
+    FlightDetails:
+      title: Flight Details
+      type: array
+      items:
+        type: object
+        properties:
+          reference:
+            type: integer
+            description: reference to flight in segment_options>flights.
+            example: 1
+          origin:
+            type: string
+            description: IATA code of the segment origin
+            example: LHR
+          origin_name:
+            type: string
+            description: Full name of the flight origin
+            example: "London, United Kingdom (LHR)"
+          destination:
+            type: string
+            description: IATA code of the segment destination
+            example: CDG
+          destination_name:
+            type: string
+            description: Full name of the flight destination
+            example: "Paris, France (CDG)"
+          departure_time:
+            type: string
+            format: date-time
+            description: "Departure date and time with timezone."
+            example: "2020-12-05T20:50:00-05:00"
+          arrival_time:
+            format: date-time
+            description: "Arrival date and time with timezone."
+            example: "2020-12-06T09:10:00+00:00"
+          flight_number:
+            type: integer
+            description: Flight number.
+            example: 530
+          carrier:
+            type: string
+            minLength: 2
+            maxLength: 2
+            description: "Airline carrier of the flight."
+            example: "AC"
+          flight_time:
+            type: integer
+            description: Flight duration in minutes
+            example: 475
+
+
+
     FareStructureResponse:
       title: Response
       type: object
@@ -1075,10 +1427,12 @@ components:
               description: Toggles number of stop for GDS request *Travelport Only*
               default: "any"
               type: string
+              enum: ["any", "direct", "1", "2"]
           baggage:
               description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
               default: "any"
               type: string
+              enum: ["any", "1", "2"]
           refundable:
               description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
               default: false
@@ -1087,10 +1441,13 @@ components:
               description: Parameter toggles which travelport endpoint you hit *Travelport Only*
               default: "americas"
               type: string
+              enum: ["emea","apac","americas"]
           num_results:
               description: Parameter sets the number of segments in the response *Travelport Only*
               default: 50
               type: integer
+              minimum: 50
+              maximum: 250
           include_lcc:
               description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
               default: []
@@ -1248,10 +1605,12 @@ components:
                 description: Toggles number of stop for GDS request *Travelport Only*
                 default: "any"
                 type: string
+                enum: ["any", "direct", "1", "2"]
             baggage:
                 description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
                 default: "any"
                 type: string
+                enum: ["any", "1", "2"]
             refundable:
                 description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
                 default: false
@@ -1260,10 +1619,38 @@ components:
                 description: Parameter toggles which travelport endpoint you hit *Travelport Only*
                 default: "americas"
                 type: string
+                enum: ["emea","apac","americas"]
             num_results:
                 description: Parameter sets the number of segments in the response *Travelport Only*
                 default: 50
                 type: integer
+                minimum: 50
+                maximum: 250
+
+    FlexTripSearchResponse:
+      title: Response
+      type: object
+      properties:
+        flex_trip:
+          type: object
+          description: Contains the JSON object of the response.
+          properties:
+            markup:
+              type: float
+              description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+              example: 25.0
+            path_sequence:
+              type: array
+              description: An array of IATA codes representing the chronological order of your trip.
+              example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
+            trip_id:
+              type: string
+              description: A unique key used for identification and when booking a trip.
+            segments:
+              $ref: '#/components/schemas/TripOptions'
+            flight_details:
+              $ref: '#/components/schemas/FlightDetails'
+
     FlexTripResponse:
       title: Response
       type: object
