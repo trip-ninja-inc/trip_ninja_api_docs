@@ -586,6 +586,10 @@ components:
             type: float
             description: Weight of the itinerary (time-value considered).
             example: 239
+          currency:
+            type: string
+            description: Currency
+            example: CAD
           price:
             type: float
             description: Price of the itinerary (fare and tax included).
