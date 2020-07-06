@@ -551,7 +551,7 @@ components:
             example: [0,1]
           segment_position:
             type: integer
-            description: Position of the current segment in itinerary structure. Starts from 0
+            description: Position of current segment in trip. Starts from 0.
             example: 0
           virtual_interline:
             type: boolean
