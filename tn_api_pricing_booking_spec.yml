@@ -635,10 +635,10 @@ components:
             type: string
             example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
         trip_type:
-            description: Trip types, values include "OneWay", "RoundTrip", "FlexTrip" and "FareStructure"
+            description: Trip types, values include "flex_trip" and "fare_structure"
             required: True
             type: string
-            enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
+            enum: [flex_trip, fare_structure]
             example: OneWay
         currency:
             description: Currency to be used for provider query requests in three digit code.
