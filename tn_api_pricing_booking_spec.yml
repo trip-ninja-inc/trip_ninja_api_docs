@@ -456,6 +456,7 @@ components:
                     - plating_carrier
                     - credentials
                     - segments
+                    - traveller_list
                 properties:
                     itinerary_reference:
                         type: integer
@@ -466,6 +467,11 @@ components:
                         description: The airline that a ticket will be issued on behalf of.
                         required: true
                         example: "WS"
+                    traveller_list:
+                        description: Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’
+                        required: true
+                        type: array
+                        example: ["ADT"]
                     credentials:
                         $ref: '#/components/schemas/credentials'
                     itinerary_type:
@@ -618,7 +624,6 @@ components:
       required:
           - trip_id
           - trip_type
-          - traveller_list
           - currency
           - price
           - markup
@@ -630,16 +635,11 @@ components:
             type: string
             example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
         trip_type:
-            description: Trip types, values include "OneWay", "RoundTrip", "FlexTrip" and "FareStructure"
+            description: Trip types, values include "flex_trip" and "fare_structure"
             required: True
             type: string
-            enum: [OneWay, RoundTrip, FlexTrip, FareStructure]
+            enum: [flex_trip, fare_structure]
             example: OneWay
-        traveller_list:
-            description: Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’
-            required: true
-            type: array
-            example: ["ADT"]
         currency:
             description: Currency to be used for provider query requests in three digit code.
             example: USD
