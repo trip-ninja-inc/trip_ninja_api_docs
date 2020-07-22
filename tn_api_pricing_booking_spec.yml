@@ -117,7 +117,7 @@ paths:
                   description: The numbers of items to return
                   example: 10
             summary: "List Bookings"
-            description: "Get a list of all bookings for a PCC, travel agency, or agent."
+            description: "Get a list of all bookings for travel agency or agent."
             operationId: "ListBooking"
 
             responses:
@@ -136,10 +136,44 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-122
+                                        example: IE2200
                                     error_details:
                                         type: array
-                                        example: ['Invalid PCC entered']
+                                        example: ['Invalid agency/agent entered']
+
+    /book/trip/{trip_id}:
+        get:
+            parameters:
+                - in: path
+                  name: trip_id
+                  schema:
+                      type: string
+                  description: A unique key used for identification and when booking a trip.
+                  example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            summary: "Booking Detail"
+            description: "Retrieve a booking details"
+            operationId: "BookingDetail"
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetBookingDetailsResponse'
+                400:
+                    description: Unable to retrieve booking information
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: IE38
+                                    error_details:
+                                        type: array
+                                        example: ['Trip ID not found']
 
 
     /book/{endpoint}/:
@@ -299,6 +333,26 @@ components:
                 $ref: '#/components/schemas/trip_pricing_breakdown'
         itinerary:
             $ref: '#/components/schemas/itinerary_response'
+
+    GetBookingDetailsResponse:
+      title: Response
+      type: object
+      properties:
+        trip_id:
+          description: A unique key used for identification and when booking a trip.
+          type: string
+          example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+        pricing:
+          description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
+          type: object
+          $ref: '#/components/schemas/trip_pricing_breakdown'
+        itinerary:
+          $ref: '#/components/schemas/itinerary_response'
+        passengers:
+          type: array
+          description: All passengers information
+          items:
+            $ref: '#/components/schemas/passenger'
 
 
     baggage:
