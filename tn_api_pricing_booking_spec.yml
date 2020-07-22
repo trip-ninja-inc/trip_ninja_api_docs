@@ -890,7 +890,7 @@ components:
                           description: Trip type
                           type: string
                           example: multi_city
-                          enum: [one_wWay, round_trip, multi_city]
+                          enum: [one_way, round_trip, multi_city]
                         pcc:
                             description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
                             type: string
