@@ -352,7 +352,7 @@ components:
           type: array
           description: All passengers information
           items:
-            $ref: '#/components/schemas/passenger'
+            $ref: '#/components/schemas/passenger_detail'
 
 
     baggage:
@@ -966,6 +966,56 @@ components:
           description: Last Name
           type: string
           example: "Collart"
+
+    passenger_detail:
+      title: Primary passenger
+      type: object
+      properties:
+        first_name:
+          description: First Name
+          type: string
+          example: "Andres"
+        last_name:
+          description: Last Name
+          type: string
+          example: "Collart"
+        gender:
+          description: Gender
+          type: string
+          example: "M"
+          enum: [F, M]
+        passport_number:
+          description: Passport Number
+          type: string
+          example: "KDS3468"
+        passport_expiry_date:
+          description: Passport Expiry Date
+          type: string
+          format: date
+          example: "2021-11-21"
+        nationality:
+          description: Nationality
+          type: string
+          example: "Canada"
+        type:
+          description: Type of passenger
+          type: string
+          example: "ADT"
+          enum: [ADT, STU, CHD, INF]
+        email:
+          description: passenger email address
+          type: string
+          example: "andres.collar@tripninja.io"
+        phone_number:
+          description: passenger phone number
+          type: string
+          example: "9022222222"
+
+
+
+
+
+
 
     pnr_info:
       type: object
