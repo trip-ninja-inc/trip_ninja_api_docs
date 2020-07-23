@@ -728,7 +728,10 @@ components:
             baggage:
                 $ref: '#/components/schemas/baggage'
             flight_details:
-                $ref: '#/components/schemas/flights'
+                type: array
+                description: An array of flights
+                items:
+                  $ref: '#/components/schemas/flights'
             additional_details:
                 $ref: '#/components/schemas/additional_details'
             brand:
@@ -1114,16 +1117,16 @@ components:
           example: "M"
           enum: [F, M]
         passport_number:
-          description: Passport Number
+          description: Passport Number *Optional*
           type: string
           example: "KDS3468"
         passport_expiry_date:
-          description: Passport Expiry Date
+          description: Passport Expiry Date *Optional*
           type: string
           format: date
           example: "2021-11-21"
         nationality:
-          description: Nationality
+          description: Nationality *Optional*
           type: string
           example: "Canada"
         type:
@@ -1132,11 +1135,11 @@ components:
           example: "ADT"
           enum: [ADT, STU, CHD, INF]
         email:
-          description: passenger email address
+          description: passenger email address *Primary passenger only*
           type: string
           example: "andres.collar@tripninja.io"
         phone_number:
-          description: passenger phone number
+          description: passenger phone number *Primary passenger only*
           type: string
           example: "9022222222"
 
