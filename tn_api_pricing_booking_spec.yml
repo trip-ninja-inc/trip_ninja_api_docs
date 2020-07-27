@@ -85,6 +85,63 @@ paths:
                                         type: array
                                         example: ['Failed segment: 4389048309dfhsjnc3420']
 
+    /book?agency={agency}&user={agent_email}&offset={offset}&limit={limit}:
+        get:
+            parameters:
+                - in: query
+                  name: agency
+                  schema:
+                      type: string
+                  description: >
+                    Travel agency for which to list bookings from. Either this or agent_email should be passed.
+                    This parameter is incompatible with `agent_email`.
+                  example: tripninja
+                - in: query
+                  name: agent_email
+                  schema:
+                      type: string
+                  description: >
+                    Email address of the travel agent to list bookings from. Either this or agent_email should be passed.
+                    This parameter is incompatible with `agency`.
+                  example: agent@travelagency.com
+                - in: query
+                  name: offset
+                  schema:
+                    type: integer
+                  description: The number of items to skip before starting to collect the result set
+                  example: 100
+                - in: query
+                  name: limit
+                  schema:
+                    type: integer
+                  description: The numbers of items to return
+                  example: 10
+            summary: "List Bookings"
+            description: "Get a list of all bookings for a PCC, travel agency, or agent."
+            operationId: "ListBooking"
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBookingResponse'
+                400:
+                    description: Unable to get bookings
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: 400-122
+                                    error_details:
+                                        type: array
+                                        example: ['Invalid PCC entered']
+
+
     /book/{endpoint}/:
         post:
             parameters:
@@ -136,46 +193,6 @@ paths:
                                     error_details:
                                         type: array
                                         example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966']
-
-        get:
-            parameters:
-                - in: path
-                  name: endpoint
-                  required: true
-                  schema:
-                      type: string
-                      enum: [preprod, prod]
-                  description: Parameter toggles Data Source production and pre-production endpoints
-            summary: "List Bookings"
-            description: "Get a list of all bookings for a PCC, travel agency, or agent."
-            operationId: "ListBooking"
-            requestBody:
-                content:
-                    application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListBookingRequest'
-
-            responses:
-                200:
-                    description: Success
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListBookingResponse'
-                400:
-                    description: Unable to get bookings
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        example: 400-122
-                                    error_details:
-                                        type: array
-                                        example: ['Invalid PCC entered']
-
 
 
         delete:
@@ -312,6 +329,7 @@ components:
                 type: string
                 description:
                 example: "CARRYON HAND BAGGAGE ALLOWANCE"
+
     flight_details:
         type: array
         description: Details of services, meals, terminals for each flight in the segment
@@ -821,29 +839,6 @@ components:
                 description: Ticketing queue on which to place the PNR
                 example: "01"
 
-
-    ListBookingRequest:
-        title: request
-        type: object
-        required:
-           - pcc
-           - endpoint
-        properties:
-            pcc:
-                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                required: true
-                type: string
-                example: 2G3C
-            agency:
-                description: Travel agency for which to list bookings from.
-                required: false  
-                type: string
-                example: tripninja
-            agent_email: 
-                description: Email address of the travel agent to list bookings from.
-                required: false 
-                type: string
-                example: agent@travelagency.com
     
     ListBookingResponse:
         title: Response
@@ -862,14 +857,40 @@ components:
                             type: string
                             description: Unique Identifier of a Universal Record. 
                             example: "AXY67G"
-                        ticketed:       
-                            type: boolean
-                            description: Notes whether the booking has been ticketed. 
-                            example: true
+                        primary_passenger:
+                            $ref: '#/components/schemas/passenger'
+                            description: Primary passenger information
+                        booking_date:
+                          description: Date on which the booking was made
+                          type: string
+                          example: "2019-07-07"
+                        departure_date:
+                          description: Date on which the first flight of the trip leaves.
+                          type: string
+                          format: date
+                          example: "2019-11-21"
+                        total_price:
+                          description: Total price of the trip including all taxes, fees, and markup.
+                          type: float
+                          example: 399.96
+                        currency:
+                          description: Currency in which the booking was made
+                          type: string
+                          example: CAD
+                        route:
+                          description: trip route
+                          type: string
+                          example: 'YHZ-YHZ'
+                        pnr_list:
+                          type: array
+                          description: List of each PNR information
+                          items:
+                            $ref: '#/components/schemas/pnr_info'
                         trip_type:
-                            description: Trip types, values include "OneWay", "RoundTrip", "FlexTrip" and "FareStructure"
-                            type: string
-                            example: OneWay 
+                          description: Trip type
+                          type: string
+                          example: multi_city
+                          enum: [one_way, round_trip, multi_city]
                         pcc:
                             description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
                             type: string
@@ -878,35 +899,33 @@ components:
                             description: Email address of travel agent who created the booking
                             type: string
                             example: agent@tripninja.io
-                        booking_date: 
-                            description: Date on which the booking was made
-                            type: string
-                            example: "2019-07-07"
-                        departure_date: 
-                            description: Date on which the first flight of the trip leaves.
-                            type: string
-                            example: "2019-11-21"
-                        flights: 
-                            description: List of all flights segment IATA codes
-                            type: array
-                            example: ['YHZ-YOW', 'YOW-YYZ', 'YYZ-YHZ']
-                        customer_email: 
-                            description: Email address of customer
-                            type: string
-                            example: customer@email.com
-                        customer_name: 
-                            description: Name of the primary passenger
-                            type: string
-                            example: customer@email.com
-                        total_price: 
-                            description: Total price of the trip including all taxes, fees, and markup.
-                            type: float
-                            example: 399.96
-                        currency: 
-                            description: Currency in which the booking was made
-                            type: string
-                            example: CAD
-                        payment:       
-                            type: boolean
-                            description: Notes whether the booking included payment information. 
-                            example: true
+
+    passenger:
+      title: Primary passenger
+      type: object
+      properties:
+        first_name:
+          description: First Name
+          type: string
+          example: "Andres"
+        last_name:
+          description: Last Name
+          type: string
+          example: "Collart"
+
+    pnr_info:
+      type: object
+      properties:
+        pnr_number:
+          description: PNR Number
+          type: string
+          example: "DKCD62A"
+        route:
+          description: PNR route
+          type: string
+          example: "YHZ-YOW,YOW-YYZ"
+        departure_date:
+          description: PNR Departure Date
+          type: string
+          format: date
+          example: "2019-11-21"
