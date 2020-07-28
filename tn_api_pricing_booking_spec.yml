@@ -1085,6 +1085,11 @@ components:
                             description: Email address of travel agent who created the booking
                             type: string
                             example: agent@tripninja.io
+                        status:
+                            description: Status of booking
+                            type: string
+                            example: booked
+                            enum: [booked,ticketed,cancelled]
 
     passenger:
       title: Primary passenger
