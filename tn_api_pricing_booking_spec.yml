@@ -1130,7 +1130,7 @@ components:
           type: string
           format: date
           example: "2021-11-21"
-        nationality:
+        passport_country:
           description: Nationality *Optional*
           type: string
           example: "Canada"
