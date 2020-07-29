@@ -1085,6 +1085,10 @@ components:
                             description: Email address of travel agent who created the booking
                             type: string
                             example: agent@tripninja.io
+                        agency:
+                            description: Travel agency
+                            type: string
+                            example: tripninja
                         status:
                             description: Status of booking
                             type: string
