@@ -1134,7 +1134,7 @@ components:
           description: Nationality *Optional*
           type: string
           example: "Canada"
-        type:
+        passenger_type:
           description: Type of passenger
           type: string
           example: "ADT"
