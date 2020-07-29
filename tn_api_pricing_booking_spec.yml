@@ -1125,7 +1125,7 @@ components:
           description: Passport Number *Optional*
           type: string
           example: "KDS3468"
-        passport_expiry_date:
+        passport_expiration:
           description: Passport Expiry Date *Optional*
           type: string
           format: date
