@@ -1116,6 +1116,11 @@ components:
           description: Last Name
           type: string
           example: "Collart"
+        date_of_birth:
+          description: Date of Birth
+          type: string
+          format: date
+          example: "2017-07-23"
         gender:
           description: Gender
           type: string
