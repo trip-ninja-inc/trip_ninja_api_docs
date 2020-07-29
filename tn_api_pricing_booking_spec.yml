@@ -613,6 +613,21 @@ components:
                 items:
                     $ref: '#/components/schemas/flights'
 
+    booked_flights:
+      allOf:
+        - $ref: "#/components/schemas/flights"
+        - type: object
+          properties:
+            origin_name:
+              type: string
+              description: Full name of the flight origin
+              example: "London, United Kingdom (LHR)"
+            destination_name:
+              type: string
+              description: Full name of the flight destination
+              example: "Paris, France (CDG)"
+
+
     flights:
         type: object
         description: flight information
@@ -634,12 +649,12 @@ components:
                 type: string
                 description: IATA code of the flight origin
                 required: true
-                example: CDG
+                example: LHR
             destination:
                 type: string
                 description: IATA code of the flight destination
                 required: true
-                example: YUL
+                example: CDG
             booking_code:
                 type: string
                 description: The airline booking code that describes the flight cabin class
@@ -731,7 +746,7 @@ components:
                 type: array
                 description: An array of flights
                 items:
-                  $ref: '#/components/schemas/flights'
+                  $ref: '#/components/schemas/booked_flights'
             additional_details:
                 $ref: '#/components/schemas/additional_details'
             brand:
