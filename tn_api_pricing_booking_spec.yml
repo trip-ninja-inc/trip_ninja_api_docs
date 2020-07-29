@@ -1130,16 +1130,16 @@ components:
           description: Passport Number *Optional*
           type: string
           example: "KDS3468"
-        passport_expiry_date:
+        passport_expiration:
           description: Passport Expiry Date *Optional*
           type: string
           format: date
           example: "2021-11-21"
-        nationality:
+        passport_country:
           description: Nationality *Optional*
           type: string
           example: "Canada"
-        type:
+        passenger_type:
           description: Type of passenger
           type: string
           example: "ADT"
