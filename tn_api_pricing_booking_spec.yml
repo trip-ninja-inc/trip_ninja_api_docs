@@ -117,7 +117,7 @@ paths:
                   description: The numbers of items to return
                   example: 10
             summary: "List Bookings"
-            description: "Get a list of all bookings for a PCC, travel agency, or agent."
+            description: "Get a list of all bookings for travel agency or agent."
             operationId: "ListBooking"
 
             responses:
@@ -136,10 +136,44 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-122
+                                        example: IE2200
                                     error_details:
                                         type: array
-                                        example: ['Invalid PCC entered']
+                                        example: ['Invalid agency/agent entered']
+
+    /book/trip/{trip_id}:
+        get:
+            parameters:
+                - in: path
+                  name: trip_id
+                  schema:
+                      type: string
+                  description: A unique key used for identification and when booking a trip.
+                  example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            summary: "Booking Detail"
+            description: "Retrieve a booking details"
+            operationId: "BookingDetail"
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetBookingDetailsResponse'
+                400:
+                    description: Unable to retrieve booking information
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: IE38
+                                    error_details:
+                                        type: array
+                                        example: ['Trip ID not found']
 
 
     /book/{endpoint}/:
@@ -300,6 +334,26 @@ components:
         itinerary:
             $ref: '#/components/schemas/itinerary_response'
 
+    GetBookingDetailsResponse:
+      title: Response
+      type: object
+      properties:
+        trip_id:
+          description: A unique key used for identification and when booking a trip.
+          type: string
+          example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+        pricing:
+          description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
+          type: object
+          $ref: '#/components/schemas/trip_pricing_breakdown'
+        itinerary:
+          $ref: '#/components/schemas/itinerary_response'
+        passengers:
+          type: array
+          description: All passengers information
+          items:
+            $ref: '#/components/schemas/passenger_detail'
+
 
     baggage:
         type: object
@@ -365,6 +419,47 @@ components:
                     description:
                     example:
 
+    additional_details:
+      type: object
+      description: Additional Details
+      properties:
+        e_ticketability:
+          type: boolean
+          example: true
+        latest_ticketing_time:
+          type: string
+          format: date
+          example: "11JUN20"
+        refundable:
+          type: boolean
+          example: true
+        cancel_penalty:
+          type: object
+          description: Information about cancellation
+          properties:
+            amount:
+              type: float
+              description: Cancellation penalty amount
+              example: 0
+            percentage:
+              type: float
+              description: Cancellation penalty percentage
+              example: 100
+        change_penalty:
+            type: object
+            description: Information about changing.
+            properties:
+              amount:
+                type: float
+                description: Change penalty amount
+                example: 78
+              percentage:
+                type: float
+                description: Change penalty percentage
+                example: 0
+        fare_types_info:
+          type: string
+          example: WS3 - Published fare
 
     trip_pricing_breakdown:
         allOf:
@@ -518,6 +613,21 @@ components:
                 items:
                     $ref: '#/components/schemas/flights'
 
+    booked_flights:
+      allOf:
+        - $ref: "#/components/schemas/flights"
+        - type: object
+          properties:
+            origin_name:
+              type: string
+              description: Full name of the flight origin
+              example: "London, United Kingdom (LHR)"
+            destination_name:
+              type: string
+              description: Full name of the flight destination
+              example: "Paris, France (CDG)"
+
+
     flights:
         type: object
         description: flight information
@@ -539,12 +649,12 @@ components:
                 type: string
                 description: IATA code of the flight origin
                 required: true
-                example: CDG
+                example: LHR
             destination:
                 type: string
                 description: IATA code of the flight destination
                 required: true
-                example: YUL
+                example: CDG
             booking_code:
                 type: string
                 description: The airline booking code that describes the flight cabin class
@@ -633,7 +743,98 @@ components:
             baggage:
                 $ref: '#/components/schemas/baggage'
             flight_details:
-                $ref: '#/components/schemas/flight_details'
+                type: array
+                description: An array of flights
+                items:
+                  $ref: '#/components/schemas/booked_flights'
+            additional_details:
+                $ref: '#/components/schemas/additional_details'
+            brand:
+              type: array
+              description: An array of brands relating to each flight of the segment
+              items:
+                type: object
+                properties:
+                  brand_description:
+                    description: The name or brand descriptor.
+                    type: string
+                    example: 'Econo-Flex'
+                  brand_services:
+                    type: object
+                    description: Brand Services
+                    properties:
+                      checked_baggage:
+                        description: Are checked bags permittied on this ticket.
+                        type: boolean
+                        example: true
+                      meals_and_beverages:
+                        description: Are meals and beverages provided as part of this ticket.
+                        type: boolean
+                        example: true
+                      rebooking:
+                        description: Rebooking available on this ticket.
+                        type: string
+                        example: $
+                      refund:
+                        description: Refundability of the ticket.
+                        type: string
+                        example: $
+                      seat_assignment:
+                        description: Seat assignment availability on this ticket.
+                        type: string
+                        example: $
+                      carry_on_hand_baggage:
+                        description: Is carry on hand baggage permitted on this ticket.
+                        type: boolean
+                        example: true
+                  carrier:
+                    description: Carrier for this brand
+                    type: string
+                    example: AA
+                  name:
+                    description: Brand name.
+                    type: string
+                    example: Econo
+                  tag_info:
+                    description: Carriers mini blurb for the brand.
+                    type: string
+                    example: Econo flex provides all the comforts of economy with additional flexibility options relating to refunds and cancellation.
+                  tag_line:
+                    description: Brand marketing tag line.
+                    type: string
+                    example: Econo flex, flexibility when it matters.
+                  services:
+                    description: An outline of each service provided.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        classification:
+                          description: Text indicating the service provided.
+                          type: string
+                          example: Baggage charges that apply at the airport.
+                        description:
+                          description: Title for the service.
+                          type: string
+                          example: CHECKED BAGGAGE
+                        group:
+                          description: The group that the service is related to.
+                          type: string
+                          example: Baggage
+                        marketing_carrier:
+                          description: The carrier that holds the service.
+                          type: string
+                          example: AA
+                        status:
+                          description: Indicates whether the service is provided, not provided or at a cost.
+                          type: string
+                          example: $
+                        text:
+                          description: Gives further details about the above service or may indicate the associated cost of the service.
+                          type: array
+                          items:
+                            type: string
+                            example: '23'
 
 #----------------------------------------------------------------------------
     PriceConfirmRequest:
@@ -839,7 +1040,7 @@ components:
                 description: Ticketing queue on which to place the PNR
                 example: "01"
 
-    
+
     ListBookingResponse:
         title: Response
         type: object
@@ -853,9 +1054,9 @@ components:
                             description: A unique key used for identification and when booking a trip.
                             type: string
                             example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-                        ur_locator_code:       
+                        ur_locator_code:
                             type: string
-                            description: Unique Identifier of a Universal Record. 
+                            description: Unique Identifier of a Universal Record.
                             example: "AXY67G"
                         primary_passenger:
                             $ref: '#/components/schemas/passenger'
@@ -895,7 +1096,7 @@ components:
                             description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
                             type: string
                             example: 2G3C
-                        agent_email: 
+                        agent_email:
                             description: Email address of travel agent who created the booking
                             type: string
                             example: agent@tripninja.io
@@ -903,6 +1104,11 @@ components:
                           description: Travel agency
                           type: string
                           example: tripninja
+                        status:
+                            description: Status of booking
+                            type: string
+                            example: booked
+                            enum: [booked,ticketed,cancelled]
 
     passenger:
       title: Primary passenger
@@ -916,6 +1122,61 @@ components:
           description: Last Name
           type: string
           example: "Collart"
+
+    passenger_detail:
+      title: Primary passenger
+      type: object
+      properties:
+        first_name:
+          description: First Name
+          type: string
+          example: "Andres"
+        last_name:
+          description: Last Name
+          type: string
+          example: "Collart"
+        date_of_birth:
+          description: Date of Birth
+          type: string
+          format: date
+          example: "2017-07-23"
+        gender:
+          description: Gender
+          type: string
+          example: "M"
+          enum: [F, M]
+        passport_number:
+          description: Passport Number *Optional*
+          type: string
+          example: "KDS3468"
+        passport_expiration:
+          description: Passport Expiry Date *Optional*
+          type: string
+          format: date
+          example: "2021-11-21"
+        passport_country:
+          description: Nationality *Optional*
+          type: string
+          example: "Canada"
+        passenger_type:
+          description: Type of passenger
+          type: string
+          example: "ADT"
+          enum: [ADT, STU, CHD, INF]
+        email:
+          description: passenger email address *Primary passenger only*
+          type: string
+          example: "andres.collar@tripninja.io"
+        phone_number:
+          description: passenger phone number *Primary passenger only*
+          type: string
+          example: "9022222222"
+
+
+
+
+
+
 
     pnr_info:
       type: object
