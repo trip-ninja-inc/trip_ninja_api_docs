@@ -85,7 +85,7 @@ paths:
                                         type: array
                                         example: ['Failed segment: 4389048309dfhsjnc3420']
 
-    /book?agency={agency}&user={agent_email}&offset={offset}&limit={limit}:
+    /book/list/?agency={agency}&user={agent_email}&offset={offset}&limit={limit}:
         get:
             parameters:
                 - in: query
@@ -727,6 +727,92 @@ components:
                           description: The segments chosen for the trip
                           items:
                               $ref: '#/components/schemas/segment_response'
+    brand:
+      type: array
+      description: An array of brands relating to each flight of the segment
+      items:
+        type: object
+        properties:
+          brand_description:
+            description: The name or brand descriptor.
+            type: string
+            example: 'Econo-Flex'
+          brand_services:
+            type: object
+            description: Brand Services
+            properties:
+              checked_baggage:
+                description: Are checked bags permittied on this ticket.
+                type: boolean
+                example: true
+              meals_and_beverages:
+                description: Are meals and beverages provided as part of this ticket.
+                type: boolean
+                example: true
+              rebooking:
+                description: Rebooking available on this ticket.
+                type: string
+                example: $
+              refund:
+                description: Refundability of the ticket.
+                type: string
+                example: $
+              seat_assignment:
+                description: Seat assignment availability on this ticket.
+                type: string
+                example: $
+              carry_on_hand_baggage:
+                description: Is carry on hand baggage permitted on this ticket.
+                type: boolean
+                example: true
+          carrier:
+            description: Carrier for this brand
+            type: string
+            example: AA
+          name:
+            description: Brand name.
+            type: string
+            example: Econo
+          tag_info:
+            description: Carriers mini blurb for the brand.
+            type: string
+            example: Econo flex provides all the comforts of economy with additional flexibility options relating to refunds and cancellation.
+          tag_line:
+            description: Brand marketing tag line.
+            type: string
+            example: Econo flex, flexibility when it matters.
+          services:
+            description: An outline of each service provided.
+            type: array
+            items:
+              type: object
+              properties:
+                classification:
+                  description: Text indicating the service provided.
+                  type: string
+                  example: Baggage charges that apply at the airport.
+                description:
+                  description: Title for the service.
+                  type: string
+                  example: CHECKED BAGGAGE
+                group:
+                  description: The group that the service is related to.
+                  type: string
+                  example: Baggage
+                marketing_carrier:
+                  description: The carrier that holds the service.
+                  type: string
+                  example: AA
+                status:
+                  description: Indicates whether the service is provided, not provided or at a cost.
+                  type: string
+                  example: $
+                text:
+                  description: Gives further details about the above service or may indicate the associated cost of the service.
+                  type: array
+                  items:
+                    type: string
+                    example: '23'
 
     segment_response:
         type: object
@@ -750,91 +836,7 @@ components:
             additional_details:
                 $ref: '#/components/schemas/additional_details'
             brand:
-              type: array
-              description: An array of brands relating to each flight of the segment
-              items:
-                type: object
-                properties:
-                  brand_description:
-                    description: The name or brand descriptor.
-                    type: string
-                    example: 'Econo-Flex'
-                  brand_services:
-                    type: object
-                    description: Brand Services
-                    properties:
-                      checked_baggage:
-                        description: Are checked bags permittied on this ticket.
-                        type: boolean
-                        example: true
-                      meals_and_beverages:
-                        description: Are meals and beverages provided as part of this ticket.
-                        type: boolean
-                        example: true
-                      rebooking:
-                        description: Rebooking available on this ticket.
-                        type: string
-                        example: $
-                      refund:
-                        description: Refundability of the ticket.
-                        type: string
-                        example: $
-                      seat_assignment:
-                        description: Seat assignment availability on this ticket.
-                        type: string
-                        example: $
-                      carry_on_hand_baggage:
-                        description: Is carry on hand baggage permitted on this ticket.
-                        type: boolean
-                        example: true
-                  carrier:
-                    description: Carrier for this brand
-                    type: string
-                    example: AA
-                  name:
-                    description: Brand name.
-                    type: string
-                    example: Econo
-                  tag_info:
-                    description: Carriers mini blurb for the brand.
-                    type: string
-                    example: Econo flex provides all the comforts of economy with additional flexibility options relating to refunds and cancellation.
-                  tag_line:
-                    description: Brand marketing tag line.
-                    type: string
-                    example: Econo flex, flexibility when it matters.
-                  services:
-                    description: An outline of each service provided.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        classification:
-                          description: Text indicating the service provided.
-                          type: string
-                          example: Baggage charges that apply at the airport.
-                        description:
-                          description: Title for the service.
-                          type: string
-                          example: CHECKED BAGGAGE
-                        group:
-                          description: The group that the service is related to.
-                          type: string
-                          example: Baggage
-                        marketing_carrier:
-                          description: The carrier that holds the service.
-                          type: string
-                          example: AA
-                        status:
-                          description: Indicates whether the service is provided, not provided or at a cost.
-                          type: string
-                          example: $
-                        text:
-                          description: Gives further details about the above service or may indicate the associated cost of the service.
-                          type: array
-                          items:
-                            type: string
-                            example: '23'
+              $ref: '#/components/schemas/brand'
 
 #----------------------------------------------------------------------------
     PriceConfirmRequest:
@@ -897,6 +899,7 @@ components:
             - passengers
             - billing
             - endpoint
+            - segment_additional_details
         properties:
             trip_id:
                 type: string
@@ -1022,6 +1025,17 @@ components:
                                 type: string
                                 description: The card's expiry date.
                                 example: 2021-10
+            segment_additional_details:
+              type: object
+              description: Additional flight and fare family details.
+              required:
+                - additional_details
+                - brands
+              properties:
+                additional_details:
+                  $ref: '#/components/schemas/additional_details'
+                brands:
+                  $ref: '#/components/schemas/brand'
 
     AddBookingToTicketingQueueRequest:
         title: Request
