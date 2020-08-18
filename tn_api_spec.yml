@@ -167,8 +167,16 @@ paths:
                 500:
                     description: Server Error
 
-    /search-prod/:
+    /search/{endpoint}/:
         post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                    type: string
+                    enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Search"
             description: |
               This endpoint triggers farestrucutre for any number of city search
