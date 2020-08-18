@@ -528,10 +528,8 @@ components:
       items:
         type: object
         properties:
-          source:
-            type: string
-            description: GDS or LCC provider source for segment.
-            example: travelport
+          credential_info:
+            $ref: '#/components/schemas/CredentialInfo'
           origin:
             type: string
             description: IATA code of the segment origin
@@ -1065,7 +1063,7 @@ components:
                                 fare_info_ref:
                                     type: string
                                     description: Fare Info reference for this segment
-                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==                                
+                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==
     Segments:
         allOf:
           - $ref: '#/components/schemas/FareStructureResponse/properties/FareStructure/properties'
@@ -1287,16 +1285,40 @@ components:
                                             type: integer
                                             description: Flight duration in minutes
                                             example: 475
+    CredentialInfo:
+        type: object
+        description: Indicate data source to call and required credentials
+        properties:
+            data_source:
+                description: data source to call.
+                required: true
+                type: string
+                enum: [amadeus, travelport, tripstack, mystifly]
+                example: amadeus
+            pcc:
+                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                required: true
+                type: string
+                example: MEL49f839
+            provider:
+                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                required: true
+                type: string
+                example: 1A
+            region:
+                description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
+                required: false
+                type: string
+                example: americas
+
     FareStructureRequest:
       title: Request
       type: object
       required:
           - flights
           - travellers
-          - provider
-          - pcc
+          - credentials
           - currency
-          - source
           - country_code
       properties:
           flights:
@@ -1349,15 +1371,11 @@ components:
               required: true
               type: array
               example: ['ADT','ADT','CHD']
-          provider:
-              description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-              type: string
-              example: 1V
-          PCC:
-              description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
-              required: true
-              type: string
-              example: 2G3C
+          credentials:
+              type: array
+              description: list of credentials to use for search
+              items:
+                  $ref: '#/components/schemas/CredentialInfo'
           max_cache:
               default: 24
               description: |
