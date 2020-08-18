@@ -528,7 +528,7 @@ components:
       items:
         type: object
         properties:
-          credentials:
+          credential_info:
             $ref: '#/components/schemas/CredentialInfo'
           origin:
             type: string
@@ -1063,7 +1063,7 @@ components:
                                 fare_info_ref:
                                     type: string
                                     description: Fare Info reference for this segment
-                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==                                
+                                    example: 3RxQ6ylJ0BKAhQAbnbAAAA==
     Segments:
         allOf:
           - $ref: '#/components/schemas/FareStructureResponse/properties/FareStructure/properties'
