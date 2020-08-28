@@ -938,6 +938,7 @@ components:
                     - gender
                     - phone_number
                     - passenger_type
+                    - email
                     properties:
                         title:
                             type: string
@@ -963,6 +964,11 @@ components:
                             required: true
                             description: "The single digit code for the customer's gender."
                             example: "M"
+                        email:
+                            type: string
+                            required: true
+                            description: "The email of the passenger - only required for the primary passenger"
+                            example: "email@email.com"
                         phone_number:
                             type: string
                             required: true
