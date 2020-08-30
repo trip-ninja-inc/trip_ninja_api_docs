@@ -316,6 +316,52 @@ paths:
                                         example: ['Could not find record matching locator code UX345SE']
 
 
+    /ticket/{endpoint}/:
+        post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
+            summary: "Ticket"
+            description: If a trip has been queued, but not yet ticketed, use this endpoint to do the ticketing.
+            operationId: Ticket
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TicketingRequest'
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: "Trip with Universal Record locator XY34Z4 successfully ticketed"
+
+                400:
+                    description: Unable to add trip to ticketing queue
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: 400-111
+                                    error_details:
+                                        type: array
+                                        example: ['Could not find record matching this trip id']
+
+
 
 components:
   schemas:
@@ -1054,6 +1100,17 @@ components:
                 description: Ticketing queue on which to place the PNR
                 example: "01"
 
+    TicketingRequest:
+        title: Request
+        type: object
+        required:
+            - trip_id
+        properties:
+            trip_id:
+                description: A unique key used for identification and when booking a trip.
+                required: true
+                type: string
+                example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
 
     ListBookingResponse:
         title: Response
