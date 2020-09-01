@@ -348,7 +348,7 @@ paths:
                                         example: "Trip with Universal Record locator XY34Z4 successfully ticketed"
 
                 400:
-                    description: Unable to add trip to ticketing queue
+                    description: Unable to issue ticket
                     content:
                         application/json:
                             schema:
