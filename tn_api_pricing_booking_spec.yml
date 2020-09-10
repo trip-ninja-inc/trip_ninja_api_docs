@@ -141,7 +141,7 @@ paths:
                                         type: array
                                         example: ['Invalid agency/agent entered']
 
-    /book/trip/{trip_id}:
+    /book/trip/{trip_id}/?agency={agency}:
         get:
             parameters:
                 - in: path
@@ -150,6 +150,14 @@ paths:
                       type: string
                   description: A unique key used for identification and when booking a trip.
                   example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+                - in: query
+                  name: agency
+                  schema:
+                      type: string
+                  description: >
+                    Travel agency for which to list bookings from. Either this or agent_email should be passed.
+                    This parameter is incompatible with `agent_email`.
+                  example: tripninja
             summary: "Booking Detail"
             description: "Retrieve a booking details"
             operationId: "BookingDetail"
