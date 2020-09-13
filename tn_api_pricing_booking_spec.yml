@@ -228,16 +228,8 @@ paths:
                                         type: array
                                         example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966']
 
-
+    /book/:
         delete:
-            parameters:
-                - in: path
-                  name: endpoint
-                  required: true
-                  schema:
-                      type: string
-                      enum: [preprod, prod]
-                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Cancel Booking"
             description: "To cancel a booking, send a request with the trip_id and ur_locator_code."
             operationId: "CancelBooking"
@@ -270,16 +262,8 @@ paths:
                                     error_details:
                                         type: array
                                         example: ['Could not find record matching locator code UX345SE']
-    /queue/{endpoint}/:
+    /queue/:
         post:
-            parameters:
-                - in: path
-                  name: endpoint
-                  required: true
-                  schema:
-                      type: string
-                      enum: [preprod, prod]
-                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Add To Ticketing Queue"
             description: If a trip has been booked, but not yet added to the agency ticketing queue, use this endpoint to add it to their queue.
             operationId: AddBookingToTicketingQueue
@@ -316,16 +300,8 @@ paths:
                                         example: ['Could not find record matching locator code UX345SE']
 
 
-    /ticket/{endpoint}/:
+    /ticket/:
         post:
-            parameters:
-                - in: path
-                  name: endpoint
-                  required: true
-                  schema:
-                      type: string
-                      enum: [preprod, prod]
-                  description: Parameter toggles Data Source production and pre-production endpoints
             summary: "Ticket"
             description: If a trip has been queued, but not yet ticketed, use this endpoint to do the ticketing.
             operationId: Ticket
