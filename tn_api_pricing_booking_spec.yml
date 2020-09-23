@@ -629,6 +629,24 @@ components:
                 type: string
                 description: Segment_id for the group
                 example: "14c9e2e5c95a5bf0f9f7712de24348e6aba88c32"
+            virtual_interline:
+              type: boolean
+              description: |
+                true if option is a vi solution
+              example: true
+            option_part:
+              type: string
+              description: |
+                shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
+              example: 1/2
+              nullable: true
+            vi_type:
+              type: string
+              enum: [ ONE_WAY, OPEN_JAW ]
+              description: |
+                type of the virtual interlining segment option
+              example: OPEN_JAW
+              nullable: true
             flights:
                 type: array
                 description: A list of flights, each flight includes origin, destination, flight number, departure time and arrival time

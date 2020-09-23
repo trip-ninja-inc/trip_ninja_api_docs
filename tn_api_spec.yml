@@ -589,7 +589,7 @@ components:
           vi_position:
             type: integer
             description: |
-              position if the virtual interlining option in itinerary. Starts from 0
+              position of the virtual interlining option in itinerary. Starts from 0
             example: 1
             nullable: true
           weight:
@@ -1357,11 +1357,6 @@ components:
                 required: false
                 type: string
                 example: americas
-            itx:
-                description: toggles if this is an itx search
-                required: false
-                type: bool
-                example: true
 
     FareStructureRequest:
       title: Request
