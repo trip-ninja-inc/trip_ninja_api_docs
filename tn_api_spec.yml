@@ -1357,6 +1357,11 @@ components:
                 required: false
                 type: string
                 example: americas
+            itx:
+                description: toggles if this is an itx search
+                required: false
+                type: bool
+                example: true
 
     FareStructureRequest:
       title: Request
