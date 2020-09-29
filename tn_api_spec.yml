@@ -553,7 +553,7 @@ components:
             example: ONE_WAY
           itinerary_id:
             type: string
-            description: Links part of the OPEN_JAW itineraries/VI-structures together
+            description: Links part of the OPEN_JAW itineraries/VI-structures together which also make a PNR.
             example: ad76ah7dhasd76asb76
           itinerary_structure:
             type: string
@@ -570,27 +570,22 @@ components:
             example: true
           option_id:
             type: string
-            description: ID mapping VI parts of the option together
-            example: vi65s76sdf9
+            description: ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position.
+            example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
             nullable: true
           option_part:
-            type: string
+            type: int
             description: |
-              shows which part of the segment option is this. Helps finding parts of the VI solution in the same segment
-            example: 1/2
-            nullable: true
-          vi_type:
-            type: string
-            enum: [ONE_WAY, OPEN_JAW]
-            description: |
-              type of the virtual interlining segment option
-            example: OPEN_JAW
+              position of the virtual interlining option in itinerary(PNR). Starts from 0
+              Helps ordering parts of the VI solution in the itinerary
+            example: 0
             nullable: true
           vi_position:
             type: integer
             description: |
-              position if the virtual interlining option in itinerary. Starts from 0
-            example: 1
+              Shows which part of the segment option is this. Helps order parts of the VI solution in the same segment
+              Starts from 0
+            example: 0
             nullable: true
           weight:
             type: float
