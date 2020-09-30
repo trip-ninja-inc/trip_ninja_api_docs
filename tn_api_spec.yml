@@ -96,8 +96,8 @@ paths:
               2 and 3 ticketed together as one openjaw.
 
               Please note that the "total_cost" field and "price" fields in the response do not contain the markup amount. The "total_cost" field is only to display the cheapest trip in the results.
-              The "price" fields displayed at the itinerary or segment level do not include the markup amount either. When displaying the trip costs using "include_itineraries" = true, use the 
-              "price" at the itinerary level plus the "tn_net_fare_markup" amount. If using the segment response type, add the "price" value for each of the segments chosen for the trip plus the "tn_net_fare_markup" 
+              The "price" fields displayed at the itinerary or segment level do not include the markup amount either. When displaying the trip costs using "include_itineraries" = true, use the
+              "price" at the itinerary level plus the "tn_net_fare_markup" amount. If using the segment response type, add the "price" value for each of the segments chosen for the trip plus the "tn_net_fare_markup"
               amount to get the total trip price.
 
             operationId: FareStructure
@@ -142,7 +142,7 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                        error: 
+                                        error:
                                             type: string
                                             description: Error Code
                                             example: "user is not authorized"
@@ -163,7 +163,7 @@ paths:
                                             ErrorDetails:
                                                 type: object
                                                 description: Usually an empty string, but will contain a helpful message if something goes wrong! Listed inside are the possible input error codes that can occur.
-                                                example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc." 
+                                                example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
                 500:
                     description: Server Error
 
@@ -289,7 +289,7 @@ paths:
                                                     IE24:
                                                         type: string
                                                         description: An example error code, refer to the error codes section for further details.
-                                                        example: Too many or too few travellers found.                                                                                            
+                                                        example: Too many or too few travellers found.
                 401:
                     description: Unauthorized
                     content:
@@ -297,7 +297,7 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                        error: 
+                                        error:
                                             type: string
                                             description: Error Code
                                             example: "user is not authorized"
@@ -314,7 +314,7 @@ paths:
                                         properties:
                                             best_path:
                                                 type: array
-                                                description: 
+                                                description:
                                                 example: []
                                             total_cost:
                                                 type: float
@@ -335,17 +335,17 @@ paths:
                                                 type: array
                                                 description: An array of IATA codes representing the chronological order of your trip.
                                                 example: []
-                                            structure: 
+                                            structure:
                                                 type: array
-                                                description: 
+                                                description:
                                                 example: [0, -2]
                                     trip:
                                         type: object
                                         description: Contains the JSON object provided as the request.
                 500:
                     description: Server Error
-                                
-              
+
+
 
     /pre-booking/:
             post:
@@ -380,8 +380,8 @@ paths:
                                             status:
                                                 type: string
                                                 description: States whether request to book was successful.
-                                                example: Not booked                                     
- 
+                                                example: Not booked
+
 
     /booking/:
           post:
@@ -414,8 +414,8 @@ paths:
                                             status:
                                                 type: string
                                                 description: States whether request to book was successful.
-                                                example: Not booked                                     
-  
+                                                example: Not booked
+
     /ticketing/:
             post:
                 summary: "Ticketing Report"
@@ -448,7 +448,7 @@ paths:
                                             status:
                                                 type: string
                                                 description: States whether request to book was successful.
-                                                example: Not booked       
+                                                example: Not booked
     /cancel/:
             post:
                 summary: "Cancel Booking Report"
@@ -480,8 +480,8 @@ paths:
                                             response:
                                                 type: string
                                                 description: States whether request to cancel was successful.
-                                                example: Could not cancel trip, check your trip_id.                                   
- 
+                                                example: Could not cancel trip, check your trip_id.
+
 
 
 components:
@@ -1447,7 +1447,7 @@ components:
               required: true
               type: string
           source:
-              description: "Metasearch source (For example: skycanner, kayak)" 
+              description: "Metasearch source (For example: skycanner, kayak)"
               example: skyscanner
               type: string
               required: true
@@ -1455,7 +1455,7 @@ components:
               description: "Country code where search came from (For example: CA, US)"
               example: CA
               type: string
-              required: true              
+              required: true
           cabin_class:
               default: E
               description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment."
@@ -1548,6 +1548,10 @@ components:
               type: boolean
           multi_pnr_mix:
               description: Return mix of single-pnr and all multi-pnr structures. include_itineraries and mix_structures needs to be passed as True for this to work
+              default: false
+              type: boolean
+          virtual_interlining:
+              description: Add virtual interlining to the search so that the results are a mix of standard search results and virtual interlining results.
               default: false
               type: boolean
 
@@ -1794,7 +1798,7 @@ components:
     ReportRequest:
         title: Request
         type: object
-        required: 
+        required:
             trip_id
             segment_ids
         properties:
