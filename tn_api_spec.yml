@@ -583,9 +583,8 @@ components:
           vi_position:
             type: integer
             description: |
-              Shows which part of the segment option is this. Helps order parts of the VI solution in the same segment
-              Starts from 0
-            example: 0
+              position of the virtual interlining option in itinerary. Starts from 0
+            example: 1
             nullable: true
           weight:
             type: float
