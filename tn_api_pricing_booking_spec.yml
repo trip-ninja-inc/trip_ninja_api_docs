@@ -889,7 +889,7 @@ components:
               description: |
                 true if option is a vi solution
               example: true
-            option_id:
+            vi_solution_id:
               type: string
               description: ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position.
               example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
@@ -907,6 +907,7 @@ components:
                 Shows which part of the segment option is this. Helps order parts of the VI solution in the same segment
                 Starts from 0
               example: 0
+              nullable: true
             baggage:
                 $ref: '#/components/schemas/baggage'
             flight_details:
