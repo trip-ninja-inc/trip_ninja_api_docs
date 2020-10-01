@@ -80,10 +80,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-100
-                                    error_details:
-                                        type: array
-                                        example: ['Failed segment: 4389048309dfhsjnc3420']
+                                        example: IE45
+                                    message:
+                                        type: string
+                                        example: 'itinerary with reference 1 was unsuccessful. reason Invalid date. Check arrival and departure dates'
 
     /book/list/?agency={agency}&user={agent_email}&offset={offset}&limit={limit}:
         get:
@@ -137,11 +137,11 @@ paths:
                                     status:
                                         type: string
                                         example: IE2200
-                                    error_details:
-                                        type: array
-                                        example: ['Invalid agency/agent entered']
+                                    message:
+                                        type: string
+                                        example: 'Invalid agency/agent entered'
 
-    /book/trip/{trip_id}:
+    /book/trip/{trip_id}/?agency={agency}:
         get:
             parameters:
                 - in: path
@@ -150,6 +150,14 @@ paths:
                       type: string
                   description: A unique key used for identification and when booking a trip.
                   example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+                - in: query
+                  name: agency
+                  schema:
+                      type: string
+                  description: >
+                    Travel agency for which to list bookings from. Either this or agent_email should be passed.
+                    This parameter is incompatible with `agent_email`.
+                  example: tripninja
             summary: "Booking Detail"
             description: "Retrieve a booking details"
             operationId: "BookingDetail"
@@ -171,9 +179,9 @@ paths:
                                     status:
                                         type: string
                                         example: IE38
-                                    error_details:
-                                        type: array
-                                        example: ['Trip ID not found']
+                                    message:
+                                        type: string
+                                        example: 'Trip ID not found'
 
 
     /book/{endpoint}/:
@@ -202,18 +210,14 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    status:
-                                        type: string
-                                        description: Status message
-                                        example: Booking successfully created
-                                    ur_locator_code:
-                                        type: string
-                                        description: Unique Identifier of a Universal Record.
-                                        example: 6D6RMG
-                                    pnr_list:
-                                        type: array
-                                        description: List of PNRs created.
-                                        example: ['7XYW3G', '7XYP4A']
+                                    ur_locator_codes:
+                                        type: json
+                                        description: Map of itinerary_reference and Unique Identifier of a Universal Record.
+                                        example: {"1":"D917A841"}
+                                    pnr_numbers:
+                                        type: json
+                                        description: Map of itinerary_reference and PNR number of a booking.
+                                        example: {"1":"TH2H52"}
                 400:
                     description: Unable to create booking
                     content:
@@ -223,10 +227,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-121
-                                    error_details:
-                                        type: array
-                                        example: ['Could not create PNR for trip 129a4045ef84edc4c0d5f0b1b28a906495d3f966']
+                                        example: IE46
+                                    message:
+                                        type: string
+                                        example: 'trip has already been booked'
 
     /book/:
         delete:
@@ -246,9 +250,12 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    status:
-                                        type: string
-                                        example: "Trip with Universal Record locator XY34Z4 successfully cancelled"
+                                  status:
+                                    type: string
+                                    example: "Success"
+                                  message:
+                                    type: string
+                                    example: "Trip was successfully cancelled"
                 400:
                     description: Unable to cancel booking
                     content:
@@ -258,10 +265,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-111
-                                    error_details:
-                                        type: array
-                                        example: ['Could not find record matching locator code UX345SE']
+                                        example: IE38
+                                    message:
+                                        type: string
+                                        example: 'Trip ID not found'
     /queue/:
         post:
             summary: "Add To Ticketing Queue"
@@ -283,7 +290,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: "Trip with Universal Record locator XY34Z4 successfully added to queue 01"
+                                        example: "0"
+                                    message:
+                                      type: string
+                                      example: "success"
 
                 400:
                     description: Unable to add trip to ticketing queue
@@ -294,10 +304,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-111
-                                    error_details:
-                                        type: array
-                                        example: ['Could not find record matching locator code UX345SE']
+                                        example: IE38
+                                    message:
+                                        type: string
+                                        example: 'Trip ID not found'
 
 
     /ticket/:
@@ -319,9 +329,12 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    status:
-                                        type: string
-                                        example: "Trip with Universal Record locator XY34Z4 successfully ticketed"
+                                  status:
+                                    type: string
+                                    example: "0"
+                                  message:
+                                    type: string
+                                    example: "success"
 
                 400:
                     description: Unable to issue ticket
@@ -332,10 +345,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        example: 400-111
-                                    error_details:
-                                        type: array
-                                        example: ['Could not find record matching this trip id']
+                                        example: IE45
+                                    message:
+                                        type: string
+                                        example: 'itinerary with reference 1 was unsuccessful. reason LAST TIME TO TICKET IS PAST - PLEASE REPRICE (08SEP20 23:19)'
 
 
 
