@@ -907,6 +907,7 @@ components:
                 Shows which part of the segment option is this. Helps order parts of the VI solution in the same segment
                 Starts from 0
               example: 0
+              nullable: true
             baggage:
                 $ref: '#/components/schemas/baggage'
             flight_details:
