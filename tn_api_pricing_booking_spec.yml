@@ -626,6 +626,7 @@ components:
                         $ref: '#/components/schemas/segment_type'
                     itinerary_markup:
                       type: number
+                      default: 0
                       description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
                       example: 7
                     segments:
@@ -786,6 +787,7 @@ components:
                           $ref: '#/components/schemas/segment_type'
                       itinerary_markup:
                         type: number
+                        default: 0
                         description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
                         example: 7
                       segments:
