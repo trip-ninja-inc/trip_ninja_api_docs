@@ -785,6 +785,18 @@ components:
                           description: The segments chosen for the trip
                           items:
                               $ref: '#/components/schemas/segment_response'
+                      base_fare:
+                          type: float
+                          description: base fare for this itinerary of the pricing response.
+                          example: 115.50
+                      taxes:
+                          type: float
+                          description: The taxes assocaited with this itinerary of the pricing response.
+                          example: 34.55
+                      fees:
+                          type: float
+                          description: The feess associated with this itinerary in the pricing response.
+                          example: 12.99
     brand:
       type: array
       description: An array of brands relating to each flight of the segment
