@@ -555,6 +555,11 @@ components:
             type: string
             description: Links part of the OPEN_JAW itineraries/VI-structures together which also make a PNR.
             example: ad76ah7dhasd76asb76
+          itinerary_markup:
+            type: number
+            default: 0
+            description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
+            example: 7
           itinerary_structure:
             type: string
             description: Structure of the OPEN_JAW itinerary
