@@ -1553,6 +1553,10 @@ components:
               description: Add virtual interlining to the search so that the results are a mix of standard search results and virtual interlining results.
               default: false
               type: boolean
+          markup_by_itinerary:
+              description: Add itinerary markup to the search result and set trip markup to 0
+              default: false
+              type: boolean
 
     FlexTripRequest:
         title: Request
