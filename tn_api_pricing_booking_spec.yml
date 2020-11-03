@@ -565,7 +565,7 @@ components:
               example: USD
           additional_markup:
             type: float
-            description: Additional markup to applied to the booking price.
+            description: Additional markup to be applied to the booking price.
             example: 15.00
 
     segment_pricing_breakdown:
@@ -1174,7 +1174,7 @@ components:
                   $ref: '#/components/schemas/brand'
             additional_markup:
               type: float
-              description: Additional markup to applied to the booking price.
+              description: Additional markup to be applied to the booking price.
               example: 15.00
 
     AddBookingToTicketingQueueRequest:
