@@ -1174,7 +1174,7 @@ components:
                   $ref: '#/components/schemas/brand'
             additional_markup:
               type: float
-              description: Additional markup to be applied to the booking price.
+              description: Additional markup to be applied to the booking price. Must be positive.
               example: 15.00
 
     AddBookingToTicketingQueueRequest:
