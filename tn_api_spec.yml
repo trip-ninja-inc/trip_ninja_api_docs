@@ -759,6 +759,12 @@ components:
             maxLength: 2
             description: "Airline carrier of the flight."
             example: "AC"
+          operating_carrier:
+            type: string
+            minLength: 2
+            maxLength: 2
+            description: "Operating airline of the flight."
+            example: "AC"
           flight_time:
             type: integer
             description: Flight duration in minutes

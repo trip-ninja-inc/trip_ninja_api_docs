@@ -727,6 +727,12 @@ components:
                 description: Leg's carrier code
                 required: true
                 example: TS
+            operating_carrier:
+              type: string
+              minLength: 2
+              maxLength: 2
+              description: "Operating airline of the flight."
+              example: "AC"
             flight_time:
                 type: integer
                 description: Flight duration in minutes
