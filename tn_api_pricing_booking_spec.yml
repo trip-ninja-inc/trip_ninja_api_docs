@@ -1305,15 +1305,19 @@ components:
       type: object
       properties:
         pnr_number:
-          description: PNR Number
+          description: PNR Number.
           type: string
           example: "DKCD62A"
         route:
-          description: PNR route
+          description: PNR route.
           type: string
           example: "YHZ-YOW,YOW-YYZ"
         departure_date:
-          description: PNR Departure Date
+          description: PNR Departure Date.
           type: string
           format: date
           example: "2019-11-21"
+        pnr_status:
+          description: The status of the PNR.
+          type: string
+          example: "booked"
