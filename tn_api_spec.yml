@@ -578,6 +578,21 @@ components:
             description: ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position.
             example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
             nullable: true
+          vi_segment_base_price:
+            type: float
+            description: The base price of the VI PNR not including taxes and fees.
+            example: 106.40
+            nullable: true
+          vi_segment_taxes:
+            type: float
+            description: The taxes associated with this VI PNR.
+            example: 24.12
+            nullable: true
+          vi_segment_fees:
+            type: float
+            description: The fees associated with this individual VI PNR.
+            example: 14.56
+            nullable: true
           itinerary_index:
             type: int
             description: |
