@@ -380,7 +380,7 @@ components:
         pricing:
           description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
           type: object
-          $ref: '#/components/schemas/trip_pricing_breakdown'
+          $ref: '#/components/schemas/trip_pricing_breakdown_additional'
         itinerary:
           $ref: '#/components/schemas/itinerary_response'
         passengers:
@@ -530,6 +530,43 @@ components:
                     type: string
                     description: Currency in which trip was priced
                     example: USD
+
+    trip_pricing_breakdown_additional:
+      type: object
+      description: Breakdown of confirmed prices including taxes, fees, and markup for the trip.
+      properties:
+          confirmed_total_price:
+              type: float
+              description: Total price of the trip after price confirmation (base_fare + taxes + fees). Does not include markup.
+              example: 455.68
+          original_total_price:
+              type: float
+              description: Original price of trip from search request - does not include markup.
+              example: 455.61
+          base_fare:
+              type: float
+              description: Confirmed base_fare price for the trip.
+              example: 370.04
+          taxes:
+              type: float
+              description: Confirmed taxes for the trip.
+              example: 85.64
+          fees:
+              type: float
+              description: Confirmed fees for trip *Travelport customers only*
+              example: 0.0
+          markup:
+              type: float
+              description: Trip Ninja provided markup amount
+              example: 20.00
+          currency:
+              type: string
+              description: Currency in which trip was priced
+              example: USD
+          additional_markup:
+            type: float
+            description: Additional markup to be applied to the booking price.
+            example: 15.00
 
     segment_pricing_breakdown:
         allOf:
@@ -1010,6 +1047,7 @@ components:
             - billing
             - endpoint
             - segment_additional_details
+            - additional_markup
         properties:
             trip_id:
                 type: string
@@ -1152,6 +1190,10 @@ components:
                   $ref: '#/components/schemas/additional_details'
                 brands:
                   $ref: '#/components/schemas/brand'
+            additional_markup:
+              type: float
+              description: Additional markup to be applied to the booking price. Must be positive.
+              example: 15.00
 
     AddBookingToTicketingQueueRequest:
         title: Request
