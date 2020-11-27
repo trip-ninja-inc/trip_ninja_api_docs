@@ -534,7 +534,7 @@ components:
           type: string
           description: Super Trip Part Type
           example: itinerary
-          enum: [flight, hotel, car]
+          enum: [itinerary, hotel, car]
         part_id:
           type: string
           description: Super Trip Part ID. (itinerary_id, hotel_reservation_id, car_rental_id)
