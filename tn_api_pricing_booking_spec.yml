@@ -213,11 +213,15 @@ paths:
                                     ur_locator_codes:
                                         type: json
                                         description: Map of itinerary_reference and Unique Identifier of a Universal Record.
-                                        example: {"1":"D917A841"}
+                                        example: {"1":"D917A841", 2: "8YYE22P0", "3": "8YYE22P0"}
                                     pnr_numbers:
                                         type: json
-                                        description: Map of itinerary_reference and PNR number of a booking.
-                                        example: {"1":"TH2H52"}
+                                        description: Map of itinerary_reference and PNR number of a booking. For consolidated tickets the PCC of the data source will be the key.
+                                        example: {"1":"TH2H52", "2": "UG22WH", "3": "UG22WH"}
+                                    consolidated_tickets:
+                                        type: json
+                                        description: A breakdown of which itineraries are stored under which PNR.
+                                        example: {"HC4C": ["1"], "Y4E5": ["2", "3"]}
                 400:
                     description: Unable to create booking
                     content:
@@ -1194,6 +1198,10 @@ components:
               type: float
               description: Additional markup to be applied to the booking price. Must be positive.
               example: 15.00
+            consolidate_ticket:
+              type: boolean
+              description: Indicates whether all bookings from one GDS are stored under a single UR locator code *Travelport only*.
+              example: True
 
     AddBookingToTicketingQueueRequest:
         title: Request
