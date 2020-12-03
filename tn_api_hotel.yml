@@ -58,7 +58,7 @@ paths:
                   description: Parameter toggles data source production and pre-production endpoints
             summary: "Hotel Search"
             description: |
-              This endpoint initiate hotel search for one location(city), and return list of available options. another endpoint needs to be called after this to obtain information about room types, etc.
+              This endpoint initiates a hotel search for one location (city), and returns a list of available options. A separate endpoint needs to be called to obtain information about room types, etc.
             operationId: Search
             requestBody:
                 content:
