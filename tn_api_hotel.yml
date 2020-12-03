@@ -1,0 +1,323 @@
+openapi: "3.0.0"
+
+info:
+  version: 2.0.0
+  title: Trip Ninja API Documentation
+  description: |
+    <h2>Introduction</h2>
+    Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
+    are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
+    and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
+    <h2>Trip Ninja API URLs</h2>
+
+    Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+
+    For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact your account manager to whitelist IPs you
+    will be using.
+
+    Before you start ensure that:<br  />
+        - IP addresses have been provided to be whitelisted for our servers.<br  />
+        - PCC / OfficeID emulation via Trip Ninja’s PCC/OfficeID has been set up.<br  />
+        - API username and password have been provided by Trip Ninja.<br  />
+
+    <h2>Authentication</h2>
+    Trip Ninja uses Basic Authentication standards. Simply encode your username and password string using base64 and pass it in the
+    authorization headers. See the python example below on how this is done. In the example, the payload and API endpoint url are not
+    shown.
+
+    Python Example:
+
+    <pre>
+    import base64
+    auth = base64.b64encode("USERNAME:PASSWORD")
+    headers = {
+        'authorization': "Basic "+ auth,
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+    </pre>
+
+  x-logo:
+    url: 'https://s3.amazonaws.com/tn-api-docs/tripninja_logo_dev-01.png'
+    altText: Trip Ninja logo
+    href: 'https://www.tripninja.io/'
+
+servers:
+  - url: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+    description: Pre-Production server
+
+paths:
+    /search/{endpoint}/hotel/:
+        post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                    type: string
+                    enum: [preprod, prod]
+                  description: Parameter toggles data source production and pre-production endpoints
+            summary: "Hotel Search"
+            description: |
+              This endpoint initiate hotel search for one location(city), and return list of available options. another endpoint needs to be called after this to obtain information about room types, etc.
+            operationId: Search
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HotelSearchRequest'
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HotelSearchResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid city.
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (no Hotel found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "No availability found: Try changing dates"
+                500:
+                    description: Server Error
+        get:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                    type: string
+                    enum: [preprod, prod]
+                  description: Parameter toggles data source production and pre-production endpoints
+                - in: path
+                  name: hotel_id
+                  required: true
+                  schema:
+                    type: string
+                  description: This parameter is an ID specific to one hotel to obtain room availibility
+            summary: "Hotel Room Availability"
+            description: |
+              This endpoint returns rooms available in the selected hotel.
+            operationId: Search
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HotelGetRoomsResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid hotel id.
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (No availability found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "No availability found: Try another hotel or dates"
+                500:
+                    description: Server Error
+
+
+    /price/hotel/{endpoint}/:
+      post:
+        parameters:
+          - in: path
+            name: endpoint
+            required: true
+            schema:
+              type: string
+              enum: [ preprod, prod ]
+            description: Parameter toggles data source production and pre-production endpoints
+        summary: "Hotel Price Confirmation"
+        description: Once the desired hotel have been selected, call the price confirm endpoint to confirm availability and prices.
+        operationId: PriceConfirm
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelPriceConfirmRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/HotelPriceConfirmResponse'
+          400:
+            description: Unable to confirm trip pricing
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE45
+                    message:
+                      type: string
+                      example: 'Unsuccessful. reason Invalid date.'
+
+components:
+  schemas:
+    HotelSearchResponse:
+      properties:
+        available_hotels:
+          type: array
+          items:
+            type: object
+            properties:
+              hotel_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: An identifier to refer to the hotel for searching room availability
+              hotel_name:
+                type: string
+                example: 'Le Blue'
+                description: Name of the hotel
+
+    HotelSearchRequest:
+      required:
+        - super_trip_id
+      properties:
+          super_trip_id:
+              type: string
+              example: "bdf876sf6sfsdf87sdf"
+              description: id of the super trip
+          iata:
+              type: string
+              example: "YYZ"
+              description: location(city) to search hotels in
+          date:
+              type: string
+              format: date
+              description: date to search hotels availibility for
+
+    HotelGetRoomsResponse:
+      properties:
+        available_rooms:
+          type: array
+          items:
+            type: object
+            properties:
+              room_id:
+                type: string
+                description: An identifier to book the room with
+                example: 'ndsf6sjf6sdf7sdf6'
+              hotel_name:
+                type: string
+                example: 'Le Blue'
+
+    HotelGetRoomsRequest:
+      required:
+        - super_trip_id
+      properties:
+          super_trip_id:
+              type: string
+              example: "bdf876sf6sfsdf87sdf"
+              description: id of the super trip
+          hotel_id:
+            type: string
+            example: 'ndsf6sjf6sdf7sdf6'
+            description: An identifier to refer to the hotel for searching room availability
+
+    HotelPriceConfirmRequest:
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+          description: id of the super trip
+        hotel_id:
+          type: string
+          example: 'ndsf6sjf6sdf7sdf6'
+          description: An identifier to refer to the hotel for searching room availability
+
+    HotelPriceConfirmResponse:
+      properties:
+        hotel_id:
+          type: string
+          example: 'ndsf6sjf6sdf7sdf6'
+          description: An identifier to refer to the hotel for searching room availability
+        price:
+          type: number
+          example: 152
+          description: Cost of stay
