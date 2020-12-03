@@ -1,0 +1,549 @@
+openapi: "3.0.0"
+
+info:
+  version: 2.0.0
+  title: Trip Ninja API Documentation
+  description: |
+    <h2>Introduction</h2>
+    Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
+    are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
+    and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
+    <h2>Trip Ninja API URLs</h2>
+
+    Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+
+    For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact your account manager to whitelist IPs you
+    will be using.
+
+    Before you start ensure that:<br  />
+        - IP addresses have been provided to be whitelisted for our servers.<br  />
+        - PCC / OfficeID emulation via Trip Ninja’s PCC/OfficeID has been set up.<br  />
+        - API username and password have been provided by Trip Ninja.<br  />
+
+    <h2>Workflow</h2>
+    The following diagram shows the typical data flow of API calls to Trip Ninja for a FareStructure integration with both a partner website
+    and metasearch as sources.
+
+    ![Workflow diagram](https://s3.amazonaws.com/tn-api-docs/FlowChart1-01.png)
+
+    Note: the following three endpoints (Price Confirmation, PNR Creation, Ticket Issuance) are simply to report to us that you have done these API calls to your GDS.
+    Price Confirmation, PNR creation, and Ticket Issuance should follow your existing process (as per the following diagram).
+
+    ![Workflow diagram](https://s3.amazonaws.com/tn-api-docs/FlowChart1-02.png)
+
+    <h2>Authentication</h2>
+    Trip Ninja uses Basic Authentication standards. Simply encode your username and password string using base64 and pass it in the
+    authorization headers. See the python example below on how this is done. In the example, the payload and API endpoint url are not
+    shown.
+
+    Python Example:
+
+    <pre>
+    import base64
+    auth = base64.b64encode("USERNAME:PASSWORD")
+    headers = {
+        'authorization': "Basic "+ auth,
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+    </pre>
+
+    # Error Codes
+    <table>
+      <tr><td>IE01</td><td>Need minimum 2 destinations</td></tr>
+      <tr><td>IE02</td><td>Duplicate city in list</td></tr>
+      <tr><td>IE09</td><td>Can't run any queries for flight dates in the past</td></tr>
+      <tr><td>IE10</td><td>Incorrect city_type, expected one of ['C', 'A']</td></tr>
+      <tr><td>IE16</td><td>Please provide a PCC</td></tr>
+      <tr><td>IE17</td><td>Invalid carrier</td></tr>
+      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas'</td></tr>
+      <tr><td>IE20</td><td>Incorrect provider, expected one of '1V','1G','1P','1A'</td></tr>
+      <tr><td>IE21</td><td>Wrong currency</td></tr>
+      <tr><td>IE22</td><td>Not a valid cabin option. expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'</td></tr>
+      <tr><td>IE23</td><td>Not a valid alliance. Expected one of *A, *S, *O</td></tr>
+      <tr><td>IE24</td><td>Travellers Type does not meet expected criteria. Should be a list having between 0 and 10 values</td></tr>
+      <tr><td>IE26</td><td>Exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one</td></tr>
+      <tr><td>IE27</td><td>Num_results should be an integer between 50 and 250</td></tr>
+      <tr><td>IE28</td><td>Refundable parameter must be boolean value true or false</td></tr>
+      <tr><td>IE29</td><td>Invalid Traveller type</td></tr>
+      <tr><td>IE30</td><td>Incorrect value for single_pnr, must be boolean</td></tr>
+      <tr><td>IE31</td><td>LCC token not associated with user</td></tr>
+      <tr><td>IE32</td><td>Incorrect value for include_itineraries, must be boolean</td></tr>
+      <tr><td>IE33</td><td>Stops must be one of 'any', 'direct', '1', '2'</td></tr>
+      <tr><td>IE34</td><td>Incorrect value for no_overnight_layovers, must be boolean</td></tr>
+      <tr><td>IE36</td><td>Invalid LCC name</td></tr>
+    <table>
+
+  x-logo:
+    url: 'https://s3.amazonaws.com/tn-api-docs/tripninja_logo_dev-01.png'
+    altText: Trip Ninja logo
+    href: 'https://www.tripninja.io/'
+
+servers:
+  - url: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+    description: Pre-Production server
+
+paths:
+    /search/flight/{endpoint}/flight/:
+        post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                    type: string
+                    enum: [preprod, prod]
+                  description: Parameter toggles Data Source production and pre-production endpoints
+            summary: "Search"
+            description: |
+              This endpoint triggers farestrucutre for any number of city search
+
+            operationId: Search
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/FlightSearchRequest'
+
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FlightSearchResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid alliance. Expected one of *A, *S, *O
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (Flight not found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: sting
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
+                500:
+                    description: Server Error
+
+    /price/flight/{endpoint}/:
+      post:
+        parameters:
+          - in: path
+            name: endpoint
+            required: true
+            schema:
+              type: string
+              enum: [ preprod, prod ]
+            description: Parameter toggles Data Source production and pre-production endpoints
+        summary: "Price Confirmation"
+        description: Once the desired flights have been selected, call the price confirm endpoint to confirm their availability and prices.
+        operationId: PriceConfirm
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceConfirmRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/PriceConfirmResponse'
+          400:
+            description: Unable to confirm trip pricing
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE45
+                    message:
+                      type: string
+                      example: 'itinerary with reference 1 was unsuccessful. reason Invalid date. Check arrival and departure dates'
+
+    /book/flight/{endpoint}/:
+      post:
+        parameters:
+          - in: path
+            name: endpoint
+            required: true
+            schema:
+              type: string
+              enum: [ preprod, prod ]
+            description: Parameter toggles Data Source production and pre-production endpoints
+        summary: "Create Booking"
+        description: "When a trip is to be booked, send a request to the endpoint /book/ to create the Universal Record and associated PNR's for the trip. The booking can then be placed on the agency's ticketing queue."
+        operationId: "CreateBooking"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookingRequest'
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    ur_locator_codes:
+                      type: json
+                      description: Map of itinerary_reference and Unique Identifier of a Universal Record.
+                      example: { "1": "D917A841" }
+                    pnr_numbers:
+                      type: json
+                      description: Map of itinerary_reference and PNR number of a booking.
+                      example: { "1": "TH2H52" }
+          400:
+            description: Unable to create booking
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE46
+                    message:
+                      type: string
+                      example: 'trip has already been booked'
+
+    /book/:
+      delete:
+        summary: "Cancel Booking"
+        description: "To cancel a booking, send a request with the trip_id and ur_locator_code."
+        operationId: "CancelBooking"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelRequest'
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "Success"
+                    message:
+                      type: string
+                      example: "Trip was successfully cancelled"
+          400:
+            description: Unable to cancel booking
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE38
+                    message:
+                      type: string
+                      example: 'Trip ID not found'
+
+    /queue/:
+      post:
+        summary: "Add To Ticketing Queue"
+        description: If a trip has been booked, but not yet added to the agency ticketing queue, use this endpoint to add it to their queue.
+        operationId: AddBookingToTicketingQueue
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddBookingToTicketingQueueRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "0"
+                    message:
+                      type: string
+                      example: "success"
+
+          400:
+            description: Unable to add trip to ticketing queue
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE38
+                    message:
+                      type: string
+                      example: 'Trip ID not found'
+
+    /ticket/:
+      post:
+        summary: "Ticket"
+        description: If a trip has been queued, but not yet ticketed, use this endpoint to do the ticketing.
+        operationId: Ticket
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketingRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "0"
+                    message:
+                      type: string
+                      example: "success"
+
+          400:
+            description: Unable to issue ticket
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE45
+                    message:
+                      type: string
+                      example: 'itinerary with reference 1 was unsuccessful. reason LAST TIME TO TICKET IS PAST - PLEASE REPRICE (08SEP20 23:19)'
+
+    /super_trip/{id}/:
+      put:
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+            description: Super Trip ID provided
+            example: "aksdhiywehe96wewe76"
+        summary: "Super Trip Nickname"
+        description: This can be used to add a nickname to a super trip
+        operationId: SuperTrip
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperTripUpdateRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "success"
+
+          500:
+            description: Unable to update the nickname
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: 'Unable to update the nickname. Internal Error'
+
+
+    /super_trip/{id}/part/:
+      delete:
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+            description: Super Trip ID provided
+            example: "aksdhiywehe96wewe76"
+        summary: "Super Trip Nickname"
+        description: This can be used to remove flights/hotels/cars from a super trip
+        operationId: SuperTripPartDeletion
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperTripPartDeletionRequest'
+
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SuperTripPartDeletionResponse'
+
+          500:
+            description: Unable to update the nickname
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: 'Unable to update the nickname. Internal Error'
+
+
+
+
+
+
+components:
+  schemas:
+    FlightSearchResponse:
+      allOf:
+        - $ref: 'tn_api_spec.yml#/components/schemas/FareStructureRequest'
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    FlightSearchRequest:
+      allOf:
+        - $ref: 'tn_api_spec.yml#/components/schemas/FareStructureRequest'
+      properties:
+          super_trip_id:
+              type: string
+              example: "bdf876sf6sfsdf87sdf"
+      
+    PriceConfirmRequest:
+      allOf:
+        - $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/PriceConfirmRequest'
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    CancelRequest:
+      allOf:
+        - $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/CancelRequest'
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    CreateBookingRequest:
+      allOf:
+        - $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/CreateBookingRequest'
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    AddBookingToTicketingQueueRequest:
+      allOf:
+        - $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/AddBookingToTicketingQueueRequest'
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    TicketingRequest:
+      allOf:
+        - $ref: 'tn_api_pricing_booking_spec.yml#/components/schemas/TicketingRequest'
+      required:
+        - super_trip_id
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+
+    SuperTripUpdateRequest:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: Super Trip Nick name
+          example: My Super Trip
+
+    SuperTripPartDeletionRequest:
+      type: object
+      properties:
+        part_type:
+          type: string
+          description: Super Trip Part Type
+          example: itinerary
+          enum: [itinerary, hotel, car]
+        part_id:
+          type: string
+          description: Super Trip Part ID. (itinerary_id, hotel_reservation_id, car_rental_id)
+          example: "hgasd65ashdg7a6w5"
+
+    SuperTripPartDeletionResponse:
+      type: object
+      properties:
+        markup:
+          type: number
+          description: Only if part type is flight. Trip Ninja provided markup for all flights in this supertrip, updated based on the removed flight
+          example: 20.00
