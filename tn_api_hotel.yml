@@ -265,10 +265,14 @@ components:
               type: string
               example: "YYZ"
               description: location(city) to search hotels in
-          date:
+          check_in_date:
               type: string
               format: date
-              description: date to search hotels availibility for
+              description: Date of check-in to search hotel availibilities on.
+          check_out_date:
+              type: string
+              format: date
+              description: Date to checkout from the hotel.
 
     HotelGetRoomsResponse:
       properties:
