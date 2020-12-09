@@ -450,10 +450,6 @@ components:
                 type: string
                 description:
                 example: "UPTO50LB/23KG AND UPTO62LI/158LCM"
-            carryon_cost:
-                type: float
-                description:
-                example: 0.00
             carryon_restrictions:
                 type: string
                 description:
