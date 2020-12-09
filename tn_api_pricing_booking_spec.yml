@@ -402,10 +402,50 @@ components:
                 type: string
                 description:
                 example: "1"
-            baggage_cost:
-                type: float
-                description:
-                example: 30.00
+            additional_checked_bags:
+                type: array
+                items:
+                  type: object
+                  description: Excess Baggage
+                  properties:
+                    applicable_bags:
+                      type: string
+                      description: Describe which checked bag is this price applicable to
+                      example: 1stChecked
+                    base_price:
+                      type: number
+                      description: Base price of the checked bag
+                      example: 40.00
+                    total_price:
+                      type: number
+                      description: Total price of the checked bag
+                      example: 40.00
+                    restriction:
+                      type: string
+                      description: Information about baggage restrictions
+                      example: UPTO50LB/23KG AND UPTO62LI/158LCM
+            additional_carry_on_bags:
+                type: array
+                items:
+                  type: object
+                  description: Excess Baggage
+                  properties:
+                    applicable_bags:
+                      type: string
+                      description: Describe which carry on bag is this price applicable to
+                      example: 1
+                    base_price:
+                      type: number
+                      description: Base price of the bag
+                      example: 10.00
+                    total_price:
+                      type: number
+                      description: Total price of the bag
+                      example: 10.00
+                    restriction:
+                      type: string
+                      description: Information about baggage restrictions
+                      example: PERSONAL ITEM
             baggage_restrictions:
                 type: string
                 description:
