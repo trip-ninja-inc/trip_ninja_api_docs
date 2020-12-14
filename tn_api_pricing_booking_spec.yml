@@ -1161,6 +1161,72 @@ components:
                                 description: The frequent flyer card number.
                                 type: string
                                 example: '84299921292'
+                        additional_checked_bags:
+                          description: The passenger's additional baggage details
+                          type: array
+                          items:
+                            type: object
+                            description: Excess Baggage
+                            properties:
+                              itinerary_reference:
+                                description: The itinerary reference to apply the card to.
+                                type: string
+                                example: "1"
+                              applicable_bags:
+                                type: array
+                                description: List of additional bags for this itinerary
+                                items:
+                                  type: object
+                                  properties:
+                                    baggage_type:
+                                      type: string
+                                      description: Describe which checked bag is this price applicable to
+                                      example: 1stChecked
+                                    base_price:
+                                      type: number
+                                      description: Base price of the checked bag
+                                      example: 40.00
+                                    total_price:
+                                      type: number
+                                      description: Total price of the checked bag
+                                      example: 40.00
+                                    restriction:
+                                      type: string
+                                      description: Information about baggage restrictions
+                                      example: UPTO50LB/23KG AND UPTO62LI/158LCM
+                        additional_carry_on_bags:
+                          description: The passenger's carry on bag details
+                          type: array
+                          items:
+                            type: object
+                            description: Excess Baggage
+                            properties:
+                              itinerary_reference:
+                                description: The itinerary reference to apply the card to.
+                                type: string
+                                example: "1"
+                              applicable_bags:
+                                type: array
+                                description: List of additional bags for this itinerary
+                                items:
+                                  type: object
+                                  properties:
+                                    baggage_type:
+                                      type: string
+                                      description: Describe which carry on bag is this price applicable to
+                                      example: 1
+                                    base_price:
+                                      type: number
+                                      description: Base price of the bag
+                                      example: 10.00
+                                    total_price:
+                                      type: number
+                                      description: Total price of the bag
+                                      example: 10.00
+                                    restriction:
+                                      type: string
+                                      description: Information about baggage restrictions
+                                      example: PERSONAL ITEM
             billing:
                 type: object
                 description: Billing information for the booking.
@@ -1386,6 +1452,73 @@ components:
           items:
             type: string
             example: '8284828284'
+        additional_checked_bags:
+          description: The passenger's additional baggage details
+          type: array
+          items:
+            type: object
+            description: Excess Baggage
+            properties:
+              itinerary_reference:
+                description: The itinerary reference to apply the card to.
+                type: string
+                example: "1"
+              applicable_bags:
+                type: array
+                description: List of additional bags for this itinerary
+                items:
+                  type: object
+                  properties:
+                    baggage_type:
+                      type: string
+                      description: Describe which checked bag is this price applicable to
+                      example: 1stChecked
+                    base_price:
+                      type: number
+                      description: Base price of the checked bag
+                      example: 40.00
+                    total_price:
+                      type: number
+                      description: Total price of the checked bag
+                      example: 40.00
+                    restriction:
+                      type: string
+                      description: Information about baggage restrictions
+                      example: UPTO50LB/23KG AND UPTO62LI/158LCM
+        additional_carry_on_bags:
+          description: The passenger's carry on bag details
+          type: array
+          items:
+            type: object
+            description: Excess Baggage
+            properties:
+              itinerary_reference:
+                description: The itinerary reference to apply the card to.
+                type: string
+                example: "1"
+              applicable_bags:
+                type: array
+                description: List of additional bags for this itinerary
+                items:
+                  type: object
+                  properties:
+                    baggage_type:
+                      type: string
+                      description: Describe which carry on bag is this price applicable to
+                      example: 1
+                    base_price:
+                      type: number
+                      description: Base price of the bag
+                      example: 10.00
+                    total_price:
+                      type: number
+                      description: Total price of the bag
+                      example: 10.00
+                    restriction:
+                      type: string
+                      description: Information about baggage restrictions
+                      example: PERSONAL ITEM
+
 
 
 
