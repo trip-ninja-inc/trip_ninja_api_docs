@@ -58,7 +58,7 @@ paths:
                   description: Parameter toggles data source production and pre-production endpoints
             summary: "Hotel Search"
             description: |
-              This endpoint initiate hotel search for one location(city), and return list of available options. another endpoint needs to be called after this to obtain information about room types, etc.
+              This endpoint initiates a hotel search for one location (city), and returns a list of available options. A separate endpoint needs to be called to obtain information about room types, etc.
             operationId: Search
             requestBody:
                 content:
@@ -265,10 +265,14 @@ components:
               type: string
               example: "YYZ"
               description: location(city) to search hotels in
-          date:
+          check_in_date:
               type: string
               format: date
-              description: date to search hotels availibility for
+              description: Date of check-in to search hotel availibilities on.
+          check_out_date:
+              type: string
+              format: date
+              description: Date to checkout from the hotel.
 
     HotelGetRoomsResponse:
       properties:
