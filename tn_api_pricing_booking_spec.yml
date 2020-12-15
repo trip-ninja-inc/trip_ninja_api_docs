@@ -1201,6 +1201,21 @@ components:
                                 description: The frequent flyer card number.
                                 type: string
                                 example: '84299921292'
+                        meals:
+                          description: The passenger's meals details
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              itinerary_reference:
+                                description: The itinerary reference to apply the card to.
+                                type: string
+                                example: "1"
+                              meal_choice:
+                                description: Choosen meal
+                                type: string
+                                enum: [AVML,BBML,BLML,CHML,DBML,FPML,GFML,HNML,JPML,KSML,LCML,LFML,LSML,MOML,NFML,NLML,OBML,ORML,RVML,SFML,SPML,VGML,VLML,VOML]
+                                example: "GFML"
                         additional_checked_bags:
                           description: The passenger's additional baggage details
                           type: array
@@ -1492,6 +1507,21 @@ components:
           items:
             type: string
             example: '8284828284'
+        meals:
+          description: The passenger's meals details
+          type: array
+          items:
+            type: object
+            properties:
+              itinerary_reference:
+                description: The itinerary reference to apply the card to.
+                type: string
+                example: "1"
+              meal_choice:
+                description: Choosen meal
+                type: string
+                enum: [ AVML,BBML,BLML,CHML,DBML,FPML,GFML,HNML,JPML,KSML,LCML,LFML,LSML,MOML,NFML,NLML,OBML,ORML,RVML,SFML,SPML,VGML,VLML,VOML ]
+                example: "GFML"
         additional_checked_bags:
           description: The passenger's additional baggage details
           type: array
