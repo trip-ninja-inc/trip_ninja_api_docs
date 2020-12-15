@@ -371,7 +371,7 @@ components:
                 type: object
                 $ref: '#/components/schemas/trip_pricing_breakdown'
         itinerary:
-            $ref: '#/components/schemas/itinerary_response'
+            $ref: '#/components/schemas/price_confirm_itinerary_response_list'
 
     GetBookingDetailsResponse:
       title: Response
@@ -386,13 +386,62 @@ components:
           type: object
           $ref: '#/components/schemas/trip_pricing_breakdown_additional'
         itinerary:
-          $ref: '#/components/schemas/itinerary_response'
+          $ref: '#/components/schemas/itinerary_response_list'
         passengers:
           type: array
           description: All passengers information
           items:
             $ref: '#/components/schemas/passenger_detail'
 
+
+    price_confirm_baggage:
+      allOf:
+        - $ref: '#/components/schemas/baggage'
+      properties:
+        additional_checked_bags:
+          type: array
+          items:
+            type: object
+            description: Excess Baggage
+            properties:
+              applicable_bags:
+                type: string
+                description: Describe which checked bag is this price applicable to
+                example: 1stChecked
+              base_price:
+                type: number
+                description: Base price of the checked bag
+                example: 40.00
+              total_price:
+                type: number
+                description: Total price of the checked bag
+                example: 40.00
+              restriction:
+                type: string
+                description: Information about baggage restrictions
+                example: UPTO50LB/23KG AND UPTO62LI/158LCM
+        additional_carry_on_bags:
+          type: array
+          items:
+            type: object
+            description: Excess Baggage
+            properties:
+              applicable_bags:
+                type: string
+                description: Describe which carry on bag is this price applicable to
+                example: 1
+              base_price:
+                type: number
+                description: Base price of the bag
+                example: 10.00
+              total_price:
+                type: number
+                description: Total price of the bag
+                example: 10.00
+              restriction:
+                type: string
+                description: Information about baggage restrictions
+                example: PERSONAL ITEM
 
     baggage:
         type: object
@@ -406,50 +455,6 @@ components:
                 type: string
                 description:
                 example: "1"
-            additional_checked_bags:
-                type: array
-                items:
-                  type: object
-                  description: Excess Baggage
-                  properties:
-                    applicable_bags:
-                      type: string
-                      description: Describe which checked bag is this price applicable to
-                      example: 1stChecked
-                    base_price:
-                      type: number
-                      description: Base price of the checked bag
-                      example: 40.00
-                    total_price:
-                      type: number
-                      description: Total price of the checked bag
-                      example: 40.00
-                    restriction:
-                      type: string
-                      description: Information about baggage restrictions
-                      example: UPTO50LB/23KG AND UPTO62LI/158LCM
-            additional_carry_on_bags:
-                type: array
-                items:
-                  type: object
-                  description: Excess Baggage
-                  properties:
-                    applicable_bags:
-                      type: string
-                      description: Describe which carry on bag is this price applicable to
-                      example: 1
-                    base_price:
-                      type: number
-                      description: Base price of the bag
-                      example: 10.00
-                    total_price:
-                      type: number
-                      description: Total price of the bag
-                      example: 10.00
-                    restriction:
-                      type: string
-                      description: Information about baggage restrictions
-                      example: PERSONAL ITEM
             baggage_restrictions:
                 type: string
                 description:
@@ -845,55 +850,110 @@ components:
                 required: true
                 example: ECONOFLEX
 #----------------------------------------------------------------------------
-    itinerary_response:
+    price_confirm_itinerary_response_list:
+      type: array
+      description: The itinerary chosen for the trip
+      items:
         allOf:
-            - $ref: #
-            - type: array
-              description: The itinerary chosen for the trip
-              items:
-                  type: object
-                  description: The itinerary to be priced
-                  required:
-                      - itinerary_reference
-                      - plating_carrier
-                      - credentials
-                      - segments
-                  properties:
-                      itinerary_reference:
-                          type: integer
-                          description: itinerary reference id within the itinerary. Always starting from 1
-                          example: 1
-                      plating_carrier:
-                          type: string
-                          description: The airline that a ticket will be issued on behalf of.
-                          required: true
-                          example: "WS"
-                      credentials:
-                          $ref: '#/components/schemas/credentials'
-                      itinerary_type:
-                          $ref: '#/components/schemas/segment_type'
-                      itinerary_markup:
-                        type: number
-                        default: 0
-                        description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
-                        example: 7
-                      segments:
-                          type: array
-                          description: The segments chosen for the trip
-                          items:
-                              $ref: '#/components/schemas/segment_response'
-                      base_fare:
-                          type: float
-                          description: The confirmed base fare for this itinerary of the pricing response.
-                          example: 115.50
-                      taxes:
-                          type: float
-                          description: The confirmed taxes associated with this itinerary of the pricing response.
-                          example: 34.55
-                      fees:
-                          type: float
-                          description: The confirmed feess associated with this itinerary in the pricing response.
-                          example: 12.99
+          - $ref: '#/components/schemas/price_confirm_itinerary_response'
+
+    itinerary_response_list:
+      type: array
+      description: The itinerary chosen for the trip
+      items:
+        allOf:
+        - $ref: '#/components/schemas/itinerary_response'
+
+    price_confirm_itinerary_response:
+      type: object
+      description: The itinerary to be priced
+      required:
+        - itinerary_reference
+        - plating_carrier
+        - credentials
+        - segments
+      properties:
+        itinerary_reference:
+          type: integer
+          description: itinerary reference id within the itinerary. Always starting from 1
+          example: 1
+        plating_carrier:
+          type: string
+          description: The airline that a ticket will be issued on behalf of.
+          required: true
+          example: "WS"
+        credentials:
+          $ref: '#/components/schemas/credentials'
+        itinerary_type:
+          $ref: '#/components/schemas/segment_type'
+        itinerary_markup:
+          type: number
+          default: 0
+          description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
+          example: 7
+        segments:
+          type: array
+          description: The segments chosen for the trip
+          items:
+            $ref: '#/components/schemas/price_confirm_segment_response'
+        base_fare:
+          type: float
+          description: The confirmed base fare for this itinerary of the pricing response.
+          example: 115.50
+        taxes:
+          type: float
+          description: The confirmed taxes associated with this itinerary of the pricing response.
+          example: 34.55
+        fees:
+          type: float
+          description: The confirmed feess associated with this itinerary in the pricing response.
+          example: 12.99
+
+    itinerary_response:
+        type: object
+        description: The itinerary to be priced
+        required:
+            - itinerary_reference
+            - plating_carrier
+            - credentials
+            - segments
+        properties:
+            itinerary_reference:
+                type: integer
+                description: itinerary reference id within the itinerary. Always starting from 1
+                example: 1
+            plating_carrier:
+                type: string
+                description: The airline that a ticket will be issued on behalf of.
+                required: true
+                example: "WS"
+            credentials:
+                $ref: '#/components/schemas/credentials'
+            itinerary_type:
+                $ref: '#/components/schemas/segment_type'
+            itinerary_markup:
+              type: number
+              default: 0
+              description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
+              example: 7
+            segments:
+                type: array
+                description: The segments chosen for the trip
+                items:
+                    $ref: '#/components/schemas/segment_response'
+            base_fare:
+                type: float
+                description: The confirmed base fare for this itinerary of the pricing response.
+                example: 115.50
+            taxes:
+                type: float
+                description: The confirmed taxes associated with this itinerary of the pricing response.
+                example: 34.55
+            fees:
+                type: float
+                description: The confirmed feess associated with this itinerary in the pricing response.
+                example: 12.99
+
     brand:
       type: array
       description: An array of brands relating to each flight of the segment
@@ -980,6 +1040,14 @@ components:
                   items:
                     type: string
                     example: '23'
+
+    price_confirm_segment_response:
+      allOf:
+        - $ref: '#/components/schemas/segment_response'
+      properties:
+        baggage:
+          $ref: '#/components/schemas/price_confirm_baggage'
+
 
     segment_response:
         type: object
