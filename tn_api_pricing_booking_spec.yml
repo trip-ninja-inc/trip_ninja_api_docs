@@ -432,7 +432,7 @@ components:
                 type: array
                 items:
                   type: object
-                  description: Excess Baggage
+                  description: Additional Carry On Baggage
                   properties:
                     applicable_bags:
                       type: string
