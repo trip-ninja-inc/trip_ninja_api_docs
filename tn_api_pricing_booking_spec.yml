@@ -1208,7 +1208,7 @@ components:
                             type: object
                             properties:
                               itinerary_reference:
-                                description: The itinerary reference to apply the card to.
+                                description: The itinerary reference to apply the meal to.
                                 type: string
                                 example: "1"
                               meal_choice:
