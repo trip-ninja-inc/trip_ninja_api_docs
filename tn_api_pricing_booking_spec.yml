@@ -607,6 +607,10 @@ components:
             type: float
             description: Additional markup to be applied to the booking price.
             example: 15.00
+          additional_baggage:
+            type: float
+            description: Price for total additional baggages added to the trip
+            example: 30.00
 
     segment_pricing_breakdown:
         allOf:
