@@ -1559,10 +1559,6 @@ components:
                       type: string
                       description: Information about baggage restrictions
                       example: UPTO50LB/23KG AND UPTO62LI/158LCM
-              flight_numbers:
-                description: flight numbers including meal
-                type: string
-                example: "QT723, AC693"
         additional_carry_on_bags:
           description: The passenger's carry on bag details
           type: array
