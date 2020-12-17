@@ -358,6 +358,25 @@ paths:
 
 components:
   schemas:
+    frequent_flyer_cards:
+      description: The passenger's frequent flyer card details
+      type: array
+      items:
+        type: object
+        properties:
+          itinerary_reference:
+            description: The itinerary reference to apply the card to.
+            type: string
+            example: "1"
+          card_supplier:
+            description: The supplier code of the loyalty program supplier.
+            type: string
+            example: "AA"
+          card_number:
+            description: The frequent flyer card number.
+            type: string
+            example: '84299921292'
+
     PriceConfirmResponse:
       title: Response
       type: object
@@ -1252,23 +1271,7 @@ components:
                             description: "The customer's passenger type. Values include 'ADT', 'MIL', 'CHD' and 'INF'."
                             example: "ADT"
                         frequent_flyer_cards:
-                          description: The passenger's frequent flyer card details
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              itinerary_reference:
-                                description: The itinerary reference to apply the card to. 
-                                type: string
-                                example: "1"
-                              card_supplier:
-                                description: The supplier code of the loyalty program supplier.
-                                type: string
-                                example: "AA"
-                              card_number:
-                                description: The frequent flyer card number.
-                                type: string
-                                example: '84299921292'
+                          $ref: '#/components/schemas/frequent_flyer_cards'
                         meals:
                           description: The passenger's meals details
                           type: array
@@ -1570,11 +1573,7 @@ components:
           type: string
           example: "9022222222"
         frequent_flyer:
-          description: The passengers frequent flyer card numbers associated with the booked trip.
-          type: array
-          items:
-            type: string
-            example: '8284828284'
+          $ref: '#/components/schemas/frequent_flyer_cards'
         meals:
           description: The passenger's meals details
           type: array
