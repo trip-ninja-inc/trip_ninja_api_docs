@@ -439,6 +439,10 @@ components:
                 type: string
                 description: Information about baggage restrictions
                 example: UPTO50LB/23KG AND UPTO62LI/158LCM
+              additional_service_reference:
+                type: string
+                description: Reference for the additional baggage option
+                example: C9O
         additional_carry_on_bags:
           type: array
           items:
@@ -461,6 +465,10 @@ components:
                 type: string
                 description: Information about baggage restrictions
                 example: PERSONAL ITEM
+              additional_service_reference:
+                type: string
+                description: Reference for the additional baggage option
+                example: C9O
 
     baggage:
         type: object
@@ -482,6 +490,7 @@ components:
                 type: string
                 description:
                 example: "CARRYON HAND BAGGAGE ALLOWANCE"
+
 
     flight_details:
         type: array
@@ -1320,6 +1329,10 @@ components:
                                       type: string
                                       description: Information about baggage restrictions
                                       example: UPTO50LB/23KG AND UPTO62LI/158LCM
+                                    additional_service_reference:
+                                      type: string
+                                      description: Reference for the additional baggage option
+                                      example: C9O
                         additional_carry_on_bags:
                           description: The passenger's carry on bag details
                           type: array
@@ -1353,6 +1366,10 @@ components:
                                       type: string
                                       description: Information about baggage restrictions
                                       example: PERSONAL ITEM
+                                    additional_service_reference:
+                                      type: string
+                                      description: Reference for the additional baggage option
+                                      example: C9O
             billing:
                 type: object
                 description: Billing information for the booking.
