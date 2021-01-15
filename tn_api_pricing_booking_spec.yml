@@ -603,6 +603,11 @@ components:
                     type: string
                     description: Currency in which trip was priced
                     example: USD
+                ancillary_total:
+                    type: float
+                    description: Total of all ancillaries
+                    example: 60.00
+
 
     trip_pricing_breakdown_additional:
       type: object
@@ -640,9 +645,9 @@ components:
             type: float
             description: Additional markup to be applied to the booking price.
             example: 15.00
-          additional_baggage:
+          ancillary_total:
             type: float
-            description: Price for total additional baggages added to the trip
+            description: Total price of all ancillaries.
             example: 30.00
 
     segment_pricing_breakdown:
