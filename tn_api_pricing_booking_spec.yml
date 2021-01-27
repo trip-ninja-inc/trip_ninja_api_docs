@@ -210,6 +210,11 @@ paths:
                             schema:
                                 type: object
                                 properties:
+                                    super_trip_id:
+                                      description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, Flights).
+                                      type: string
+                                      required: true
+                                      example: "5df23dd9s72hne223d299err2323423r2342r221"
                                     ur_locator_codes:
                                         type: json
                                         description: Map of itinerary_reference and Unique Identifier of a Universal Record.
