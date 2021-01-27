@@ -1463,13 +1463,12 @@ components:
         title: Request
         type: object
         required:
-            - trip_id
+            - super_trip_id
         properties:
-            trip_id:
-                description: A unique key used for identification and when booking a trip.
-                required: true
-                type: string
-                example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            super_trip_id:
+              description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+              type: string
+              example: "5df23dd9s72hne223d299err2323423r2342r221"
 
     ListBookingResponse:
         title: Response
