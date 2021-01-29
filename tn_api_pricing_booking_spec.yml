@@ -141,15 +141,15 @@ paths:
                                         type: string
                                         example: 'Invalid agency/agent entered'
 
-    /book/trip/{trip_id}/?agency={agency}:
+    /book/trip/{super_trip_id}/?agency={agency}:
         get:
             parameters:
                 - in: path
-                  name: trip_id
+                  name: super_trip_id
                   schema:
                       type: string
-                  description: A unique key used for identification and when booking a trip.
-                  example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+                  description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+                  example: "5df23dd9s72hne223d299err2323423r2342r221"
                 - in: query
                   name: agency
                   schema:
@@ -405,10 +405,10 @@ components:
       title: Response
       type: object
       properties:
-        trip_id:
-          description: A unique key used for identification and when booking a trip.
+        super_trip_id:
+          description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
           type: string
-          example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+          example: "5df23dd9s72hne223d299err2323423r2342r221"
         pricing:
           description: Breakdown of the total confirmed prices including taxes, fees, and markup for the trip.
           type: object
@@ -1189,13 +1189,12 @@ components:
         title: Request
         type: object
         required:
-            - trip_id
+            - super_trip_id
         properties:
-            trip_id:
-                type: string
-                required: true
-                description: Trip ID returned in search response
-                example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+            super_trip_id:
+              description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+              type: string
+              example: "5df23dd9s72hne223d299err2323423r2342r221"
 
     CreateBookingRequest:
         title: Request
@@ -1453,14 +1452,13 @@ components:
         title: Request
         type: object
         required:
-            - trip_id
+            - super_trip_id
             - queue
         properties:
-            trip_id:
-                description: A unique key used for identification and when booking a trip.
-                required: true
-                type: string
-                example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            super_trip_id:
+              description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+              type: string
+              example: "5df23dd9s72hne223d299err2323423r2342r221"
             queue:
                 type: string
                 description: Ticketing queue on which to place the PNR
@@ -1470,13 +1468,12 @@ components:
         title: Request
         type: object
         required:
-            - trip_id
+            - super_trip_id
         properties:
-            trip_id:
-                description: A unique key used for identification and when booking a trip.
-                required: true
-                type: string
-                example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
+            super_trip_id:
+              description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+              type: string
+              example: "5df23dd9s72hne223d299err2323423r2342r221"
 
     ListBookingResponse:
         title: Response
@@ -1487,6 +1484,10 @@ components:
                 items:
                     type: object
                     properties:
+                        super_trip_id:
+                          description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
+                          type: string
+                          example: "5df23dd9s72hne223d299err2323423r2342r221"
                         trip_id:
                             description: A unique key used for identification and when booking a trip.
                             type: string
