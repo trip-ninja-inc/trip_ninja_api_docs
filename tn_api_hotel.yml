@@ -46,7 +46,7 @@ servers:
     description: Pre-Production server
 
 paths:
-    /search/hotels{endpoint}:
+    /search/hotels/{endpoint}:
         post:
             parameters:
                 - in: path
@@ -132,7 +132,7 @@ paths:
                       enum: [ preprod, prod ]
                       description: Parameter toggles data source production and pre-production endpoints.
             summary: "Hotel Media"
-            description: Get the media details of the hotels in the request list.
+            description: Get the media details of the hotels in the request list. There is a limit of 20 hotels with which to request media for in each endpoint call.
             operationId: Media
             requestBody:
                 content:
@@ -331,9 +331,24 @@ components:
                           description: The full location name as provided by the GDS.
                           example: "London, England"
                       rating:
-                          type: int
-                          description: The hotel rating
-                          example: 4
+                          type: object
+                          properties:
+                              rating:
+                                  type: int
+                                  description: The hotel rating
+                                  example: 4
+                              rating_provider:
+                                  type: string
+                                  description: The provider of the rating.
+                                  example: Giata
+                              rating_maximum:
+                                  type: int
+                                  description: The best possible rating.
+                                  example: 10
+                              rating_minimum:
+                                  type: int
+                                  description: The worst possible rating.
+                                  example: 0
                       hotel_chain:
                           type: string
                           description: The refence for the hotel chain.
@@ -369,9 +384,9 @@ components:
                                   type: float
                                   description: The lattitude of the hotel.
                                   example: -63.575245615440565
-                              distance_from_city_km:
+                              distance_from_search_reference:
                                   type: float
-                                  description: The distance that the hotel is from the "City Centre".
+                                  description: The distance that the hotel is from the reference submitted in the search.
                                   example: 7.5
                               phone_number:
                                   type: str
@@ -395,25 +410,37 @@ components:
               type: string
               example: '1'
               description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+          next_result_reference:
+              type: string
+              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+              description: The reference used to get the next list of results from the GDS.
 
     HotelSearchRequest:
+      required:
+          - location
+          - check_in_date
+          - check_out_date
+          - hotel_itinerary_reference
+          - credential_info
+          - total_travellers
+          - total_rooms
       properties:
           super_trip_id:
               type: string
               example: "bdf876sf6sfsdf87sdf"
               description: id of the super trip, may not be present in the initial search.
-          iata:
+          location:
               type: string
               example: "YYZ"
               description: location (city iata) to search for hotels in.
           check_in_date:
               type: string
               format: date
-              description: Date of check-in.
+              description: "Date of check-in. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
           check_out_date:
               type: string
               format: date
-              description: Date to checkout from the hotel.
+              description: "Date to checkout from the hotel. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
           currency:
               type: string
               example: 'CAD'
@@ -445,8 +472,27 @@ components:
                       description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
                       type: string
                       example: CAD
+          next_result_reference:
+              type: string
+              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+              description: The reference used to get the next list of results from the GDS.
+          hotel_itinerary_reference:
+              type: string
+              example: '1'
+              description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+
 
     HotelDetailsRequest:
+        required:
+            - hotel_itinerary_reference
+            - credential_info
+            - hotel_chain
+            - hotel_code
+            - total_travellers
+            - total_rooms
+            - currency
+            - check_in_date
+            - check_out_date
         properties:
             super_trip_id:
                 type: string
@@ -496,11 +542,13 @@ components:
             check_in_date:
                 type: string
                 format: date
-                description: Date of check-in to search hotel availibilities on.
+                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                example: '2021-05-10'
             check_out_date:
                 type: string
                 format: date
-                description: Date to checkout from the hotel.
+                description: "Date to checkout from the hotel. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                example: '2021-05-15'
 
     HotelDetailsResponse:
         properties:
@@ -517,7 +565,7 @@ components:
                 properties:
                     street_address:
                         type: string
-                        description: The street address of the hotel.
+                        description: The street address of the hotel. This is more details than the one returned at search.
                         example: '1583 Brunswick St, Halifax, NS B3J 3P5'
                     longitude:
                         type: float
@@ -527,9 +575,9 @@ components:
                         type: float
                         description: The lattitude of the hotel.
                         example: -63.575245615440565
-                    distance_from_city_km:
+                    distance_from_search_reference:
                         type: float
-                        description: The distance that the hotel is from the "City Centre".
+                        description: The distance that the hotel is from the reference submitted in the search.
                         example: 7.5
                     phone_number:
                         type: str
@@ -598,6 +646,8 @@ components:
 
 
     HotelPriceConfirmRequest:
+      required:
+          - hotels_to_price
       properties:
         super_trip_id:
             type: string
@@ -608,6 +658,17 @@ components:
             items:
                 type: object
                 properties:
+                    required:
+                        - hotel_id
+                        - hotel_chain
+                        - hotel_code
+                        - total_travellers
+                        - total_rooms
+                        - check_in_date
+                        - check_out_date
+                        - rate_reference
+                        - hotel_itinerary_reference
+                        - credential_info
                     hotel_id:
                         type: string
                         example: 'ndsf6sjf6sdf7sdf6'
@@ -635,11 +696,11 @@ components:
                     check_in_date:
                         type: string
                         format: date
-                        description: Date of check-in to search hotel availibilities on.
+                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                     check_out_date:
                         type: string
                         format: date
-                        description: Date to checkout from the hotel.
+                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                     rate_reference:
                         type: string
                         description: The hotel supplied reference for the room / rate being booked.
@@ -699,6 +760,19 @@ components:
                         type: string
                         description: The hotel supplied reference for the room / rate being booked.
                         example: OQN22AZ
+                    rules:
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                rule_type:
+                                    type: string
+                                    description: The type of rule available.
+                                    example: 'Cancellation'
+                                rule_description:
+                                    type: string
+                                    description: The description of the above rule.
+                                    example: PENALTY AMOUNT 505.00 CANCEL BY 2021-05-04
         total_price:
             type: number
             example: 705.10
@@ -706,11 +780,17 @@ components:
 
     HotelMediaRequest:
         properties:
+            required:
+                - hotels
             hotels:
                 type: array
                 items:
                     type: object
                     properties:
+                        required:
+                            - hotel_chain
+                            - hotel_code
+                            - data_source
                         hotel_chain:
                             type: string
                             description: The refence for the hotel chain.
@@ -719,6 +799,18 @@ components:
                             type: string
                             description: The reference for the hotel code
                             example: '35573'
+                        data_source:
+                            description: Data Source to call. Currently only Travelport available
+                            required: true
+                            type: string
+                            enum: [travelport]
+                            example: amadeus
+            size:
+                type: str
+                enum: ['small', 'medium', 'large', 'thumbnail']
+                example: 'small'
+                description: A size may be specified. In doing so, only that size image will be returned
+
 
     HotelMediaResponse:
         properties:
@@ -756,5 +848,8 @@ components:
                                         type: string
                                         description: The url for the image of the above titled part of the hotel of size large.
                                         example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-
+                                    thumbnail:
+                                        type: string
+                                        description: The url for the image of the above titled part of the hotel of size thumbnail.
+                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
 
