@@ -406,6 +406,26 @@ components:
                               type: string
                               description: A title or descriptor of the amenity provided.
                               example: High speed internet connection
+                      credential_info:
+                          type: object
+                          properties:
+                            pcc:
+                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                                type: string
+                                example: 2G3C
+                            provider:
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                required: true
+                                type: string
+                                example: 1V
+                            pcc_currency:
+                                description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
+                                type: string
+                                example: CAD
+                      conversion_rate:
+                          type: float
+                          description: The conversion rate to get the price in the currency requested.
+                          example: 0.45
           hotel_itinerary_reference:
               type: string
               example: '1'
@@ -484,6 +504,7 @@ components:
 
     HotelDetailsRequest:
         required:
+            - hotel_trace_id
             - hotel_itinerary_reference
             - credential_info
             - hotel_chain
@@ -498,6 +519,10 @@ components:
                 type: string
                 example: "bdf876sf6sfsdf87sdf"
                 description: id of the super trip
+            hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: An identifier to refer to the hotel for searching room availability
             hotel_itinerary_reference:
                 type: string
                 example: '1'
@@ -549,6 +574,10 @@ components:
                 format: date
                 description: "Date to checkout from the hotel. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
                 example: '2021-05-15'
+            conversion_rate:
+                type: float
+                description: The conversion rate to get the price in the currency requested.
+                example: 0.45
 
     HotelDetailsResponse:
         properties:
@@ -612,14 +641,18 @@ components:
                             type: float
                             description: The total price of the entire stay at the hotel for this room.
                             example: 705.10
-                        price_by_day:
+                        price_per_room_per_night:
                             type: float
-                            description: The price by day for the hotel room
+                            description: The price of the room per night.
                             example: 141.02
-                        description:
+                        room_description:
                             type: string
                             description: A description of the room.
                             example: 'Executive Suite Room'
+                        rate_descriotion:
+                            type: string
+                            description: A description of the rate.
+                            example: '2 Double Bed Non Smoking Featuring All The Modern-day Essentials Including A Flat Screen'
                         refundable:
                             type: boolean
                             description: Explains whether the booking will be refundable.
@@ -643,10 +676,10 @@ components:
                                     type: boolean
                                     description: Indicates if dinner is provided with the room.
                                     example: True
-            bed_type:
-                type: string
-                description: The bed that is provided with the room.
-                example: 'King Single'
+                        bed_type:
+                            type: string
+                            description: The bed that is provided with the room.
+                            example: 'King Single'
 
 
     HotelPriceConfirmRequest:
