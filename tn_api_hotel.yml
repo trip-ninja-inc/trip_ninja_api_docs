@@ -312,7 +312,7 @@ components:
   schemas:
     HotelSearchResponse:
       properties:
-          hotel_id:
+          hotel_trace_id:
               type: string
               example: 'ndsf6sjf6sdf7sdf6'
               description: An identifier to refer to the hotel for searching room availability
@@ -556,10 +556,14 @@ components:
                 type: string
                 example: "bdf876sf6sfsdf87sdf"
                 description: id of the super trip
-            hotel_id:
+            hotel_trace_id:
                 type: string
                 example: 'ndsf6sjf6sdf7sdf6'
                 description: An identifier to refer to the hotel for searching room availability
+            hotel_itinerary_reference:
+                type: string
+                example: '1'
+                description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
             address:
                 type: object
                 properties:
@@ -659,7 +663,7 @@ components:
                 type: object
                 properties:
                     required:
-                        - hotel_id
+                        - hotel_trace_id
                         - hotel_chain
                         - hotel_code
                         - total_travellers
@@ -669,7 +673,7 @@ components:
                         - rate_reference
                         - hotel_itinerary_reference
                         - credential_info
-                    hotel_id:
+                    hotel_trace_id:
                         type: string
                         example: 'ndsf6sjf6sdf7sdf6'
                         description: The reference for the hotel search.
@@ -740,7 +744,7 @@ components:
             items:
                 type: object
                 properties:
-                    hotel_id:
+                    hotel_trace_id:
                         type: string
                         example: 'ndsf6sjf6sdf7sdf6'
                         description: An identifier to refer to the hotel for searching room availability
