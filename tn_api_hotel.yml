@@ -442,7 +442,7 @@ components:
           - check_out_date
           - hotel_itinerary_reference
           - credential_info
-          - total_travellers
+          - traveller_total
           - total_rooms
       properties:
           super_trip_id:
@@ -456,16 +456,16 @@ components:
           check_in_date:
               type: string
               format: date
-              description: "Date of check-in. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+              description: "Date of check-in. format: YYYY-MM-DD."
           check_out_date:
               type: string
               format: date
-              description: "Date to checkout from the hotel. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+              description: "Date to checkout from the hotel. format: YYYY-MM-DD."
           currency:
               type: string
               example: 'CAD'
               description: Currency to make the search in.
-          total_travellers:
+          traveller_total:
               type: int
               example: 3
               description: Number of people that will be staying at the hotel.
@@ -509,7 +509,7 @@ components:
             - credential_info
             - hotel_chain
             - hotel_code
-            - total_travellers
+            - traveller_total
             - total_rooms
             - currency
             - check_in_date
@@ -552,7 +552,7 @@ components:
                 type: string
                 description: The reference for the hotel code
                 example: '35573'
-            total_travellers:
+            traveller_total:
                 type: int
                 example: 3
                 description: Number of people that will be staying at the hotel.
@@ -567,12 +567,12 @@ components:
             check_in_date:
                 type: string
                 format: date
-                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
                 example: '2021-05-10'
             check_out_date:
                 type: string
                 format: date
-                description: "Date to checkout from the hotel. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
                 example: '2021-05-15'
             conversion_rate:
                 type: float
@@ -699,7 +699,7 @@ components:
                         - hotel_trace_id
                         - hotel_chain
                         - hotel_code
-                        - total_travellers
+                        - traveller_total
                         - total_rooms
                         - check_in_date
                         - check_out_date
@@ -718,7 +718,7 @@ components:
                         type: string
                         description: The reference for the hotel code
                         example: '35573'
-                    total_travellers:
+                    traveller_total:
                         type: int
                         example: 3
                         description: Number of people that will be staying at the hotel.
@@ -733,11 +733,11 @@ components:
                     check_in_date:
                         type: string
                         format: date
-                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
                     check_out_date:
                         type: string
                         format: date
-                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
+                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD."
                     rate_reference:
                         type: string
                         description: The hotel supplied reference for the room / rate being booked.
