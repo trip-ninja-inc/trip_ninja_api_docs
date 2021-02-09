@@ -718,6 +718,16 @@ components:
                 required: false
                 type: string
                 example: americas
+            pcc_currency:
+                description: Indicates the currency that the PCC is charged in.
+                required: false
+                type: string
+                example: CAD
+            conversion_rate:
+                description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
+                required: true
+                type: float
+                example: 0.78 
 
     itinerary:
         allOf:
