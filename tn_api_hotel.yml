@@ -443,7 +443,7 @@ components:
           - hotel_itinerary_reference
           - credential_info
           - traveller_total
-          - total_rooms
+          - rooms_total
       properties:
           super_trip_id:
               type: string
@@ -469,7 +469,7 @@ components:
               type: int
               example: 3
               description: Number of people that will be staying at the hotel.
-          total_rooms:
+          rooms_total:
               type: int
               example: 2
               description: The number of rooms required for the above travellers.
@@ -510,7 +510,7 @@ components:
             - hotel_chain
             - hotel_code
             - traveller_total
-            - total_rooms
+            - rooms_total
             - currency
             - check_in_date
             - check_out_date
@@ -556,7 +556,7 @@ components:
                 type: int
                 example: 3
                 description: Number of people that will be staying at the hotel.
-            total_rooms:
+            rooms_total:
                 type: int
                 example: 2
                 description: The number of rooms required for the above travellers.
@@ -700,7 +700,7 @@ components:
                         - hotel_chain
                         - hotel_code
                         - traveller_total
-                        - total_rooms
+                        - rooms_total
                         - check_in_date
                         - check_out_date
                         - rate_reference
@@ -722,7 +722,7 @@ components:
                         type: int
                         example: 3
                         description: Number of people that will be staying at the hotel.
-                    total_rooms:
+                    rooms_total:
                         type: int
                         example: 2
                         description: The number of rooms required for the above travellers.
