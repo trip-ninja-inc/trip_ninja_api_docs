@@ -488,10 +488,6 @@ components:
                       required: true
                       type: string
                       example: 1V
-                  pcc_currency:
-                      description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
-                      type: string
-                      example: CAD
           next_result_reference:
               type: string
               example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
@@ -540,10 +536,6 @@ components:
                         required: true
                         type: string
                         example: 1V
-                    pcc_currency:
-                        description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
-                        type: string
-                        example: CAD
             hotel_chain:
                 type: string
                 description: The refence for the hotel chain.
@@ -759,10 +751,6 @@ components:
                               required: true
                               type: string
                               example: 1V
-                          pcc_currency:
-                              description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
-                              type: string
-                              example: CAD
 
 
 
