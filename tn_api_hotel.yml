@@ -5,7 +5,7 @@ info:
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
-    Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
+    Trip Ninja uses a REST API with requests and responses in JSON format. For development and testring, the pre-production servers
     are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
     and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
     <h2>Trip Ninja API URLs</h2>
@@ -46,7 +46,7 @@ servers:
     description: Pre-Production server
 
 paths:
-    /search/{endpoint}/hotel/:
+    /search/hotels/{endpoint}:
         post:
             parameters:
                 - in: path
@@ -81,7 +81,7 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
@@ -96,7 +96,7 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE44
                                     message:
@@ -111,7 +111,7 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
@@ -120,32 +120,32 @@ paths:
                                         example: "No availability found: Try changing dates"
                 500:
                     description: Server Error
-        get:
+
+    /media/hotels/{endpoint}/:
+        post:
             parameters:
                 - in: path
                   name: endpoint
                   required: true
                   schema:
-                    type: string
-                    enum: [preprod, prod]
-                  description: Parameter toggles data source production and pre-production endpoints
-                - in: path
-                  name: hotel_id
-                  required: true
-                  schema:
-                    type: string
-                  description: This parameter is an ID specific to one hotel to obtain room availibility
-            summary: "Hotel Room Availability"
-            description: |
-              This endpoint returns rooms available in the selected hotel.
-            operationId: Search
+                      type: string
+                      enum: [ preprod, prod ]
+                      description: Parameter toggles data source production and pre-production endpoints.
+            summary: "Hotel Media"
+            description: Get the media details of the hotels in the request list. There is a limit of 20 hotels with which to request media for in each endpoint call.
+            operationId: Media
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HotelMediaRequest'
             responses:
                 200:
                     description: Success
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/HotelGetRoomsResponse'
+                                $ref: '#/components/schemas/HotelMediaResponse'
                 400:
                     description: Invalid Input
                     content:
@@ -154,13 +154,13 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
                                         type: string
                                         description: Contains the error message
-                                        example: Not a valid hotel id.
+                                        example: Not a valid city.
                 401:
                     description: Unauthorized
                     content:
@@ -169,7 +169,7 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE44
                                     message:
@@ -177,25 +177,98 @@ paths:
                                         description: Contains the error message
                                         example: "User is not authorized"
                 206:
-                    description: Partial Content (No availability found)
+                    description: Partial Content (no Hotel found)
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
                                         type: string
                                         description: Contains the error message
-                                        example: "No availability found: Try another hotel or dates"
+                                        example: "No availability found: Try changing dates"
+                500:
+                    description: Server Error
+
+    /details/hotels/{endpoint}/:
+        post:
+            parameters:
+                - in: path
+                  name: endpoint
+                  required: true
+                  schema:
+                      type: string
+                      enum: [ preprod, prod ]
+                  description: Parameter toggles data source production and pre-production endpoints.
+            summary: "Hotel Details"
+            description: Get the room details of one of the hotels returned in the search response.
+            operationId: Details
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HotelDetailsRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                               $ref: '#/components/schemas/HotelDetailsResponse'
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: Not a valid city.
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: IE44
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                206:
+                    description: Partial Content (no Hotel found)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: IE23
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "No availability found: Try changing dates"
                 500:
                     description: Server Error
 
 
-    /price/hotel/{endpoint}/:
+    /price/hotels/{endpoint}/:
       post:
         parameters:
           - in: path
@@ -239,89 +312,569 @@ components:
   schemas:
     HotelSearchResponse:
       properties:
-        available_hotels:
-          type: array
-          items:
-            type: object
-            properties:
-              hotel_id:
-                type: string
-                example: 'ndsf6sjf6sdf7sdf6'
-                description: An identifier to refer to the hotel for searching room availability
-              hotel_name:
-                type: string
-                example: 'Le Blue'
-                description: Name of the hotel
+          hotel_trace_id:
+              type: string
+              example: 'ndsf6sjf6sdf7sdf6'
+              description: An identifier to refer to the hotel for searching room availability
+          hotels:
+              type: array
+              description: A list of hotels available based on the search request details.
+              items:
+                  type: object
+                  properties:
+                      location_iata:
+                          type: string
+                          description: The location of the hotel.
+                          example: 'LON'
+                      location_full:
+                          type: string
+                          description: The full location name as provided by the GDS.
+                          example: "London, England"
+                      rating:
+                          type: object
+                          properties:
+                              rating:
+                                  type: int
+                                  description: The hotel rating
+                                  example: 4
+                              rating_provider:
+                                  type: string
+                                  description: The provider of the rating.
+                                  example: Giata
+                              rating_maximum:
+                                  type: int
+                                  description: The best possible rating.
+                                  example: 10
+                              rating_minimum:
+                                  type: int
+                                  description: The worst possible rating.
+                                  example: 0
+                      hotel_chain:
+                          type: string
+                          description: The refence for the hotel chain.
+                          example: 'GI'
+                      hotel_code:
+                          type: string
+                          description: The reference for the hotel code
+                          example: '35573'
+                      hotel_name:
+                          type: string
+                          description: The name of the hotel
+                          example: 'Cambridge Suites Hotel Halifax'
+                      minimum_charge:
+                          type: float
+                          description: The minimun total for the requested search available (in the currency provided in the search request)
+                          example: 400.32
+                      maximum_charge:
+                          type: float
+                          description: The maximum total priced room option available (in the currency provided in the search request)
+                          example: 780.65
+                      address:
+                          type: object
+                          properties:
+                              street_address:
+                                  type: string
+                                  description: The street address of the hotel.
+                                  example: '1583 Brunswick St, Halifax, NS B3J 3P5'
+                              longitude:
+                                  type: float
+                                  description: The longitude of the hotel.
+                                  example: 44.64511447836071
+                              lattitude:
+                                  type: float
+                                  description: The lattitude of the hotel.
+                                  example: -63.575245615440565
+                              distance_from_search_reference:
+                                  type: float
+                                  description: The distance that the hotel is from the reference submitted in the search.
+                                  example: 7.5
+                              phone_number:
+                                  type: str
+                                  description: The contact phone number for the hotel.
+                                  example: '+1 902-420-0555'
+                      ammenities:
+                        type: array
+                        description: A list of the amenities provided at this hotel.
+                        items:
+                          type: object
+                          properties:
+                            amenity_type:
+                              type: string
+                              description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
+                              example: "HA"
+                            amenity_title:
+                              type: string
+                              description: A title or descriptor of the amenity provided.
+                              example: High speed internet connection
+                      credential_info:
+                          type: object
+                          properties:
+                            pcc:
+                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                                type: string
+                                example: 2G3C
+                            provider:
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                required: true
+                                type: string
+                                example: 1V
+                            pcc_currency:
+                                description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
+                                type: string
+                                example: CAD
+                      conversion_rate:
+                          type: float
+                          description: The conversion rate to get the price in the currency requested.
+                          example: 0.45
+          hotel_itinerary_reference:
+              type: string
+              example: '1'
+              description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+          next_result_reference:
+              type: string
+              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+              description: The reference used to get the next list of results from the GDS.
 
     HotelSearchRequest:
       required:
-        - super_trip_id
+          - location
+          - check_in_date
+          - check_out_date
+          - hotel_itinerary_reference
+          - credential_info
+          - traveller_total
+          - rooms_total
       properties:
           super_trip_id:
               type: string
               example: "bdf876sf6sfsdf87sdf"
-              description: id of the super trip
-          iata:
+              description: id of the super trip, may not be present in the initial search.
+          location:
               type: string
               example: "YYZ"
-              description: location(city) to search hotels in
+              description: location (city iata) to search for hotels in.
           check_in_date:
               type: string
               format: date
-              description: Date of check-in to search hotel availibilities on.
+              description: "Date of check-in. format: YYYY-MM-DD."
           check_out_date:
               type: string
               format: date
-              description: Date to checkout from the hotel.
-
-    HotelGetRoomsResponse:
-      properties:
-        available_rooms:
-          type: array
-          items:
-            type: object
-            properties:
-              room_id:
-                type: string
-                description: An identifier to book the room with
-                example: 'ndsf6sjf6sdf7sdf6'
-              hotel_name:
-                type: string
-                example: 'Le Blue'
-
-    HotelGetRoomsRequest:
-      required:
-        - super_trip_id
-      properties:
-          super_trip_id:
+              description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+          currency:
               type: string
-              example: "bdf876sf6sfsdf87sdf"
-              description: id of the super trip
-          hotel_id:
-            type: string
-            example: 'ndsf6sjf6sdf7sdf6'
-            description: An identifier to refer to the hotel for searching room availability
+              example: 'CAD'
+              description: Currency to make the search in.
+          traveller_total:
+              type: int
+              example: 3
+              description: Number of people that will be staying at the hotel.
+          rooms_total:
+              type: int
+              example: 2
+              description: The number of rooms required for the above travellers.
+          credential_info:
+              type: array
+              description: An array of credentials with which to search using.
+              items:
+                type: object
+                properties:
+                  pcc:
+                      description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                      type: string
+                      example: 2G3C
+                  provider:
+                      description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                      required: true
+                      type: string
+                      example: 1V
+          next_result_reference:
+              type: string
+              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+              description: The reference used to get the next list of results from the GDS.
+          hotel_itinerary_reference:
+              type: string
+              example: '1'
+              description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+
+
+    HotelDetailsRequest:
+        required:
+            - hotel_trace_id
+            - hotel_itinerary_reference
+            - credential_info
+            - hotel_chain
+            - hotel_code
+            - traveller_total
+            - rooms_total
+            - currency
+            - check_in_date
+            - check_out_date
+        properties:
+            super_trip_id:
+                type: string
+                example: "bdf876sf6sfsdf87sdf"
+                description: id of the super trip
+            hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: An identifier to refer to the hotel for searching room availability
+            hotel_itinerary_reference:
+                type: string
+                example: '1'
+                description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+            credential_info:
+                type: object
+                description: The credentials with which to make the details call on.
+                properties:
+                    pcc:
+                        description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                        type: string
+                        example: 2G3C
+                    provider:
+                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                        required: true
+                        type: string
+                        example: 1V
+            hotel_chain:
+                type: string
+                description: The refence for the hotel chain.
+                example: 'GI'
+            hotel_code:
+                type: string
+                description: The reference for the hotel code
+                example: '35573'
+            traveller_total:
+                type: int
+                example: 3
+                description: Number of people that will be staying at the hotel.
+            rooms_total:
+                type: int
+                example: 2
+                description: The number of rooms required for the above travellers.
+            currency:
+                type: string
+                example: 'CAD'
+                description: The currency that the details should be presented in.
+            check_in_date:
+                type: string
+                format: date
+                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                example: '2021-05-10'
+            check_out_date:
+                type: string
+                format: date
+                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                example: '2021-05-15'
+            conversion_rate:
+                type: float
+                description: The conversion rate to get the price in the currency requested.
+                example: 0.45
+
+    HotelDetailsResponse:
+        properties:
+            super_trip_id:
+                type: string
+                example: "bdf876sf6sfsdf87sdf"
+                description: id of the super trip
+            hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: An identifier to refer to the hotel for searching room availability
+            hotel_itinerary_reference:
+                type: string
+                example: '1'
+                description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+            address:
+                type: object
+                properties:
+                    street_address:
+                        type: string
+                        description: The street address of the hotel. This is more details than the one returned at search.
+                        example: '1583 Brunswick St, Halifax, NS B3J 3P5'
+                    longitude:
+                        type: float
+                        description: The longitude of the hotel.
+                        example: 44.64511447836071
+                    lattitude:
+                        type: float
+                        description: The lattitude of the hotel.
+                        example: -63.575245615440565
+                    distance_from_search_reference:
+                        type: float
+                        description: The distance that the hotel is from the reference submitted in the search.
+                        example: 7.5
+                    phone_number:
+                        type: str
+                        description: The contact phone number for the hotel.
+                        example: '+1 902-420-0555'
+            location_iata:
+                type: string
+                description: The location of the hotel.
+                example: 'LON'
+            hotel_name:
+                type: string
+                description: The name of the hotel.
+                example: "Cambridge Suites Hotel Halifax"
+            check_in_time:
+                type: string
+                description: The check in time for the hotel.
+                example: "3pm"
+            check_out_time:
+                type: string
+                description: The check out time
+                example: "10am"
+            rooms:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        total_price:
+                            type: float
+                            description: The total price of the entire stay at the hotel for this room.
+                            example: 705.10
+                        price_per_room_per_night:
+                            type: float
+                            description: The price of the room per night.
+                            example: 141.02
+                        room_description:
+                            type: string
+                            description: A description of the room.
+                            example: 'Executive Suite Room'
+                        rate_descriotion:
+                            type: string
+                            description: A description of the rate.
+                            example: '2 Double Bed Non Smoking Featuring All The Modern-day Essentials Including A Flat Screen'
+                        refundable:
+                            type: boolean
+                            description: Explains whether the booking will be refundable.
+                            example: True
+                        smoking:
+                            type: boolean
+                            description: Indicates whether you are allowed to smoke in the room.
+                            example: False
+                        meals:
+                            type: object
+                            properties:
+                                breakfast:
+                                    type: boolean
+                                    description: Indicates if breakfast is provided with the room.
+                                    example: True
+                                lunch:
+                                    type: boolean
+                                    description: Indicates if lunch is provided with the room.
+                                    example: True
+                                dinner:
+                                    type: boolean
+                                    description: Indicates if dinner is provided with the room.
+                                    example: True
+                        bed_type:
+                            type: string
+                            description: The bed that is provided with the room.
+                            example: 'King Single'
+
 
     HotelPriceConfirmRequest:
       required:
-        - super_trip_id
+          - hotels_to_price
       properties:
         super_trip_id:
-          type: string
-          example: "bdf876sf6sfsdf87sdf"
-          description: id of the super trip
-        hotel_id:
-          type: string
-          example: 'ndsf6sjf6sdf7sdf6'
-          description: An identifier to refer to the hotel for searching room availability
+            type: string
+            example: "bdf876sf6sfsdf87sdf"
+            description: Id of the super trip.
+        hotels_to_price:
+            type: array
+            items:
+                type: object
+                properties:
+                    required:
+                        - hotel_trace_id
+                        - hotel_chain
+                        - hotel_code
+                        - traveller_total
+                        - rooms_total
+                        - check_in_date
+                        - check_out_date
+                        - rate_reference
+                        - hotel_itinerary_reference
+                        - credential_info
+                    hotel_trace_id:
+                        type: string
+                        example: 'ndsf6sjf6sdf7sdf6'
+                        description: The reference for the hotel search.
+                    hotel_chain:
+                        type: string
+                        description: The refence for the hotel chain.
+                        example: 'GI'
+                    hotel_code:
+                        type: string
+                        description: The reference for the hotel code
+                        example: '35573'
+                    traveller_total:
+                        type: int
+                        example: 3
+                        description: Number of people that will be staying at the hotel.
+                    rooms_total:
+                        type: int
+                        example: 2
+                        description: The number of rooms required for the above travellers.
+                    currency:
+                        type: string
+                        example: 'CAD'
+                        description: The currency that the details should be presented in.
+                    check_in_date:
+                        type: string
+                        format: date
+                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                    check_out_date:
+                        type: string
+                        format: date
+                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD."
+                    rate_reference:
+                        type: string
+                        description: The hotel supplied reference for the room / rate being booked.
+                        example: OQN22AZ
+                    hotel_itinerary_reference:
+                        type: string
+                        example: '1'
+                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                    credential_info:
+                        type: object
+                        description: The credentials with which to make the pricing on.
+                        properties:
+                          pcc:
+                              description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                              type: string
+                              example: 2G3C
+                          provider:
+                              description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                              required: true
+                              type: string
+                              example: 1V
+
+
 
     HotelPriceConfirmResponse:
       properties:
-        hotel_id:
-          type: string
-          example: 'ndsf6sjf6sdf7sdf6'
-          description: An identifier to refer to the hotel for searching room availability
-        price:
-          type: number
-          example: 152
-          description: Cost of stay
+        super_trip_id:
+            type: string
+            example: "bdf876sf6sfsdf87sdf"
+            description: Id of the super trip.
+        priced_hotels:
+            type: array
+            items:
+                type: object
+                properties:
+                    hotel_trace_id:
+                        type: string
+                        example: 'ndsf6sjf6sdf7sdf6'
+                        description: An identifier to refer to the hotel for searching room availability
+                    total_price:
+                        type: float
+                        description: The total price of the entire stay at the hotel for this room.
+                        example: 705.10
+                    price_by_day:
+                        type: float
+                        description: The price by day for the hotel room
+                        example: 141.02
+                    hotel_itinerary_reference:
+                        type: string
+                        example: '1'
+                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                    rate_reference:
+                        type: string
+                        description: The hotel supplied reference for the room / rate being booked.
+                        example: OQN22AZ
+                    rules:
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                rule_type:
+                                    type: string
+                                    description: The type of rule available.
+                                    example: 'Cancellation'
+                                rule_description:
+                                    type: string
+                                    description: The description of the above rule.
+                                    example: PENALTY AMOUNT 505.00 CANCEL BY 2021-05-04
+        total_price:
+            type: number
+            example: 705.10
+            description: Cost of all hotel prices combined.
+
+    HotelMediaRequest:
+        properties:
+            required:
+                - hotels
+            hotels:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        required:
+                            - hotel_chain
+                            - hotel_code
+                            - data_source
+                        hotel_chain:
+                            type: string
+                            description: The refence for the hotel chain.
+                            example: 'GI'
+                        hotel_code:
+                            type: string
+                            description: The reference for the hotel code
+                            example: '35573'
+                        data_source:
+                            description: Data Source to call. Currently only Travelport available
+                            required: true
+                            type: string
+                            enum: [travelport]
+                            example: amadeus
+            size:
+                type: str
+                enum: ['small', 'medium', 'large', 'thumbnail']
+                example: 'small'
+                description: A size may be specified. In doing so, only that size image will be returned
+
+
+    HotelMediaResponse:
+        properties:
+            hotels_media:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        hotel_chain:
+                            type: string
+                            description: The refence for the hotel chain.
+                            example: 'GI'
+                        hotel_code:
+                            type: string
+                            description: The reference for the hotel code
+                            example: '35573'
+                        hotel_media_items:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    title:
+                                        type: string
+                                        description: The title / descriptor of the photos contained in this media item.
+                                        example: 'Front desk.'
+                                    small:
+                                        type: string
+                                        description: The url for the image of the above titled part of the hotel of size small.
+                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                    medium:
+                                        type: string
+                                        description: The url for the image of the above titled part of the hotel of size medium.
+                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                    large:
+                                        type: string
+                                        description: The url for the image of the above titled part of the hotel of size large.
+                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                    thumbnail:
+                                        type: string
+                                        description: The url for the image of the above titled part of the hotel of size thumbnail.
+                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+
