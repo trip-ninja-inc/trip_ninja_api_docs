@@ -132,7 +132,7 @@ paths:
                       enum: [ preprod, prod ]
                       description: Parameter toggles data source production and pre-production endpoints.
             summary: "Hotel Media"
-            description: Get the media details of the hotels in the request list. There is a limit of 20 hotels with which to request media for in each endpoint call.
+            description: Get the media details of the hotels in the request list. There is a limit of 20 hotels with which to request media for in each endpoint call. You are able to send more than 20, of which we will return as many that are cached and a maximum of 20 from the hotel data source.
             operationId: Media
             requestBody:
                 content:
