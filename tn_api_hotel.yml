@@ -804,18 +804,18 @@ components:
             description: Cost of all hotel prices combined.
 
     HotelMediaRequest:
+        required:
+          - hotels
         properties:
-            required:
-                - hotels
             hotels:
+                description: A list of hotels that you wish to get media for.
                 type: array
                 items:
                     type: object
+                    required:
+                        - hotel_chain
+                        - hotel_code
                     properties:
-                        required:
-                            - hotel_chain
-                            - hotel_code
-                            - data_source
                         hotel_chain:
                             type: string
                             description: The refence for the hotel chain.
@@ -824,22 +824,15 @@ components:
                             type: string
                             description: The reference for the hotel code
                             example: '35573'
-                        data_source:
-                            description: Data Source to call. Currently only Travelport available
-                            required: true
-                            type: string
-                            enum: [travelport]
-                            example: amadeus
-            size:
-                type: str
-                enum: ['small', 'medium', 'large', 'thumbnail']
-                example: 'small'
-                description: A size may be specified. In doing so, only that size image will be returned
+            cache_only:
+              type: boolean
+              description: Cache only indicates that you would like to retrieve only cached hotels and not query the GDS.
+              example: False
 
 
     HotelMediaResponse:
         properties:
-            hotels_media:
+            hotels:
                 type: array
                 items:
                     type: object
@@ -861,14 +854,6 @@ components:
                                         type: string
                                         description: The title / descriptor of the photos contained in this media item.
                                         example: 'Front desk.'
-                                    small:
-                                        type: string
-                                        description: The url for the image of the above titled part of the hotel of size small.
-                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                    medium:
-                                        type: string
-                                        description: The url for the image of the above titled part of the hotel of size medium.
-                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
                                     large:
                                         type: string
                                         description: The url for the image of the above titled part of the hotel of size large.
