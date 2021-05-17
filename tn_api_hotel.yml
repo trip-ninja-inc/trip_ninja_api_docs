@@ -307,6 +307,39 @@ paths:
                     message:
                       type: string
                       example: 'Unsuccessful. reason Invalid date.'
+      delete:
+        summary: "Remove Price Confirmed Hotel"
+        description: "This allows for a user to remove a single hotel from the super trip."
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelRemovePriceConfirm'
+        responses:
+            200:
+                description: Success
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                              status:
+                                type: string
+                                example: "Success"
+            400:
+              description: Unable to remove priced hotel
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: IE45
+                      message:
+                        type: string
+                        example: 'super_trip_id required for price confirm delete'
+
 
 components:
   schemas:
@@ -552,6 +585,10 @@ components:
                 type: int
                 example: 2
                 description: The number of rooms required for the above travellers.
+            room_type:
+                type: string
+                example: 'Double'
+                description: The type of room to price.
             currency:
                 type: string
                 example: 'CAD'
@@ -673,85 +710,75 @@ components:
                             description: The bed that is provided with the room.
                             example: 'King Single'
 
+    HotelRemovePriceConfirm:
+        required:
+          - super_trip_id
+          - hotel_trace_id
+        properties:
+            super_trip_id:
+                type: string
+                example: "bdf876sf6sfsdf87sdf"
+                description: id of the super trip
+            hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: The reference for the hotel search.
 
     HotelPriceConfirmRequest:
       required:
-          - hotels_to_price
+          - hotel_trace_id
+          - hotel_chain
+          - hotel_code
+          - traveller_total
+          - rooms_total
+          - check_in_date
+          - check_out_date
+          - room_type
       properties:
-        super_trip_id:
-            type: string
-            example: "bdf876sf6sfsdf87sdf"
-            description: Id of the super trip.
-        hotels_to_price:
-            type: array
-            items:
-                type: object
-                properties:
-                    required:
-                        - hotel_trace_id
-                        - hotel_chain
-                        - hotel_code
-                        - traveller_total
-                        - rooms_total
-                        - check_in_date
-                        - check_out_date
-                        - rate_reference
-                        - hotel_itinerary_reference
-                        - credential_info
-                    hotel_trace_id:
-                        type: string
-                        example: 'ndsf6sjf6sdf7sdf6'
-                        description: The reference for the hotel search.
-                    hotel_chain:
-                        type: string
-                        description: The refence for the hotel chain.
-                        example: 'GI'
-                    hotel_code:
-                        type: string
-                        description: The reference for the hotel code
-                        example: '35573'
-                    traveller_total:
-                        type: int
-                        example: 3
-                        description: Number of people that will be staying at the hotel.
-                    rooms_total:
-                        type: int
-                        example: 2
-                        description: The number of rooms required for the above travellers.
-                    currency:
-                        type: string
-                        example: 'CAD'
-                        description: The currency that the details should be presented in.
-                    check_in_date:
-                        type: string
-                        format: date
-                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
-                    check_out_date:
-                        type: string
-                        format: date
-                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD."
-                    rate_reference:
-                        type: string
-                        description: The hotel supplied reference for the room / rate being booked.
-                        example: OQN22AZ
-                    hotel_itinerary_reference:
-                        type: string
-                        example: '1'
-                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
-                    credential_info:
-                        type: object
-                        description: The credentials with which to make the pricing on.
-                        properties:
-                          pcc:
-                              description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                              type: string
-                              example: 2G3C
-                          provider:
-                              description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                              required: true
-                              type: string
-                              example: 1V
-
+          super_trip_id:
+              type: string
+              example: "bdf876sf6sfsdf87sdf"
+              description: id of the super trip
+          hotel_trace_id:
+              type: string
+              example: 'ndsf6sjf6sdf7sdf6'
+              description: The reference for the hotel search.
+          hotel_chain:
+              type: string
+              description: The refence for the hotel chain.
+              example: 'GI'
+          hotel_code:
+              type: string
+              description: The reference for the hotel code.
+              example: '35573'
+          hotel_name:
+              type: string
+              description: The name of the hotel to be priced.
+              example: Comfort Inn
+          traveller_total:
+              type: int
+              example: 3
+              description: Number of people that will be staying at the hotel.
+          rooms_total:
+              type: int
+              example: 2
+              description: The number of rooms required for the above travellers.
+          currency:
+              type: string
+              example: 'CAD'
+              description: The currency that the details should be presented in.
+          check_in_date:
+              type: string
+              format: date
+              description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+          check_out_date:
+              type: string
+              format: date
+              description: "Date to checkout from the hotel. Format: YYYY-MM-DD."
+          room_type:
+              type: string
+              example: 'Double'
+              description: The type of room to price.
 
 
     HotelPriceConfirmResponse:
@@ -760,48 +787,10 @@ components:
             type: string
             example: "bdf876sf6sfsdf87sdf"
             description: Id of the super trip.
-        priced_hotels:
-            type: array
-            items:
-                type: object
-                properties:
-                    hotel_trace_id:
-                        type: string
-                        example: 'ndsf6sjf6sdf7sdf6'
-                        description: An identifier to refer to the hotel for searching room availability
-                    total_price:
-                        type: float
-                        description: The total price of the entire stay at the hotel for this room.
-                        example: 705.10
-                    price_by_day:
-                        type: float
-                        description: The price by day for the hotel room
-                        example: 141.02
-                    hotel_itinerary_reference:
-                        type: string
-                        example: '1'
-                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
-                    rate_reference:
-                        type: string
-                        description: The hotel supplied reference for the room / rate being booked.
-                        example: OQN22AZ
-                    rules:
-                        type: array
-                        items:
-                            type: object
-                            properties:
-                                rule_type:
-                                    type: string
-                                    description: The type of rule available.
-                                    example: 'Cancellation'
-                                rule_description:
-                                    type: string
-                                    description: The description of the above rule.
-                                    example: PENALTY AMOUNT 505.00 CANCEL BY 2021-05-04
-        total_price:
-            type: number
-            example: 705.10
-            description: Cost of all hotel prices combined.
+        hotel_trace_id:
+            type: string
+            example: 'ndsf6sjf6sdf7sdf6'
+            description: An identifier to refer to the hotel for searching room availability
 
     HotelMediaRequest:
         required:
