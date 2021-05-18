@@ -779,6 +779,10 @@ components:
               type: string
               example: 'Double'
               description: The type of room to price.
+          rate_plan_type:
+              type: string
+              example: '1Fddqq'
+              description: The type reference for the rate plan selected for this hotel and this room.
 
 
     HotelPriceConfirmResponse:
