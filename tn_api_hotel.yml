@@ -453,42 +453,40 @@ paths:
                       example: 'Unsuccessful. reason Invalid payment information.'
           500:
             description: Server Error
+
       delete:
-        parameters:
-          summary: "Hotel Cancel"
-          description: Use this endpoint to cancel a hotel booking.
-          operationId: CancelHotel
-          requestBody:
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/HotelCancellationRequest'
-          responses:
-              200:
-                  description: Success
-                  content:
-                      application/json:
-                          schema:
-                              type: object
-                              properties:
-                                status:
-                                  type: string
-                                  example: "Success"
-              400:
-                description: Unable to cancel Hotel.
+        summary: "Hotel Cancel"
+        description: Use this endpoint to cancel a hotel booking.
+        operationId: CancelHotel
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelCancellationRequest'
+        responses:
+            200:
+                description: Success
                 content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        status:
-                          type: string
-                          example: IE45
-                        message:
-                          type: string
-                          example: 'super_trip_id required for price confirm delete'
-
-
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                              status:
+                                type: string
+                                example: "Success"
+            400:
+              description: Unable to cancel Hotel.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: IE45
+                      message:
+                        type: string
+                        example: 'super_trip_id required for price confirm delete'
 
 components:
   schemas:
