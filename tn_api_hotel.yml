@@ -877,7 +877,22 @@ components:
     HotelMediaRequest:
         required:
           - hotels
+          - credential_info
         properties:
+            credential_info:
+              type: object
+              required:
+                - pcc
+                - provider
+              properties:
+                pcc:
+                  description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+                  type: string
+                  example: 2G3C
+                provider:
+                  description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                  type: string
+                  example: 1V
             hotels:
                 description: A list of hotels that you wish to get media for.
                 type: array
