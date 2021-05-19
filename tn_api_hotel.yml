@@ -813,6 +813,7 @@ components:
               required:
                 - pcc
                 - provider
+                - data_source
               properties:
                 pcc:
                   description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
@@ -822,6 +823,10 @@ components:
                   description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
                   type: string
                   example: 1V
+                data_source:
+                  description: The datasource that is associated with the PCC.
+                  type: string
+                  enum: [ travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly ]
             hotels:
                 description: A list of hotels that you wish to get media for.
                 type: array
