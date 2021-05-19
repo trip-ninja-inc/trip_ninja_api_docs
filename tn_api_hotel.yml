@@ -872,8 +872,6 @@ components:
             example: 'ndsf6sjf6sdf7sdf6'
             description: An identifier to refer to the hotel for searching room availability
 
-
-
     HotelMediaRequest:
         required:
           - hotels
