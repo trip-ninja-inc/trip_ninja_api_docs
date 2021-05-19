@@ -734,6 +734,9 @@ components:
           - check_in_date
           - check_out_date
           - room_type
+          - currency
+          - rate_plan_type
+          - hotel_name
       properties:
           super_trip_id:
               type: string
