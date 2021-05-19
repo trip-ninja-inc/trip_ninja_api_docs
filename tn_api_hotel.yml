@@ -453,6 +453,41 @@ paths:
                       example: 'Unsuccessful. reason Invalid payment information.'
           500:
             description: Server Error
+      delete:
+        parameters:
+          summary: "Hotel Cancel"
+          description: Use this endpoint to cancel a hotel booking.
+          operationId: CancelHotel
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/HotelCancellationRequest'
+          responses:
+              200:
+                  description: Success
+                  content:
+                      application/json:
+                          schema:
+                              type: object
+                              properties:
+                                status:
+                                  type: string
+                                  example: "Success"
+              400:
+                description: Unable to cancel Hotel.
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                          example: IE45
+                        message:
+                          type: string
+                          example: 'super_trip_id required for price confirm delete'
+
 
 
 components:
@@ -1248,3 +1283,17 @@ components:
                 description: Provides status of the hotel, indicating whether this individual hotel booking was a success.
                 example: success
 
+    HotelCancellationRequest:
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+          description: Id of the super trip.
+        hotel_trace_id:
+          type: string
+          example: 'ndsf6sjf6sdf7sdf6'
+          description: An identifier to refer to the hotel for searching room availability.
+        ur_locator_code:
+          type: string
+          description: Unique Identifier of a Universal Record.
+          example: "AXY67G"
