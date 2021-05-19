@@ -1010,7 +1010,6 @@ components:
           required:
             - pcc
             - provider
-            - pcc_currency
             - data_source
           properties:
             pcc:
@@ -1021,10 +1020,6 @@ components:
               description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
               type: string
               example: 1V
-            pcc_currency:
-              description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
-              type: string
-              example: CAD
             data_source:
               description: The datasource that is associated with the PCC.
               type: string
