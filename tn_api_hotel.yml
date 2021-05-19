@@ -340,45 +340,6 @@ paths:
                         type: string
                         example: 'super_trip_id required for price confirm delete'
 
-    /book/hotels/{endpoint}/:
-      post:
-        parameters:
-          - in: path
-            name: endpoint
-            required: true
-            schema:
-              type: string
-              enum: [ preprod, prod ]
-            description: Parameter toggles data source production and pre-production endpoints
-        summary: "Hotel Book"
-        description: Once search, selection and pricing has been completed, this call will book and reserve the chosen hotel.
-        operationId: Book
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HotelBookRequest'
-
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/HotelBookResponse'
-          400:
-            description: Unable to book hotels
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: string
-                      example: IE45
-                    message:
-                      type: string
-                      example: 'pricing_info required to make a hotel booking.'
 
 components:
   schemas:
@@ -773,7 +734,6 @@ components:
           - check_in_date
           - check_out_date
           - room_type
-          - credential_info
       properties:
           super_trip_id:
               type: string
@@ -819,22 +779,10 @@ components:
               type: string
               example: 'Double'
               description: The type of room to price.
-          credential_info:
-              type: object
-              properties:
-                pcc:
-                    description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                    type: string
-                    example: 2G3C
-                provider:
-                    description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                    required: true
-                    type: string
-                    example: 1V
-                pcc_currency:
-                    description: The currency that is associated with the PCC. This will be the currency that any bookings are made and charged in.
-                    type: string
-                    example: CAD
+          rate_plan_type:
+              type: string
+              example: 'A00BOB'
+              description: The type reference for the rate plan selected for this hotel and this room.
 
 
     HotelPriceConfirmResponse:
@@ -908,117 +856,3 @@ components:
                                         description: The url for the image of the above titled part of the hotel of size thumbnail.
                                         example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
 
-    HotelBookRequest:
-        required:
-           - super_trip_id
-           - hotel_bookings
-        properties:
-            super_trip_id:
-                type: string
-                example: "bdf876sf6sfsdf87sdf"
-                description: Id of the super trip.
-            hotel_bookings:
-                required: true
-                type: array
-                description: A list of the hotel_trace_ids for those hotels to be booked.
-                items:
-                    type: string
-                    example: 'ndsf6sjf6sdf7sdf6'
-            passengers:
-                description: "An array of passenger details."
-                required: true
-                type: array
-                items:
-                    type: object
-                    required:
-                    - first_name
-                    - last_name
-                    - date_of_birth
-                    - gender
-                    - phone_number
-                    - passenger_type
-                    - email
-                    properties:
-                        first_name:
-                            type: string
-                            required: true
-                            description: "The customer's first name."
-                            example: FirstName
-                        last_name:
-                            type: string
-                            required: true
-                            description: "The customer's last name."
-                            example: LastName
-                        date_of_birth:
-                            type: string
-                            required: true
-                            description: "The customer's date of birth."
-                            example: "2005-03-10"
-                        gender:
-                            type: string
-                            required: true
-                            description: "The single digit code for the customer's gender."
-                            example: "M"
-                        email:
-                            type: string
-                            required: true
-                            description: "The email of the passenger - only required for the primary passenger"
-                            example: "email@email.com"
-                        phone_number:
-                            type: string
-                            required: true
-                            description: "The customer's phone number."
-                            example: "9022225555"
-                        passenger_type:
-                            type: string
-                            required: true
-                            description: "The customer's passenger type. Values include 'ADT', 'MIL', 'CHD' and 'INF'."
-                            example: "ADT"
-            payment_info:
-                type: object
-                description: Credit card payment information for booking.
-                properties:
-                    card_type:
-                        type: string
-                        description: The two digit credit card code.
-                        example: VI
-                    cardholder_name:
-                        type: string
-                        description: The full name of the cardholder as it appears on the card.
-                        example: John David Smith
-                    card_number:
-                        type: string
-                        description: The credit card number.
-                        example: "4520000000000000"
-                    card_cvv:
-                        type: string
-                        description: The three to four digit card security or CVV code.
-                        example: "345"
-                    card_expiration_date:
-                        type: string
-                        description: The card's expiry date.
-                        example: 2021-10
-
-    HotelBookResponse:
-        properties:
-            super_trip_id:
-                type: string
-                example: "bdf876sf6sfsdf87sdf"
-                description: Id of the super trip.
-            booked_hotels:
-                type: array
-                items:
-                    type: object
-                    properties:
-                        hotel_trace_id:
-                            type: string
-                            example: 'ndsf6sjf6sdf7sdf6'
-                            description: An identifier to refer to the hotel for searching room availability
-                        booking_reference:
-                            type: string
-                            example: '21hhh12y3yysw1'
-                            description: The booking reference provided by the GDS.
-                        booking_success:
-                            type: string
-                            enum: [success, fail]
-                            description: This denotes whether the booking succeeded for this hotel.
