@@ -413,6 +413,80 @@ paths:
                         type: string
                         example: 'super_trip_id required for price confirm delete'
 
+    /book/hotels/{endpoint}/:
+      post:
+        parameters:
+          - in: path
+            name: endpoint
+            required: true
+            schema:
+              type: string
+              enum: [ preprod, prod ]
+            description: Parameter toggles data source production and pre-production endpoints
+        summary: "Hotel Book"
+        description: Use this url to Book a hotel that has been selected and priced.
+        operationId: BookHotels
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelBookRequest'
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/HotelBookResponse'
+          400:
+            description: Unable to book hotel.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: IE45
+                    message:
+                      type: string
+                      example: 'Unsuccessful. reason Invalid payment information.'
+          500:
+            description: Server Error
+
+      delete:
+        summary: "Hotel Cancel"
+        description: Use this endpoint to cancel a hotel booking.
+        operationId: CancelHotel
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelCancellationRequest'
+        responses:
+            200:
+                description: Success
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                              status:
+                                type: string
+                                example: "Success"
+            400:
+              description: Unable to cancel Hotel.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: IE45
+                      message:
+                        type: string
+                        example: 'super_trip_id required for price confirm delete'
 
 components:
   schemas:
@@ -857,7 +931,7 @@ components:
               description: The type of room to price.
           rate_plan_type:
               type: string
-              example: '1Fddqq'
+              example: 'A00BOB'
               description: The type reference for the rate plan selected for this hotel and this room.
 
 
@@ -1034,7 +1108,7 @@ components:
         hotel_trace_id:
           type: string
           example: 'ndsf6sjf6sdf7sdf6'
-          description: An identifier to refer to the hotel for searching room availability
+          description: An identifier to refer to the hotel for searching room availability.
         super_trip_id:
           type: string
           example: "bdf876sf6sfsdf87sdf"
@@ -1045,7 +1119,7 @@ components:
           example: 'non-refundable rate cancellation permitted up to 1days before arrival'
         guarantee_policy_text:
           type: string
-          description: The guarantee policy
+          description: The guarantee policy.
           example: ''
         deposit:
           type: string
@@ -1053,7 +1127,7 @@ components:
           example: 'book 7 days before arrival full room , tax payment due 174.40 gbp deposit due -at time of booking credit card deposit only'
         room_rate_descriptions:
           type: array
-          description: A list of the various rate description information - includes types such as Extra Charges, Rate comment, Rate description, Room detail, Room rate, Room text
+          description: A list of the various rate description information - includes types such as Extra Charges, Rate comment, Rate description, Room detail, Room rate, Room text.
           items:
             type: object
             properties:
@@ -1080,3 +1154,148 @@ components:
                 description: The full text of the ruledescription
                 example: 'non-refundable rate cancellation permitted up to 1days before arrival'
 
+    HotelBookRequest:
+      required:
+        - super_trip_id
+        - passengers
+        - payment_info
+        - hotel_bookings
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+          description: Id of the super trip.
+        passengers:
+          type: array
+          description: A list of passengers that will be booked to this hotel.
+          items:
+            type: object
+            required:
+              - first_name
+              - last_name
+              - date_of_birth
+              - gender
+              - passenger_type
+              - email
+              - phone_number
+            properties:
+              first_name:
+                description: First Name.
+                type: string
+                example: "Andres"
+              last_name:
+                description: Last Name.
+                type: string
+                example: "Collart"
+              date_of_birth:
+                description: Date of Birth.
+                type: string
+                format: date
+                example: "2017-07-23"
+              gender:
+                description: Gender
+                type: string
+                example: "M"
+                enum: [F, M]
+              passenger_type:
+                description: Type of passenger.
+                type: string
+                example: "ADT"
+                enum: [ADT, STU, CHD, INF]
+              email:
+                description: Passenger's email address.
+                type: string
+                example: "andres.collar@tripninja.io"
+              phone_number:
+                description: Passenger's phone number.
+                type: string
+                example: "9022222222"
+        payment_info:
+            type: object
+            required:
+              - card_type
+              - cardholder_name
+              - card_number
+              - card_cvv
+              - card_expiration_date
+            description: Credit card payment information for booking.
+            properties:
+                card_type:
+                    type: string
+                    description: The two digit credit card code.
+                    example: VI
+                cardholder_name:
+                    type: string
+                    description: The full name of the cardholder as it appears on the card.
+                    example: John David Smith
+                card_number:
+                    type: string
+                    description: The credit card number.
+                    example: "4520000000000000"
+                card_cvv:
+                    type: string
+                    description: The three to four digit card security or CVV code.
+                    example: "345"
+                card_expiration_date:
+                    type: string
+                    description: The card's expiry date.
+                    example: 2021-10
+        hotel_bookings:
+          type: array
+          description: A list of the hotel_trace_ids for the hotels that you wish to be booked. All should relate to a single super_trip_id.
+          example: [ndsf6sjf6sdf7sdf6, 4ff234f23r23r3rd]
+          items:
+            type: string
+
+    HotelBookResponse:
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+          description: Id of the super trip.
+        booked_hotels:
+          type: array
+          description: A list of the hotels booked including the booking references and status.
+          items:
+            type: object
+            properties:
+              hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: The specific hotel id.
+              booking_reference:
+                type: string
+                example: 'JJ8rrO9'
+                description: The booking reference for the hotel.
+              ur_locator_code:
+                type: string
+                description: Unique Identifier of a Universal Record.
+                example: "AXY67G"
+              provider_locator_code:
+                type: string
+                description: The provider locator code that can be used to update the hotel later on.
+                example: 'D2eEr3E'
+              check_in_date:
+                type: string
+                format: date
+                description: "Date of check-in. format: YYYY-MM-DD. Post-booking this can be used to sort the reservations."
+              booking_success:
+                type: string
+                enum: [success, fail]
+                description: Provides status of the hotel, indicating whether this individual hotel booking was a success.
+                example: success
+
+    HotelCancellationRequest:
+      properties:
+        super_trip_id:
+          type: string
+          example: "bdf876sf6sfsdf87sdf"
+          description: Id of the super trip.
+        hotel_trace_id:
+          type: string
+          example: 'ndsf6sjf6sdf7sdf6'
+          description: The specific hotel id.
+        provider_locator_code:
+          type: string
+          description: The provider locator code that is used to reference and cancel the trip on the GDS.
+          example: 'D2eEr3E'
