@@ -452,6 +452,10 @@ components:
                 type: string
                 description: Reference for the additional baggage option
                 example: C9O
+              passenger_reference:
+                type: number
+                description: The reference for the passenger that the baggage applies to.
+                example: 1
         additional_carry_on_bags:
           type: array
           items:
@@ -727,7 +731,7 @@ components:
                 description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
                 required: true
                 type: float
-                example: 0.78 
+                example: 0.78
 
     itinerary:
         allOf:
