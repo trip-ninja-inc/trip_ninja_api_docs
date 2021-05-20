@@ -482,6 +482,10 @@ components:
                 type: string
                 description: Reference for the additional baggage option
                 example: C9O
+              passenger_reference:
+                type: number
+                description: The reference for the passenger that the baggage applies to.
+                example: 1
 
     baggage:
         type: object
