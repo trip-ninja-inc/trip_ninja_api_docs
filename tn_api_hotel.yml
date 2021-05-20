@@ -1262,7 +1262,7 @@ components:
               hotel_trace_id:
                 type: string
                 example: 'ndsf6sjf6sdf7sdf6'
-                description: An identifier to refer to the hotel for searching room availability
+                description: The specific hotel id.
               booking_reference:
                 type: string
                 example: 'JJ8rrO9'
@@ -1271,6 +1271,10 @@ components:
                 type: string
                 description: Unique Identifier of a Universal Record.
                 example: "AXY67G"
+              provider_locator_code:
+                type: string
+                description: The provider locator code that can be used to update the hotel later on.
+                example: 'D2eEr3E'
               check_in_date:
                 type: string
                 format: date
@@ -1290,8 +1294,8 @@ components:
         hotel_trace_id:
           type: string
           example: 'ndsf6sjf6sdf7sdf6'
-          description: An identifier to refer to the hotel for searching room availability.
-        ur_locator_code:
+          description: The specific hotel id.
+        provider_locator_code:
           type: string
-          description: Unique Identifier of a Universal Record.
-          example: "AXY67G"
+          description: The provider locator code that is used to reference and cancel the trip on the GDS.
+          example: 'D2eEr3E'
