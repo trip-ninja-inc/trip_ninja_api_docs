@@ -121,79 +121,6 @@ paths:
                 500:
                     description: Server Error
 
-    /media/hotels/{endpoint}/:
-        post:
-            parameters:
-                - in: path
-                  name: endpoint
-                  required: true
-                  schema:
-                      type: string
-                      enum: [ preprod, prod ]
-                      description: Parameter toggles data source production and pre-production endpoints.
-            summary: "Hotel Media"
-            description: Get the media details of the hotels in the request list. There is a limit of 20 hotels with which to request media for in each endpoint call. You are able to send more than 20, of which we will return as many that are cached and a maximum of 20 from the hotel data source.
-            operationId: Media
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/HotelMediaRequest'
-            responses:
-                200:
-                    description: Success
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/HotelMediaResponse'
-                400:
-                    description: Invalid Input
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: IE23
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: Not a valid city.
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: IE44
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: "User is not authorized"
-                206:
-                    description: Partial Content (no Hotel found)
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: IE23
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: "No availability found: Try changing dates"
-                500:
-                    description: Server Error
-
     /details/hotels/{endpoint}/:
         post:
             parameters:
@@ -614,6 +541,38 @@ components:
               type: string
               example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
               description: The reference used to get the next list of results from the GDS.
+          hotels_media:
+              description: 'A list of media items for all the hotels returned in the search.'
+              type: array
+              items:
+                  type: object
+                  properties:
+                      hotel_chain:
+                          type: string
+                          description: The refence for the hotel chain.
+                          example: 'GI'
+                      hotel_code:
+                          type: string
+                          description: The reference for the hotel code
+                          example: '35573'
+                      hotel_media_items:
+                          description: A selection of media items for the above referenced hotel.
+                          type: array
+                          items:
+                              type: object
+                              properties:
+                                  title:
+                                      type: string
+                                      description: The title / descriptor of the photos contained in this media item.
+                                      example: 'Front desk.'
+                                  large:
+                                      type: string
+                                      description: The url for the image of the above titled part of the hotel of size large.
+                                      example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                  thumbnail:
+                                      type: string
+                                      description: The url for the image of the above titled part of the hotel of size thumbnail.
+                                      example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
 
     HotelSearchRequest:
       required:
@@ -945,88 +904,6 @@ components:
             type: string
             example: 'ndsf6sjf6sdf7sdf6'
             description: An identifier to refer to the hotel for searching room availability
-
-    HotelMediaRequest:
-        required:
-          - hotels
-          - credential_info
-        properties:
-            credential_info:
-              type: object
-              required:
-                - pcc
-                - provider
-                - data_source
-              properties:
-                pcc:
-                  description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                  type: string
-                  example: 2G3C
-                provider:
-                  description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                  type: string
-                  example: 1V
-                data_source:
-                  description: The datasource that is associated with the PCC.
-                  type: string
-                  enum: [ travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly ]
-            hotels:
-                description: A list of hotels that you wish to get media for.
-                type: array
-                items:
-                    type: object
-                    required:
-                        - hotel_chain
-                        - hotel_code
-                    properties:
-                        hotel_chain:
-                            type: string
-                            description: The refence for the hotel chain.
-                            example: 'GI'
-                        hotel_code:
-                            type: string
-                            description: The reference for the hotel code
-                            example: '35573'
-            cache_only:
-              type: boolean
-              description: Cache only indicates that you would like to retrieve only cached hotels and not query the GDS.
-              example: False
-
-
-    HotelMediaResponse:
-        properties:
-            hotels:
-                type: array
-                items:
-                    type: object
-                    properties:
-                        hotel_chain:
-                            type: string
-                            description: The refence for the hotel chain.
-                            example: 'GI'
-                        hotel_code:
-                            type: string
-                            description: The reference for the hotel code
-                            example: '35573'
-                        hotel_media_items:
-                            type: array
-                            items:
-                                type: object
-                                properties:
-                                    title:
-                                        type: string
-                                        description: The title / descriptor of the photos contained in this media item.
-                                        example: 'Front desk.'
-                                    large:
-                                        type: string
-                                        description: The url for the image of the above titled part of the hotel of size large.
-                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                    thumbnail:
-                                        type: string
-                                        description: The url for the image of the above titled part of the hotel of size thumbnail.
-                                        example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-
-
 
     HotelRulesRequest:
       required:
