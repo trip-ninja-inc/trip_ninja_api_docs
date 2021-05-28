@@ -1506,14 +1506,6 @@ components:
                           description: A unique key used to identify an entire super trip which incorporates all inclusive bookings (i.e. Cars, Hotels, other Flights). The key can be used to search and price flights again and place them into the same super trip.
                           type: string
                           example: "5df23dd9s72hne223d299err2323423r2342r221"
-                        trip_id:
-                            description: A unique key used for identification and when booking a trip.
-                            type: string
-                            example: "129a4045ef84edc4c0d5f0b1b28a906495d3f966"
-                        ur_locator_code:
-                            type: string
-                            description: Unique Identifier of a Universal Record.
-                            example: "AXY67G"
                         primary_passenger:
                             $ref: '#/components/schemas/passenger'
                             description: Primary passenger information
@@ -1526,40 +1518,6 @@ components:
                           type: string
                           format: date
                           example: "2019-11-21"
-                        total_price:
-                          description: Total price of the trip including all taxes, fees, and markup.
-                          type: float
-                          example: 399.96
-                        currency:
-                          description: Currency in which the booking was made
-                          type: string
-                          example: CAD
-                        route:
-                          description: trip route
-                          type: string
-                          example: 'YHZ-YHZ'
-                        pnr_list:
-                          type: array
-                          description: List of each PNR information
-                          items:
-                            $ref: '#/components/schemas/pnr_info'
-                        trip_type:
-                          description: Trip type
-                          type: string
-                          example: multi_city
-                          enum: [one_way, round_trip, multi_city]
-                        pcc:
-                            description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                            type: string
-                            example: 2G3C
-                        agent_email:
-                            description: Email address of travel agent who created the booking
-                            type: string
-                            example: agent@tripninja.io
-                        agency:
-                          description: Travel agency
-                          type: string
-                          example: tripninja
                         status:
                             description: Status of booking
                             type: string
