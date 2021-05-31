@@ -1082,7 +1082,7 @@ components:
               email:
                 description: Passenger's email address.
                 type: string
-                example: "andres.collar@tripninja.io"
+                example: "andres.collart@tripninja.io"
               phone_number:
                 description: Passenger's phone number.
                 type: string
