@@ -811,10 +811,10 @@ components:
                                     type: boolean
                                     description: Indicates if dinner is provided with the room.
                                     example: True
-                        bed_type:
-                            type: string
-                            description: The bed that is provided with the room.
-                            example: 'King Single'
+                        bed_types:
+                            type: object
+                            description: An object where the key is the name of the room type and the value is the number of those beds in the room.
+                            example: {"Queen bed": 2, "King Single": 1}
 
     HotelRemovePriceConfirm:
         required:
@@ -1082,7 +1082,7 @@ components:
               email:
                 description: Passenger's email address.
                 type: string
-                example: "andres.collar@tripninja.io"
+                example: "andres.collart@tripninja.io"
               phone_number:
                 description: Passenger's phone number.
                 type: string
