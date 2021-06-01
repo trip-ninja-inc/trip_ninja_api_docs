@@ -1582,8 +1582,8 @@ components:
                           type: string
                           example: "5df23dd9s72hne223d299err2323423r2342r221"
                         primary_passenger:
-                            $ref: '#/components/schemas/passenger'
-                            description: Primary passenger information
+                          $ref: '#/components/schemas/passenger'
+                          description: Primary passenger information
                         booking_date:
                           description: Date on which the booking was made
                           type: string
@@ -1594,10 +1594,19 @@ components:
                           format: date
                           example: "2019-11-21"
                         status:
-                            description: Status of booking
-                            type: string
-                            example: booked
-                            enum: [booked,ticketed,cancelled]
+                          description: Status of booking
+                          type: string
+                          example: booked
+                          enum: [booked,ticketed,cancelled]
+                        pnr_list:
+                          type: array
+                          description: List of each PNR information
+                          items:
+                            $ref: '#/components/schemas/pnr_info'
+                        currency:
+                          description: Currency in which the booking was made
+                          type: string
+                          example: CAD
 
     passenger:
       title: Primary passenger
