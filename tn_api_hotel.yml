@@ -613,20 +613,7 @@ components:
               example: 2
               description: The number of rooms required for the above travellers.
           credential_info:
-              type: array
-              description: An array of credentials with which to search using.
-              items:
-                type: object
-                properties:
-                  pcc:
-                      description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                      type: string
-                      example: 2G3C
-                  provider:
-                      description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                      required: true
-                      type: string
-                      example: 1V
+            $ref: '#/components/schemas/credential_info'
           next_result_reference:
               type: string
               example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
@@ -663,18 +650,7 @@ components:
                 example: '1'
                 description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
             credential_info:
-                type: object
-                description: The credentials with which to make the details call on.
-                properties:
-                    pcc:
-                        description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-                        type: string
-                        example: 2G3C
-                    provider:
-                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                        required: true
-                        type: string
-                        example: 1V
+                $ref: '#/components/schemas/credential_info'
             hotel_chain:
                 type: string
                 description: The refence for the hotel chain.
@@ -843,6 +819,8 @@ components:
           - currency
           - rate_plan_type
           - hotel_name
+          - credential_info
+          - conversion_rate
       properties:
           super_trip_id:
               type: string
@@ -892,6 +870,13 @@ components:
               type: string
               example: 'A00BOB'
               description: The type reference for the rate plan selected for this hotel and this room.
+          credential_info:
+            $ref: '#/components/schemas/credential_info'
+          conversion_rate:
+              type: float
+              description: The conversion rate to get the price in the currency requested.
+              example: 0.45
+
 
 
     HotelPriceConfirmResponse:
@@ -960,25 +945,28 @@ components:
           format: date
           description: "Date to checkout from the hotel. format: YYYY-MM-DD."
         credential_info:
-          type: object
-          required:
-            - pcc
-            - provider
-            - data_source
-          properties:
-            pcc:
-              description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
-              type: string
-              example: 2G3C
-            provider:
-              description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-              type: string
-              example: 1V
-            data_source:
-              description: The datasource that is associated with the PCC.
-              type: string
-              enum: [travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly]
+          $ref: '#/components/schemas/credential_info'
 
+    credential_info:
+      description: The credential info that will be used to make the request.
+      type: object
+      required:
+        - pcc
+        - provider
+        - data_source
+      properties:
+        pcc:
+          description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries.
+          type: string
+          example: 2G3C
+        provider:
+          description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+          type: string
+          example: 1V
+        data_source:
+          description: The datasource that is associated with the PCC.
+          type: string
+          enum: [travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly]
 
     HotelRulesResponse:
       properties:
