@@ -420,6 +420,81 @@ components:
           description: All passengers information
           items:
             $ref: '#/components/schemas/passenger_detail'
+        hotels:
+          type: array
+          description: A list of the hotels booked under this super trip.
+          items:
+            type: object
+            description: Hotels
+            properties:
+              hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: An identifier to refer to the hotel for searching room availability
+              status:
+                enum: [booked, cancelled]
+                description: "Status of the hotel booking"
+              booked_hotel_details:
+                type: object
+                description: The specific details of the booked hotel.
+                properties:
+                  address:
+                    type: object
+                    properties:
+                      street_address:
+                        type: string
+                        description: The street address of the hotel.
+                        example: '1583 Brunswick St, Halifax, NS B3J 3P5'
+                      longitude:
+                        type: float
+                        description: The longitude of the hotel.
+                        example: 44.64511447836071
+                      lattitude:
+                        type: float
+                        description: The lattitude of the hotel.
+                        example: -63.575245615440565
+                      distance_from_search_reference:
+                        type: float
+                        description: The distance that the hotel is from the reference submitted in the search.
+                        example: 7.5
+                      phone_number:
+                        type: str
+                        description: The contact phone number for the hotel.
+                        example: '+1 902-420-0555'
+                  hotel_chain:
+                    type: string
+                    description: The refence for the hotel chain.
+                    example: 'GI'
+                  hotel_code:
+                    type: string
+                    description: The reference for the hotel code
+                    example: '35573'
+                  hotel_name:
+                    type: string
+                    description: The name of the hotel
+                    example: 'Cambridge Suites Hotel Halifax'
+                  location_iata:
+                    type: string
+                    description: The location of the hotel.
+                    example: 'LON'
+                  check_in_time:
+                    type: string
+                    description: The check in time for the hotel.
+                    example: "3pm"
+                  check_out_time:
+                    type: string
+                    description: The check out time
+                    example: "10am"
+                  rate_plan_type:
+                    type: string
+                    example: 'A00BOB'
+                    description: The type reference for the rate plan selected for this hotel and this room.
+                  total_price:
+                    type: number
+                    description: Total price of the hotel
+                    example: 40.00
+
+
 
 
     price_confirm_baggage:
@@ -1507,8 +1582,8 @@ components:
                           type: string
                           example: "5df23dd9s72hne223d299err2323423r2342r221"
                         primary_passenger:
-                            $ref: '#/components/schemas/passenger'
-                            description: Primary passenger information
+                          $ref: '#/components/schemas/passenger'
+                          description: Primary passenger information
                         booking_date:
                           description: Date on which the booking was made
                           type: string
@@ -1519,10 +1594,19 @@ components:
                           format: date
                           example: "2019-11-21"
                         status:
-                            description: Status of booking
-                            type: string
-                            example: booked
-                            enum: [booked,ticketed,cancelled]
+                          description: Status of booking
+                          type: string
+                          example: booked
+                          enum: [booked,ticketed,cancelled]
+                        pnr_list:
+                          type: array
+                          description: List of each PNR information
+                          items:
+                            $ref: '#/components/schemas/pnr_info'
+                        currency:
+                          description: Currency in which the booking was made
+                          type: string
+                          example: CAD
 
     passenger:
       title: Primary passenger
