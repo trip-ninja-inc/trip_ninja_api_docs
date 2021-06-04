@@ -892,7 +892,6 @@ components:
 
     HotelRulesRequest:
       required:
-        - hotel_itinerary_reference
         - hotel_trace_id
         - hotel_chain
         - hotel_code
@@ -904,10 +903,6 @@ components:
         - check_out_date
         - credential_info
       properties:
-        hotel_itinerary_reference:
-          type: string
-          example: '1'
-          description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
         hotel_trace_id:
           type: string
           example: 'ndsf6sjf6sdf7sdf6'
@@ -970,19 +965,11 @@ components:
 
     HotelRulesResponse:
       properties:
-        hotel_trace_id:
-          type: string
-          example: 'ndsf6sjf6sdf7sdf6'
-          description: An identifier to refer to the hotel for searching room availability.
-        super_trip_id:
-          type: string
-          example: "bdf876sf6sfsdf87sdf"
-          description: id of the super trip.
-        cancellation_policy_text:
+        cancellation_policy:
           type: string
           description: The cancellation policy
           example: 'non-refundable rate cancellation permitted up to 1days before arrival'
-        guarantee_policy_text:
+        guarantee_policy:
           type: string
           description: The guarantee policy.
           example: ''
@@ -991,33 +978,13 @@ components:
           description: The deposit requirements
           example: 'book 7 days before arrival full room , tax payment due 174.40 gbp deposit due -at time of booking credit card deposit only'
         room_rate_descriptions:
-          type: array
-          description: A list of the various rate description information - includes types such as Extra Charges, Rate comment, Rate description, Room detail, Room rate, Room text.
-          items:
-            type: object
-            properties:
-              description_type:
-                type: string
-                description: The type of description
-                example: 'Extra charges'
-              description_text:
-                type: string
-                description: The full text of the description
-                example: 'rollaway - 10.00 gbp per room per night'
+          type: object
+          description: The various rate descriptions - includes types such as Extra Charges, Rate comment, Rate description, Room detail, Room rate, Room text.
+          example: {"Rate description": "Early check in and check out when available.", "Room rate": "Maximum occupancy - 1" }
         rule_descriptions:
-          type: array
-          description: A list of the various rate rules - includes types such as Cancellation, Deposit, Location Text, Miscellaneous, Promotional, and PropertyText
-          items:
-            type: object
-            properties:
-              description_type:
-                type: string
-                description: The type of rule description
-                example: 'Cancellation'
-              description_text:
-                type: string
-                description: The full text of the ruledescription
-                example: 'non-refundable rate cancellation permitted up to 1days before arrival'
+          type: object
+          description: The various rate rules - includes types such as Cancellation, Deposit, Location Text, Miscellaneous, Promotional, and PropertyText
+          example: {"Guarantee": "Accept all guarantee methods", "Checkin Checkout": "Check in time 15:00, check out time 11:00"}
 
     HotelBookRequest:
       required:
