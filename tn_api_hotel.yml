@@ -588,10 +588,33 @@ components:
               type: string
               example: "bdf876sf6sfsdf87sdf"
               description: id of the super trip, may not be present in the initial search.
-          location:
-              type: string
-              example: "YYZ"
-              description: location (city iata) to search for hotels in.
+          hotel_location:
+              type: object
+              description: location (city, airport, or reference point) to search for hotels in.
+              required:
+                - type
+                - IATA
+              properties:
+                  type:
+                    type: string
+                    description: Defines whether it's a city ('C'), airport ('A'), or reference point ('R')
+                    example: 'R'
+                  IATA:
+                    type: string
+                    description: The IATA code for the city/airport, or nearest IATA for the reference point
+                    example: 'PAR'
+                  name:
+                    type: string
+                    description: The IATA code for the city/airport, or nearest IATA for the reference point. Required for reference point.
+                    example: 'Eiffel Tower'
+                  region:
+                    type: string
+                    description: The state/province for the reference point. Only required for reference point if there are multiple reference points with same name in the same country.
+                    example: 'NS'
+                  country:
+                    type: string
+                    description: The 2-letter country code for the reference point. Required for reference point.
+                    example: 'FR'
           check_in_date:
               type: string
               format: date
