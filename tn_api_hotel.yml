@@ -814,6 +814,11 @@ components:
                             type: object
                             description: An object where the key is the name of the room type and the value is the number of those beds in the room.
                             example: {"Queen bed": 2, "King Single": 1}
+                        guarantee:
+                            type: string
+                            description: The guarantee type for the room - needed for pricing.
+                            example: "Guarantee"
+
 
     HotelRemovePriceConfirm:
         required:
@@ -844,6 +849,7 @@ components:
           - hotel_name
           - credential_info
           - conversion_rate
+          - guarantee
       properties:
           super_trip_id:
               type: string
@@ -894,11 +900,15 @@ components:
               example: 'A00BOB'
               description: The type reference for the rate plan selected for this hotel and this room.
           credential_info:
-            $ref: '#/components/schemas/credential_info'
+              $ref: '#/components/schemas/credential_info'
           conversion_rate:
               type: float
               description: The conversion rate to get the price in the currency requested.
               example: 0.45
+          guarantee:
+              type: string
+              description: The guarantee type for the room - needed for pricing.
+              example: "Guarantee"
 
 
 
