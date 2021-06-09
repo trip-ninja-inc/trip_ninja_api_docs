@@ -538,9 +538,20 @@ components:
               example: '1'
               description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
           next_result_reference:
-              type: string
-              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
-              description: The reference used to get the next list of results from the GDS.
+              type: array
+              description: The reference object with the reference and the provider map.
+              items:
+                  type: object
+                  properties:
+                      reference:
+                          description: The reference for the GDS to make the next search.
+                          example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+                          type: string
+                      provider:
+                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                        type: string
+                        example: 1V
+
           hotels_media:
               description: 'A list of media items for all the hotels returned in the search.'
               type: array
@@ -638,9 +649,19 @@ components:
           credential_info:
             $ref: '#/components/schemas/credential_info'
           next_result_reference:
-              type: string
-              example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
-              description: The reference used to get the next list of results from the GDS.
+              type: array
+              description: The reference object with the reference and the provider map.
+              items:
+                  type: object
+                  properties:
+                      reference:
+                          description: The reference for the GDS to make the next search.
+                          example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
+                          type: string
+                      provider:
+                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                        type: string
+                        example: 1V
           hotel_itinerary_reference:
               type: string
               example: '1'
