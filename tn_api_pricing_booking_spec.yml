@@ -227,6 +227,11 @@ paths:
                                         type: json
                                         description: A breakdown of which itineraries are stored under which PNR.
                                         example: {"HC4C": ["1"], "Y4E5": ["2", "3"]}
+                                    booked_hotels:
+                                        type: array
+                                        description: A list of the hotels booked.
+                                        items:
+                                          $ref: '#/components/schemas/BookedHotelResponse'
                 400:
                     description: Unable to create booking
                     content:
@@ -1289,11 +1294,43 @@ components:
               type: string
               example: "5df23dd9s72hne223d299err2323423r2342r221"
 
+    BookedHotelResponse:
+        title: Response
+        type: object
+        properties:
+            hotel_trace_id:
+                type: string
+                example: 'ndsf6sjf6sdf7sdf6'
+                description: The specific hotel id.
+            booking_reference:
+                type: string
+                example: 'JJ8rrO9'
+                description: The booking reference for the hotel.
+            ur_locator_code:
+                type: string
+                description: Unique Identifier of a Universal Record.
+                example: "AXY67G"
+            provider_locator_code:
+                type: string
+                description: The provider locator code that can be used to update the hotel later on.
+                example: 'D2eEr3E'
+            check_in_date:
+                type: string
+                format: date
+                description: "Date of check-in. format: YYYY-MM-DD. Post-booking this can be used to sort the reservations."
+            booking_success:
+                type: string
+                enum: [success, fail]
+                description: Provides status of the hotel, indicating whether this individual hotel booking was a success.
+                example: success
+
+
     CreateBookingRequest:
         title: Request
         type: object
         required:
-            - trip_id
+            - super_trip_id
+            - hotel_trace_ids
             - passengers
             - billing
             - endpoint
@@ -1305,6 +1342,10 @@ components:
                 type: string
                 required: true
                 example: "5df23dd9s72hne223d299err2323423r2342r221"
+            hotel_trace_ids:
+                type: array
+                description: A list of the holtel trace ids for all the hotels in the booking. If there are no hotels in this booking then send as an empty array.
+                example: ['ndsf6sjf6sdf7sdf6', 'DDsf9Qj96sPP7sd9U']
             add_to_ticketing_queue:
                 type: boolean
                 example: true
@@ -1756,16 +1797,6 @@ components:
                       type: string
                       description: Information about baggage restrictions
                       example: PERSONAL ITEM
-
-
-
-
-
-
-
-
-
-
     pnr_info:
       type: object
       properties:
