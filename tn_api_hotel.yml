@@ -655,10 +655,6 @@ components:
                 format: date
                 description: "Date to checkout from the hotel. format: YYYY-MM-DD."
                 example: '2021-05-15'
-            conversion_rate:
-                type: float
-                description: The conversion rate to get the price in the currency requested.
-                example: 0.45
 
     HotelDetailsResponse:
         properties:
@@ -761,6 +757,15 @@ components:
                             type: object
                             description: An object where the key is the name of the room type and the value is the number of those beds in the room.
                             example: {"Queen bed": 2, "King Single": 1}
+                        original_total_string:
+                            type: string
+                            description: The original total price as a string in the hotels currency is required for the rules request and is presented here.
+                            example: "SGD172.00"
+                        guarantee:
+                            type: string
+                            description: The guarantee type for the room - needed for pricing.
+                            example: "Guarantee"
+
 
     HotelRemovePriceConfirm:
         required:
@@ -790,7 +795,8 @@ components:
           - rate_plan_type
           - hotel_name
           - credential_info
-          - conversion_rate
+          - converted_total_price
+          - guarantee
       properties:
           super_trip_id:
               type: string
@@ -841,11 +847,15 @@ components:
               example: 'A00BOB'
               description: The type reference for the rate plan selected for this hotel and this room.
           credential_info:
-            $ref: '#/components/schemas/credential_info'
-          conversion_rate:
+              $ref: '#/components/schemas/credential_info'
+          converted_total_price:
               type: float
-              description: The conversion rate to get the price in the currency requested.
-              example: 0.45
+              example: 127.0
+              description: The total price converted into the currency searched in. This can used as a reference to the price billed at booking when retrieving the booking at a later date.
+          guarantee:
+              type: string
+              description: The guarantee type for the room - needed for pricing.
+              example: "Guarantee"
 
 
 
@@ -866,7 +876,7 @@ components:
         - hotel_chain
         - hotel_code
         - rate_plan_type
-        - base_price_incl_curr
+        - original_total_string
         - traveller_total
         - rooms_total
         - check_in_date
@@ -889,10 +899,10 @@ components:
           type: string
           description: The reference for the room and rate plan selection
           example: 'A01LV8'
-        base_price_incl_curr:
-          type: string
-          description: The total price of the room including the currency, as returned from hotel details
-          example: 'USD1234.56'
+        original_total_string:
+            type: string
+            description: The original total price as a string in the hotels currency is required for the rules request and is presented here.
+            example: "SGD172.00"
         traveller_total:
           type: int
           example: 3
