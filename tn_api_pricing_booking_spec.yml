@@ -501,7 +501,7 @@ components:
                   currency:
                       type: string
                       example: 'CAD'
-                      description: Currency to make the search in.
+                      description: Currency the booking was made in.
                   rating:
                       type: int
                       description: The hotel rating
