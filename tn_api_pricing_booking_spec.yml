@@ -93,9 +93,9 @@ paths:
                   schema:
                       type: string
                   description: >
-                    Travel agency for which to list bookings from. Either this or agent_email should be passed.
+                    Travel agency id for which to list bookings from. Either this or agent_email should be passed.
                     This parameter is incompatible with `agent_email`.
-                  example: tripninja
+                  example: '9238812-2131233-ee213123'
                 - in: query
                   name: agent_email
                   schema:
