@@ -10,7 +10,7 @@ info:
     and pre-production endpoints - these correspond to the Data Source’s production and pre-production services, and can be used as desired.<br  />
     <h2>Trip Ninja API URLs</h2>
 
-    Pre-Production: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+    Pre-Production: https://preprodapi.tripninja.io
 
     For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact your account manager to whitelist IPs you
     will be using.
@@ -37,11 +37,11 @@ info:
     </pre>
 
   x-logo:
-    url: 'https://s3.amazonaws.com/tn-api-docs/tripninja_logo_dev-01.png'
+    url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png
     altText: Trip Ninja logo
 
 servers:
-  - url: http://trip-ninja-api-preprod.us-east-2.elasticbeanstalk.com
+  - url: https://preprodapi.tripninja.io
     description: Pre-Production server
 
 paths:
