@@ -37,7 +37,7 @@ info:
     </pre>
 
   x-logo:
-    url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png
+    url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png'
     altText: Trip Ninja logo
 
 servers:
