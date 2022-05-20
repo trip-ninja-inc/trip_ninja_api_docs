@@ -358,7 +358,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ReportRequest'
+                                $ref: '#/components/schemas/PriceConfirmationReportRequest'
                 responses:
                     200:
                         description: Success
@@ -369,7 +369,7 @@ paths:
                                     properties:
                                         status:
                                             type: string
-                                            example: "confirmed"
+                                            example: "success"
                     400:
                         description: Invalid Input
                         content:
@@ -392,7 +392,7 @@ paths:
                   content:
                       application/json:
                           schema:
-                              $ref: '#/components/schemas/ReportRequest'
+                              $ref: '#/components/schemas/BookingReportRequest'
               responses:
                     200:
                         description: Success
@@ -403,7 +403,7 @@ paths:
                                     properties:
                                         status:
                                             type: string
-                                            example: "booked"
+                                            example: "success"
                     400:
                         description: Invalid Input
                         content:
@@ -426,7 +426,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ReportRequest'
+                                $ref: '#/components/schemas/TicketingReportRequest'
                 responses:
                     200:
                         description: Success
@@ -1829,7 +1829,43 @@ components:
                 segments:
                     $ref: '#/components/schemas/Segments'
 
-    ReportRequest:
+    PriceConfirmationReportRequest:
+        title: Request
+        type: object
+        required:
+            trip_id
+            segment_ids
+        properties:
+            trip_id:
+                type: string
+                description: Trip ID returned in search response
+                example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+            segment_ids:
+                type: array
+                description: Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
+                example: ["18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
+
+    BookingReportRequest:
+      title: Request
+      type: object
+      required:
+          trip_id
+          segment_ids
+      properties:
+          trip_id:
+              type: string
+              description: Trip ID returned in search response
+              example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+          segment_ids:
+              type: array
+              description: Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
+              example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
+          customer_booking_reference_id:
+              type: string
+              description: Customer booking reference ID from the client.
+              example: "cust-book-1234aa94d"
+
+    TicketingReportRequest:
         title: Request
         type: object
         required:
