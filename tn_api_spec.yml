@@ -1570,10 +1570,10 @@ components:
                 type: string
           include_itineraries:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
-              default: true
+              default: false
               type: boolean
           mix_structures:
-              description: Return mix of results with the best multi-pnr structure and single-pnr structure. include_itineraries needs to be passed as True for this to work
+              description: Return mix of results with the best multi-pnr structure and single-pnr structure.
               default: false
               type: boolean
           multi_pnr_mix:
