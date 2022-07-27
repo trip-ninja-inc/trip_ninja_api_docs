@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "3.3.0"
+  version: "4.2.0"
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
@@ -1570,6 +1570,10 @@ components:
                 type: string
           include_itineraries:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
+              default: false
+              type: boolean
+          should_compress_itinerary:
+              description: Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
               default: false
               type: boolean
           mix_structures:
