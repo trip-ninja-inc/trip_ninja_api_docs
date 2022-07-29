@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "3.3.0"
+  version: "4.2.0"
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
@@ -62,7 +62,7 @@ info:
       <tr><td>IE23</td><td>Not a valid alliance. Expected one of *A, *S, *O</td></tr>
       <tr><td>IE24</td><td>Travellers Type does not meet expected criteria. Should be a list having between 0 and 10 values</td></tr>
       <tr><td>IE26</td><td>Exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one</td></tr>
-      <tr><td>IE27</td><td>Num_results should be an integer between 50 and 1000</td></tr>
+      <tr><td>IE27</td><td>Num_results should be an integer between 50 and 5000</td></tr>
       <tr><td>IE28</td><td>Refundable parameter must be boolean value true or false</td></tr>
       <tr><td>IE29</td><td>Invalid Traveller type</td></tr>
       <tr><td>IE30</td><td>Incorrect value for single_pnr, must be boolean</td></tr>
@@ -912,7 +912,7 @@ components:
                             description: exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one
                         IE27:
                             type: string
-                            description: num_results should be an integer between 50 and 1000
+                            description: num_results should be an integer between 50 and 5000
                         IE28:
                             type: string
                             description: refundable parameter must be a boolean value true or false
@@ -1559,7 +1559,7 @@ components:
               default: 50
               type: integer
               minimum: 50
-              maximum: 1000
+              maximum: 5000
           include_lcc:
               description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
               default: []
@@ -1570,6 +1570,10 @@ components:
                 type: string
           include_itineraries:
               description: Enables itineraries to be constructed and returned from segments found for the requested trip.
+              default: false
+              type: boolean
+          should_compress_itinerary:
+              description: Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
               default: false
               type: boolean
           mix_structures:
@@ -1749,7 +1753,7 @@ components:
                 default: 50
                 type: integer
                 minimum: 50
-                maximum: 1000
+                maximum: 5000
 
     FlexTripSearchResponse:
       title: Response
