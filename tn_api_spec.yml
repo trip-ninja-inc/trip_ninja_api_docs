@@ -700,6 +700,36 @@ components:
           priced_passengers:
             type: array
             example: ['ADT','INF']
+          price_breakdown_with_passenger_type_code:
+            type: array
+            description: Displays the pricing for each passenger type
+            items: 
+              type: object
+              properties:
+                passenger_type_code: 
+                  type: string
+                  example: ADT
+                base_price:
+                  type: float
+                  example: 73.00
+                total_price:
+                  type: float
+                  example: 132.39
+                taxes:
+                  type: float
+                  example: 59.39
+                tax_breakdown:
+                  type: array
+                  description: Breakdown of taxes amount into their categories
+                  items:
+                    type: object
+                    properties:
+                      category:
+                        type: string
+                        example: "CA"
+                      amount:
+                        type: float
+                        example: 7.12
           segment_time_w_connections:
             type: float
             description: segment travel time accounting for time between flights
