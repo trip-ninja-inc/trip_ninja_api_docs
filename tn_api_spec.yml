@@ -743,7 +743,7 @@ components:
           origin:
             type: string
             description: IATA code of the segment origin
-            example: LHR
+            example: "LHR"
           origin_name:
             type: string
             description: Full name of the flight origin
@@ -751,7 +751,7 @@ components:
           destination:
             type: string
             description: IATA code of the segment destination
-            example: CDG
+            example: "CDG"
           destination_name:
             type: string
             description: Full name of the flight destination
@@ -766,7 +766,7 @@ components:
             description: "Arrival date and time with timezone."
             example: "2020-12-06T09:10:00+00:00"
           flight_number:
-            type: string
+            type: int
             description: Flight number.
             example: 530
           carrier:
@@ -782,7 +782,7 @@ components:
           carrier_fullname:
             type: string
             description: Full name of the carrier
-            example: Air Canada
+            example: "Air Canada"
           operating_carrier:
             type: string
             minLength: 2
@@ -792,23 +792,23 @@ components:
           operating_carrier_fullname:
             type: string
             description: Full name of the operating carrier
-            example: Westjet
+            example: "Westjet"
           reference:
             type: string
             description: reference to flight in flight_details list.
-            example: 83810422f17f30a4c7a366af5a12d9d05c86c04d
+            example: "83810422f17f30a4c7a366af5a12d9d05c86c04d"
           aircraft_type:
             type: string
             description: IATA type code for aircraft model.
-            example: 7M8
+            example: "7M8"
           fare_info_ref:
             type: string
             description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
-            example: WPADWJK0nDKATShj2JAAAA==
+            example: "WPADWJK0nDKATShj2JAAAA=="
           fare_rule_key:
             type: string
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
-            example: gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E=
+            example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
 
     LegDetails:
       title: Leg Details
@@ -824,7 +824,7 @@ components:
           Origin:
               type: string
               description: IATA code of the leg origin
-              example: LHR
+              example: "LHR"
           DestinationName:
               type: string
               description: Full name of the leg destination
@@ -832,7 +832,7 @@ components:
           Destination:
               type: string
               description: IATA code of the leg destination
-              example: CDG
+              example: "CDG"
           DepartureTime:
               type: string
               description: Departure time of the leg
@@ -848,11 +848,11 @@ components:
           Carrier:
               type: string
               description: Leg's carrier code
-              example: BA
+              example: "BA"
           OperatingCarrier:
               type: string
               description: Leg's operating carrier code
-              example: WS    
+              example: "WS"    
           FlightTime:
               type: integer
               description: Flight duration in minutes
@@ -860,7 +860,7 @@ components:
           AircraftType:
             type: string
             description: IATA type code for aircraft model.
-            example: 7M8
+            example: "7M8"
           Key:
               type: string
               description: Leg’s string identifier
@@ -868,23 +868,23 @@ components:
           BookingCode:
               type: string
               description: The airline booking code that describes the flight cabin class
-              example: X
+              example: "X"
           cabin_class:
               type: string
               description: Leg’s cabin class *Travelport customers only*
-              example: Economy
+              example: "Economy"
           fare_info_ref:
             type: string
             description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
-            example: WPADWJK0nDKATShj2JAAAA==
+            example: "WPADWJK0nDKATShj2JAAAA=="
           fare_rule_key:
             type: string
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
-            example: gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E=
+            example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
           fare_type:
               type: string
               description: Leg's fare type 
-              example: PublicFare
+              example: "PublicFare"
 
 
 
