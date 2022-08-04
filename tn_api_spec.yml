@@ -1051,6 +1051,8 @@ components:
                     $ref: '#/components/schemas/Itineraries'
                 segments:
                     $ref: '#/components/schemas/Segments'
+                flight_details:
+                    $ref: '#/components/schemas/FlightDetails'
 
     Itineraries:
         allOf:
