@@ -530,7 +530,7 @@ components:
         properties:
           passenger_type_code: 
             type: string
-            example: ADT
+            example: "ADT"
           base_price:
             type: float
             example: 73.00
