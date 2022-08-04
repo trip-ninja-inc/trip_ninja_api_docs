@@ -783,6 +783,16 @@ components:
             type: string
             description: Full name of the carrier
             example: Air Canada
+          operating_carrier:
+            type: string
+            minLength: 2
+            maxLength: 2
+            description: "Operating airline of the flight."
+            example: "WS"
+          operating_carrier_fullname:
+            type: string
+            description: Full name of the operating carrier
+            example: Westjet
           reference:
             type: string
             description: reference to flight in flight_details list.
