@@ -799,9 +799,9 @@ components:
             description: "Arrival date and time with timezone."
             example: "2020-12-06T09:10:00+00:00"
           flight_number:
-            type: integer
+            type: string
             description: Flight number.
-            example: 530
+            example: "530"
           carrier:
             type: string
             minLength: 2
