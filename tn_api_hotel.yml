@@ -572,6 +572,12 @@ components:
               type: int
               example: 2
               description: The number of rooms required for the above travellers.
+          rooms_list:
+              type: array
+              example: [{ "num_adults": 2, "num_children": 3, "nationality": "CO", "country_of_residence": "CA", "children_age_list": [1, 5, 8] }]
+              description: List of guest info per room required to make WebBeds hotel search requests. *WebBeds Only*
+              items:
+                  $ref: '#/components/schemas/webbeds_room_obj'
           credential_info:
             $ref: '#/components/schemas/credential_info'
           next_result_reference:
@@ -942,6 +948,36 @@ components:
           description: The datasource that is associated with the PCC.
           type: string
           enum: [travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly]
+
+    webbeds_room_obj:
+      description: The guest info required for WebBeds hotel search requests.
+      type: object
+      required:
+        - num_adults
+        - num_children
+        - nationality
+        - country_of_residence
+      properties:
+        num_adults:
+          description: Number of adults staying in the room.
+          type: int
+          example: 2
+        num_children:
+          description: Number of children staying in the room.
+          type: int
+          example: 3
+        nationality:
+          description: 2 letter country code of nationality of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia. 
+          type: string
+          example: CO
+        country_of_residence:
+          description: 2 letter country code of country of residence of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+          type: string
+          example: CA
+        children_age_list:
+          description: List of ages for children staying in room. Optional if num_children = 0, Required if num_children > 0.
+          type: array
+          example: [5, 7, 11]
 
     HotelRulesResponse:
       properties:
