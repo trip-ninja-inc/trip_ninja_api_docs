@@ -562,7 +562,7 @@ components:
                   country:
                     type: string
                     description: The 2-letter country code for the reference point. Required for reference point.
-                    example: 'FR'           
+                    example: 'FR'
           check_in_date:
               type: string
               format: date
