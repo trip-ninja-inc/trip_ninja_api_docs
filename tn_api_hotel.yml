@@ -417,7 +417,7 @@ components:
                                   type: float
                                   description: The lattitude of the hotel.
                                   example: -63.575245615440565
-                              distance_from_search_reference:
+                              distance_from_reference_point_km:
                                   type: float
                                   description: The distance that the hotel is from the reference submitted in the search.
                                   example: 7.5
@@ -459,6 +459,11 @@ components:
                           type: float
                           description: The conversion rate to get the price in the currency requested.
                           example: 0.45
+                      neighbourhood:
+                          type: string
+                          description: The neighbourhood or locality of the hotel.
+                          example: Saint Boniface
+                      
           hotel_itinerary_reference:
               type: string
               example: '1'
@@ -511,15 +516,21 @@ components:
                                       description: The url for the image of the above titled part of the hotel of size thumbnail.
                                       example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
 
+          hotel_neighbourhoods:
+              description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
+              type: array of strings
+              example: ['St. Vital Center', 'Downtown', 'River Heights', 'Saint Boniface', 'Fort Garry']
+
     HotelSearchRequest:
       required:
-          - location
           - check_in_date
           - check_out_date
           - hotel_itinerary_reference
           - credential_info
           - traveller_total
           - rooms_total
+          - hotel_location
+          - currency
       properties:
           super_trip_id:
               type: string
@@ -572,6 +583,13 @@ components:
               type: int
               example: 2
               description: The number of rooms required for the above travellers.
+          rooms:
+              type: array
+              example: [{ "num_adults": 2, "num_children": 3, "nationality": "CO", "country_of_residence": "CA", "children_age_list": [1, 5, 8] },
+                        { "num_adults": 1, "num_children": 0}]
+              description: List of guest info per room required to make WebBeds hotel search requests. *WebBeds Only*
+              items:
+                  $ref: '#/components/schemas/webbeds_room_obj'
           credential_info:
             $ref: '#/components/schemas/credential_info'
           next_result_reference:
@@ -685,7 +703,7 @@ components:
                         type: float
                         description: The lattitude of the hotel.
                         example: -63.575245615440565
-                    distance_from_search_reference:
+                    distance_from_reference_point_km:
                         type: float
                         description: The distance that the hotel is from the reference submitted in the search.
                         example: 7.5
@@ -942,6 +960,34 @@ components:
           description: The datasource that is associated with the PCC.
           type: string
           enum: [travelport, travelport_student, travelport_itx, amadeus, tripstack, mystifly]
+
+    webbeds_room_obj:
+      description: The guest info required for WebBeds hotel search requests. *WebBeds only*
+      type: object
+      required:
+        - num_adults
+        - num_children
+      properties:
+        num_adults:
+          description: Number of adults staying in the room.
+          type: int
+          example: 2
+        num_children:
+          description: Number of children staying in the room, if none use 0.
+          type: int
+          example: 3
+        nationality:
+          description: 2 letter country code of nationality of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia. 
+          type: string
+          example: CO
+        country_of_residence:
+          description: 2 letter country code of country of residence of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+          type: string
+          example: CA
+        children_age_list:
+          description: List of ages for children staying in room. Optional if num_children = 0, Required if num_children > 0.
+          type: array of ints
+          example: [5, 7, 11]
 
     HotelRulesResponse:
       properties:
