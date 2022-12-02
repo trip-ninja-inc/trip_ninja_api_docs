@@ -1939,8 +1939,8 @@ components:
         type: Array of strings and/or Array of arrays
         description: |
             Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
-            
-            Example:
+
+            This is the example structure but should be generalized for all combinations as Trip Ninja’s technology handles more than just 3-segment trips.
             1) structure: [0, 1]
                 - `segment_ids: ["segment_id_0", "segment_id_1"]`
             2) structure: [(0, 1)]
