@@ -317,42 +317,44 @@ components:
                             default: false
                             type: boolean
                 credentials:
-                    type: object
+                    type: array
                     description: Indicate data source to call and required credentials
-                    required:
-                        - data_source
-                        - pcc
-                        - provider
-                    properties:
-                        data_source:
-                            description: data source to call.
-                            type: string
-                            enum: [ "amadeus", "travelport" ]
-                            example: "amadeus"
-                        pcc:
-                            description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
-                            type: string
-                            example: "MEL49f839"
-                        provider:
-                            description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                            type: string
-                            example: "1A"
-                        region:
-                            description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
-                            type: string
-                            example: "americas"
-                        itx:
-                            description: toggles if this is an itx search
-                            type: bool
-                            example: true
-                        pcc_currency:
-                            description: Indicates the currency that the PCC is charged in.
-                            type: string
-                            example: "CAD"
-                        conversion_rate:
-                            description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
-                            type: float
-                            example: 0.78
+                    items:
+                        type: object
+                        required:
+                            - data_source
+                            - pcc
+                            - provider
+                        properties:
+                            data_source:
+                                description: data source to call.
+                                type: string
+                                enum: [ "amadeus", "travelport" ]
+                                example: "amadeus"
+                            pcc:
+                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                                type: string
+                                example: "MEL49f839"
+                            provider:
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                type: string
+                                example: "1A"
+                            region:
+                                description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
+                                type: string
+                                example: "americas"
+                            itx:
+                                description: toggles if this is an itx search
+                                type: bool
+                                example: true
+                            pcc_currency:
+                                description: Indicates the currency that the PCC is charged in.
+                                type: string
+                                example: "CAD"
+                            conversion_rate:
+                                description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
+                                type: float
+                                example: 0.78
                 should_include_hotel_results:
                     description: When set to true, hotel results will also be included in the response. The default of this field is true.
                     default: true
@@ -542,6 +544,10 @@ components:
                                     description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
                                     type: array of strings
                                     example: [ "St. Vital Center", "Downtown", "River Heights", "Saint Boniface", "Fort Garry" ]
+                total_trip_price:
+                    description: Total trip price with the cheapest flights and hotels combined
+                    type: float
+                    example: 123.23
                 msdp_package_id:
                     description: A unique identifier for each msdp search
                     type: string
@@ -1195,8 +1201,7 @@ components:
                                             type: string
                                             example: Economic Standard
                             brands:
-                                type: array
-                                description: list of branded fares for the current segment
+                                $ref: "#/components/schemas/SearchComponents/Flight/Brands"
                 PriceBreakdownWithPassengerTypeCode:
                     type: array
                     description: Displays the pricing for each passenger type
@@ -1227,8 +1232,248 @@ components:
                                         amount:
                                             type: float
                                             example: 7.12
-                FlightDetails:
+                PercentageWithExtraInfo:
                     type: object
+                    description: Information about penalty percentage and amount
+                    properties:
+                        amount:
+                            type: float
+                            description: Penalty amount
+                            example: 78
+                        percentage:
+                            type: float
+                            description: Penalty percentage
+                            example: 0
+
+                ChangePenaltyWithExtraInfo:
+                    type: object
+                    description: Information about changing.
+                    properties:
+                        amount:
+                            type: float
+                            description: Change penalty amount
+                            example: 78
+                        percentage:
+                            $ref: "#/components/schemas/SearchComponents/Flight/PercentageWithExtraInfo"
+                        applies_at:
+                            type: string
+                            description: When will the change penality apply at
+                            example: "Anytime"
+
+                CancelPenaltyWithExtraInfo:
+                    type: object
+                    description: Information about cancelling.
+                    properties:
+                        amount:
+                            type: float
+                            description: Cancel penalty amount
+                            example: 78
+                        percentage:
+                            $ref: "#/components/schemas/SearchComponents/Flight/PercentageWithExtraInfo"
+                        applies_at:
+                            type: string
+                            description: When will the cancel penality apply at
+                            example: "Anytime"
+
+                BrandFareInfo:
+                    description: Contains fare info for the brand
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            origin:
+                                description: Origin of the segment
+                                type: string
+                                example: YHZ
+                            destination:
+                                description: Destination of the segment
+                                type: string
+                                example: YVR
+                            fare_basis:
+                                description: Fare Basis Code for the segment.
+                                type: string
+                                example: "QUSDSI0E"
+                            booking_code:
+                                description: Booking code for the segment
+                                type: string
+                                example: "12S3TI3P"
+                            cabin_class:
+                                description: Cabin class of the segment
+                                type: string
+                                example: "E"
+                            brand:
+                                description: Contains brand information for the fare
+                                type: object
+                                properties:
+                                    name:
+                                        description: Name of the brand
+                                        type: string
+                                        example: "STANDARD"
+                                    brand_description:
+                                        description: Description of the brand
+                                        type: string
+                                        example: "Standard: Carry on baggage only"
+                                    tag_line:
+                                        description: Tag line of the brand
+                                        type: string
+                                        example: "Low Fares for Carefee Travel"
+                                    brand_services:
+                                        description: Contains information of what the brand offers
+                                        type: object
+                                        properties:
+                                            carry_on_hand_baggage:
+                                                description: Are carry on bags permittied on this ticket. True/False or "$"
+                                                type: boolean or string
+                                                example: true
+                                            checked_baggage:
+                                                description: Are checked bags permittied on this ticket. True/False or "$"
+                                                type: boolean or string
+                                                example: true
+                                            rebooking:
+                                                description: Rebooking available on this ticket.
+                                                type: string
+                                                example: $
+                                            refund:
+                                                description: Refundability of the ticket.
+                                                type: boolean
+                                                example: true
+                                            seat_assignment:
+                                                description: Seat assignment availability on this ticket.
+                                                type: string
+                                                example: $
+                                            meals_and_beverages:
+                                                description: Are meals and beverages provided as part of this ticket.
+                                                type: boolean
+                                                example: true
+                                            wifi:
+                                                description: Wifi availability on the flight.
+                                                type: string
+                                                example: $
+                                    tier:
+                                        description: Brand tier
+                                        type: string
+                                        example: "0002"
+
+                Brands:
+                    type: array
+                    description: List of branded fares for the current segment
+                    items:
+                        type: object
+                        properties:
+                            should_quick_trip_reload_price:
+                                description: Indicator for reloading pricing
+                                type: boolean
+                                example: true
+                            base_price:
+                                description: Base price of the segment (tax excluded)
+                                type: float
+                                example: 0
+                            taxes:
+                                description: Tax price of the segment
+                                type: float
+                                example: 119.1
+                            fees:
+                                description: Fees for the segment *Travelport customers only*
+                                type: float
+                                example: 0
+                            price:
+                                description: Price of the segment (fare and tax included).
+                                type: float
+                                example: 197.1
+                            change_penalty:
+                                $ref: "#/components/schemas/SearchComponents/Flight/ChangePenaltyWithExtraInfo"
+                            cancel_penalty:
+                                $ref: "#/components/schemas/SearchComponents/Flight/CancelPenaltyWithExtraInfo"
+                            baggage_info:
+                                description: Contains baggage information.
+                                type: object
+                                properties:
+                                    pieces:
+                                        description: Number of baggages included
+                                        type: int
+                                        example: 1
+                                    units:
+                                        description: Unit of the baggage
+                                        type: string
+                                        example: "pc"
+                            fare_info:
+                                $ref: "#/components/schemas/SearchComponents/Flight/BrandFareInfo"
+
+                FlightDetails:
+                    title: Flight Details
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            origin:
+                                type: string
+                                description: IATA code of the segment origin
+                                example: "LHR"
+                            origin_name:
+                                type: string
+                                description: Full name of the flight origin
+                                example: "London, United Kingdom (LHR)"
+                            destination:
+                                type: string
+                                description: IATA code of the segment destination
+                                example: "CDG"
+                            destination_name:
+                                type: string
+                                description: Full name of the flight destination
+                                example: "Paris, France (CDG)"
+                            departure_time:
+                                type: string
+                                format: date-time
+                                description: "Departure date and time with timezone."
+                                example: "2020-12-05T20:50:00-05:00"
+                            arrival_time:
+                                format: date-time
+                                description: "Arrival date and time with timezone."
+                                example: "2020-12-06T09:10:00+00:00"
+                            flight_number:
+                                type: string
+                                description: Flight number.
+                                example: "530"
+                            carrier:
+                                type: string
+                                minLength: 2
+                                maxLength: 2
+                                description: "Airline carrier of the flight."
+                                example: "AC"
+                            flight_time:
+                                type: integer
+                                description: Flight duration in minutes
+                                example: 475
+                            carrier_fullname:
+                                type: string
+                                description: Full name of the carrier
+                                example: "Air Canada"
+                            operating_carrier:
+                                type: string
+                                minLength: 2
+                                maxLength: 2
+                                description: "Operating airline of the flight."
+                                example: "WS"
+                            operating_carrier_fullname:
+                                type: string
+                                description: Full name of the operating carrier
+                                example: "Westjet"
+                            reference:
+                                type: string
+                                description: reference to flight in flight_details list.
+                                example: "83810422f17f30a4c7a366af5a12d9d05c86c04d"
+                            aircraft_type:
+                                type: string
+                                description: IATA type code for aircraft model.
+                                example: "7M8"
+                            fare_info_ref:
+                                type: string
+                                description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
+                                example: "WPADWJK0nDKATShj2JAAAA=="
+                            fare_rule_key:
+                                type: string
+                                description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
+                                example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
 
             Credentials:
                 type: object
