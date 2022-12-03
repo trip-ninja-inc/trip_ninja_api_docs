@@ -64,14 +64,14 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/MSDPSearchRequest"
+                            $ref: "#/components/schemas/Requests/MSDPSearchRequest"
             responses:
                 200:
                     description: Success
                     content:
                         application/json:
                             schema:
-                                $ref: "#/components/schemas/MSDPSearchResponse"
+                                $ref: "#/components/schemas/Responses/MSDPSearchResponse"
                 400:
                     description: Invalid Input
                     content:
@@ -119,438 +119,532 @@ paths:
                                         example: "No availability found: Try changing dates"
                 500:
                     description: Server Error
+    /msdp/results/flights/?trip_id={trip_id}:
+        get:
+            parameters:
+                -   in: path
+                    name: trip_id
+                    required: true
+                    schema:
+                        type: string
+                        example: bdf876sf6sfsdf87sdf
+                    description: Parameter to retrieve the flight results
+            summary: "MSDP Get Flight Results"
+            description: |
+                This endpoint retrieves the flight results from the prior msdp search
+            operationId: Get Flight Results
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Responses/MSDPGetFlightResultsResponse"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE38"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Trip ID not found"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE44"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                500:
+                    description: Server Error
+
+    /msdp/search/removehotel/hotel_trace_id={hotel_trace_id}:
+        patch:
+            parameters:
+                -   in: path
+                    name: hotel_trace_id
+                    required: true
+                    schema:
+                        type: string
+                        example: bdf876sf6sfsdf87sdf
+                    description: Parameter to remove the hotel result from the searched msdp package
+            summary: "MSDP Remove Hotel Result"
+            description:  This endpoint removes a specific hotel result from the prior msdp search
+            operationId: Remove Hotel Result
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Responses/MSDPSearchResponse"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "400"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Query parameters are wrong or cached request is expired."
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE44"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                500:
+                    description: Server Error
 
 
 components:
     schemas:
-        MSDPSearchRequest:
-            required:
-                - currency
-                - hotel_data
-                - flight_data
-                - credentials
-            properties:
-                currency:
-                    description: Currency to make the search in.
-                    type: str
-                    example: "AUD"
-                hotel_data:
-                    description: parameters to search for 1 or more hotels
-                    type: object
-                    required:
-                        - hotels
-                        - traveller_total
-                        - rooms_total
-                        - rooms
-                    properties:
-                        hotels:
-                            description: parameters for each hotel search
-                            type: array
-                            items:
-                                type: object
-                                required:
-                                    - id
-                                    - hotel_location
-                                    - check_in_date
-                                    - check_out_date
-                                    - hotel_itinerary_reference
-                                properties:
-                                    id:
-                                        description: matching id from the flight id for the msdp package
-                                        type: int
-                                        example: 1
-                                    hotel_location:
-                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelLocation"
-                                    check_in_date:
-                                        type: string
-                                        format: date
-                                        description: "Date of check-in. format: YYYY-MM-DD."
-                                        example: "2023-06-20"
-                                    check_out_date:
-                                        type: string
-                                        format: date
-                                        description: "Date to checkout from the hotel. format: YYYY-MM-DD."
-                                        example: "2023-06-25"
-                                    next_result_reference:
-                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
-                                    hotel_itinerary_reference:
-                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
-                        traveller_total:
-                            description: Number of people that will be staying at the hotel.
-                            type: int
-                            example: 3
-                        rooms_total:
-                            description: The number of rooms required for the above travellers.
-                            type: int
-                            example: 2
-                        rooms:
-                            $ref: "#/components/schemas/SearchComponents/Hotel/HotelRooms"
-                flight_data:
-                    description: parameters to search for 1 or more flights
-                    type: object
-                    required:
-                        - flights
-                        - travellers
-                    properties:
-                        flights:
-                            $ref: "#/components/schemas/SearchComponents/Flight/Flights"
-                        travellers:
-                            description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
-                            required: true
-                            type: array
-                            example: [ 'ADT', 'ADT', 'CHD' ]
-                        max_cache:
-                            default: 24
-                            description: |
-                                Hours to retain data queried from provider to be cached for use in future requests.
-                                Higher values result in:<br  />
-                                    1) faster queries as more data is available for re-use<br  />
-                                    2) lower look-to-book ratios from the GDS perspective which may lower costs<br  />
-                                    3) less accurate pricing data which may cause issues in AirPriceReq when ticketing.<br  />
-                                Minimum value is 0.04 hours, maximum value is 720 hours.
-                                Please discuss with your Trip Ninja Account Manager if you need
-                                access to caching outside these limits.
-                            type: integer
-                        country_code:
-                            description: "Country code where search came from (For example: CA, US)"
-                            example: "CA"
-                            type: string
-                        cabin_class:
-                            default: "E"
-                            description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment."
-                            example: "E"
-                            type: string
-                        time_value:
-                            default: 0
-                            description: |
-                                This parameter helps set the value of a passenger’s time, in
-                                terms of the currency selected. It is used to trade off flight
-                                prices versus flight durations. The parameter is in units of
-                                [currency]/hour. Flight durations are calculated as the difference
-                                in minutes from the arrival time of the last flight in a leg to
-                                the departure time of the first flight in the leg.
-                                
-                                True Cost of Flight = [Flight Price] * [time_value/60] * [Flight Duration]
-                                
-                                The itinerary which provides the lowest True Cost of Flight is
-                                what is returned in the response. If you provide a time_value
-                                of 0 or do not provide the parameter, it will sort by price.
-                            type: integer
-                        alliance:
-                            description: Parameter toggles the preferred alliance for your query. If there are results containing flights from the given alliance, only flights from that alliance will be returned. Otherwise it will return flights from any alliance. *Travelport Only*
-                            type: string
-                            example: "*A"
-                        schema:
-                            default: 40
-                            description: Toggles which Travelport schema version to use. *Travelport Only*
-                            type: integer
-                        exclude_carriers:
-                            description: Parameter toggles a list of carriers to exclude from the query results. This option can not be applied together with the alliance option. They are mutually exclusive.
-                            type: array
-                            example: [ "AC" ]
-                            items:
-                                type: string
-                        permitted_carriers:
-                            description: Toggles permitted carriers in GDS request
-                            required: false
-                            type: array
-                            example: [ "AC" ]
-                        no_overnight_layovers:
-                            description: Toggles whether to return results with no overnight layovers *Travelport Only*
-                            type: boolean
-                            default: false
-                        stops:
-                            description: Toggles number of stop for GDS request *Travelport Only*
-                            default: "any"
-                            type: string
-                            enum: [ "any", "direct", "1", "2" ]
-                        baggage:
-                            description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
-                            default: "any"
-                            type: string
-                            enum: [ "any", "1", "2" ]
-                        refundable:
-                            description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
-                            default: false
-                            type: boolean
-                        region:
-                            description: Parameter toggles which travelport endpoint you hit *Travelport Only*
-                            default: "americas"
-                            type: string
-                            enum: [ "emea", "apac", "americas" ]
-                        num_results:
-                            description: Parameter sets the number of segments in the response *Travelport Only*
-                            default: 50
-                            type: integer
-                            minimum: 50
-                            maximum: 5000
-                        include_lcc:
-                            description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
-                            default: [ ]
-                            required: false
-                            type: array
-                            example: [ "travelport" ]
-                            items:
-                                type: string
-                        include_itineraries:
-                            description: Enables itineraries to be constructed and returned from segments found for the requested trip.
-                            default: false
-                            type: boolean
-                        should_compress_itinerary:
-                            description: Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
-                            default: false
-                            type: boolean
-                        mix_structures:
-                            description: Return mix of results with the best multi-pnr structure and single-pnr structure.
-                            default: false
-                            type: boolean
-                        single_pnr:
-                            description: Return single-pnr structures in addition to the results returned. If there are too many results, it will be truncated to num_results.
-                            default: false
-                            type: boolean
-                        multi_pnr_mix:
-                            description: Return mix of single-pnr and all multi-pnr structures. include_itineraries and mix_structures needs to be passed as True for this to work
-                            default: false
-                            type: boolean
-                        markup_by_itinerary:
-                            description: Add itinerary markup to the search result and set trip markup to 0
-                            default: false
-                            type: boolean
-                credentials:
-                    type: array
-                    description: Indicate data source to call and required credentials
-                    items:
+        Requests:
+            MSDPSearchRequest:
+                required:
+                    - currency
+                    - hotel_data
+                    - flight_data
+                    - credentials
+                properties:
+                    currency:
+                        description: Currency to make the search in.
+                        type: str
+                        example: "AUD"
+                    hotel_data:
+                        description: parameters to search for 1 or more hotels
                         type: object
                         required:
-                            - data_source
-                            - pcc
-                            - provider
+                            - hotels
+                            - traveller_total
+                            - rooms_total
+                            - rooms
                         properties:
-                            data_source:
-                                description: data source to call.
+                            hotels:
+                                description: parameters for each hotel search
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - id
+                                        - hotel_location
+                                        - check_in_date
+                                        - check_out_date
+                                        - hotel_itinerary_reference
+                                    properties:
+                                        id:
+                                            description: matching id from the flight id for the msdp package
+                                            type: int
+                                            example: 1
+                                        hotel_location:
+                                            $ref: "#/components/schemas/SearchComponents/Hotel/HotelLocation"
+                                        check_in_date:
+                                            type: string
+                                            format: date
+                                            description: "Date of check-in. format: YYYY-MM-DD."
+                                            example: "2023-06-20"
+                                        check_out_date:
+                                            type: string
+                                            format: date
+                                            description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                                            example: "2023-06-25"
+                                        next_result_reference:
+                                            $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
+                                        hotel_itinerary_reference:
+                                            $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
+                            traveller_total:
+                                description: Number of people that will be staying at the hotel.
+                                type: int
+                                example: 3
+                            rooms_total:
+                                description: The number of rooms required for the above travellers.
+                                type: int
+                                example: 2
+                            rooms:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelRooms"
+                    flight_data:
+                        description: parameters to search for 1 or more flights
+                        type: object
+                        required:
+                            - flights
+                            - travellers
+                        properties:
+                            flights:
+                                $ref: "#/components/schemas/SearchComponents/Flight/Flights"
+                            travellers:
+                                description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
+                                required: true
+                                type: array
+                                example: [ 'ADT', 'ADT', 'CHD' ]
+                            max_cache:
+                                default: 24
+                                description: |
+                                    Hours to retain data queried from provider to be cached for use in future requests.
+                                    Higher values result in:<br  />
+                                        1) faster queries as more data is available for re-use<br  />
+                                        2) lower look-to-book ratios from the GDS perspective which may lower costs<br  />
+                                        3) less accurate pricing data which may cause issues in AirPriceReq when ticketing.<br  />
+                                    Minimum value is 0.04 hours, maximum value is 720 hours.
+                                    Please discuss with your Trip Ninja Account Manager if you need
+                                    access to caching outside these limits.
+                                type: integer
+                            country_code:
+                                description: "Country code where search came from (For example: CA, US)"
+                                example: "CA"
                                 type: string
-                                enum: [ "amadeus", "travelport" ]
-                                example: "amadeus"
-                            pcc:
-                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                            cabin_class:
+                                default: "E"
+                                description: "Parameter toggles the permitted cabin class for your query. Alternatively, it can be set for each segment."
+                                example: "E"
                                 type: string
-                                example: "MEL49f839"
-                            provider:
-                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                            time_value:
+                                default: 0
+                                description: |
+                                    This parameter helps set the value of a passenger’s time, in
+                                    terms of the currency selected. It is used to trade off flight
+                                    prices versus flight durations. The parameter is in units of
+                                    [currency]/hour. Flight durations are calculated as the difference
+                                    in minutes from the arrival time of the last flight in a leg to
+                                    the departure time of the first flight in the leg.
+                                    
+                                    True Cost of Flight = [Flight Price] * [time_value/60] * [Flight Duration]
+                                    
+                                    The itinerary which provides the lowest True Cost of Flight is
+                                    what is returned in the response. If you provide a time_value
+                                    of 0 or do not provide the parameter, it will sort by price.
+                                type: integer
+                            alliance:
+                                description: Parameter toggles the preferred alliance for your query. If there are results containing flights from the given alliance, only flights from that alliance will be returned. Otherwise it will return flights from any alliance. *Travelport Only*
                                 type: string
-                                example: "1A"
+                                example: "*A"
+                            schema:
+                                default: 40
+                                description: Toggles which Travelport schema version to use. *Travelport Only*
+                                type: integer
+                            exclude_carriers:
+                                description: Parameter toggles a list of carriers to exclude from the query results. This option can not be applied together with the alliance option. They are mutually exclusive.
+                                type: array
+                                example: [ "AC" ]
+                                items:
+                                    type: string
+                            permitted_carriers:
+                                description: Toggles permitted carriers in GDS request
+                                required: false
+                                type: array
+                                example: [ "AC" ]
+                            no_overnight_layovers:
+                                description: Toggles whether to return results with no overnight layovers *Travelport Only*
+                                type: boolean
+                                default: false
+                            stops:
+                                description: Toggles number of stop for GDS request *Travelport Only*
+                                default: "any"
+                                type: string
+                                enum: [ "any", "direct", "1", "2" ]
+                            baggage:
+                                description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
+                                default: "any"
+                                type: string
+                                enum: [ "any", "1", "2" ]
+                            refundable:
+                                description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
+                                default: false
+                                type: boolean
                             region:
-                                description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
+                                description: Parameter toggles which travelport endpoint you hit *Travelport Only*
+                                default: "americas"
                                 type: string
-                                example: "americas"
-                            itx:
-                                description: toggles if this is an itx search
-                                type: bool
-                                example: true
-                            pcc_currency:
-                                description: Indicates the currency that the PCC is charged in.
-                                type: string
-                                example: "CAD"
-                            conversion_rate:
-                                description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
-                                type: float
-                                example: 0.78
-                should_include_hotel_results:
-                    description: When set to true, hotel results will also be included in the response. The default of this field is true.
-                    default: true
-                    type: boolean
-                    example: false
-
-        MSDPSearchResponse:
-            properties:
-                flight_results:
-                    description: Consists of all the flight results
-                    type: object
-                    properties:
-                        fare_structure:
-                            type: object
-                            description: Contains the JSON object of the response.
-                            properties:
-                                currency:
+                                enum: [ "emea", "apac", "americas" ]
+                            num_results:
+                                description: Parameter sets the number of segments in the response *Travelport Only*
+                                default: 50
+                                type: integer
+                                minimum: 50
+                                maximum: 5000
+                            include_lcc:
+                                description: Enable a hybrid search of both GDS and low cost carrier content. This requires prior setup with Trip Ninja and an agreement with an LCC provider.
+                                default: [ ]
+                                required: false
+                                type: array
+                                example: [ "travelport" ]
+                                items:
                                     type: string
-                                    description: Currency
-                                    example: CAD
-                                markup:
+                            include_itineraries:
+                                description: Enables itineraries to be constructed and returned from segments found for the requested trip.
+                                default: false
+                                type: boolean
+                            should_compress_itinerary:
+                                description: Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
+                                default: false
+                                type: boolean
+                            mix_structures:
+                                description: Return mix of results with the best multi-pnr structure and single-pnr structure.
+                                default: false
+                                type: boolean
+                            single_pnr:
+                                description: Return single-pnr structures in addition to the results returned. If there are too many results, it will be truncated to num_results.
+                                default: false
+                                type: boolean
+                            multi_pnr_mix:
+                                description: Return mix of single-pnr and all multi-pnr structures. include_itineraries and mix_structures needs to be passed as True for this to work
+                                default: false
+                                type: boolean
+                            markup_by_itinerary:
+                                description: Add itinerary markup to the search result and set trip markup to 0
+                                default: false
+                                type: boolean
+                    credentials:
+                        type: array
+                        description: Indicate data source to call and required credentials
+                        items:
+                            type: object
+                            required:
+                                - data_source
+                                - pcc
+                                - provider
+                            properties:
+                                data_source:
+                                    description: data source to call.
+                                    type: string
+                                    enum: [ "amadeus", "travelport" ]
+                                    example: "amadeus"
+                                pcc:
+                                    description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                                    type: string
+                                    example: "MEL49f839"
+                                provider:
+                                    description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                    type: string
+                                    example: "1A"
+                                region:
+                                    description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
+                                    type: string
+                                    example: "americas"
+                                itx:
+                                    description: toggles if this is an itx search
+                                    type: bool
+                                    example: true
+                                pcc_currency:
+                                    description: Indicates the currency that the PCC is charged in.
+                                    type: string
+                                    example: "CAD"
+                                conversion_rate:
+                                    description: The conversion rate that was used to convert from the pcc_currency to the searched currency. In order to convery back to the pcc currency simply use price * (1 / conversion_rate).
                                     type: float
-                                    description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
-                                    example: 25.0
-                                path_sequence:
-                                    type: array
-                                    description: An array of IATA codes representing the chronological order of your trip.
-                                    example: [ 'LON-CDG', 'CDG-YUL', 'YUL-LON' ]
-                                trip_id:
-                                    type: string
-                                    description: A unique key used for identification and when booking a trip.
-                                itineraries:
-                                    $ref: "#/components/schemas/SearchComponents/Flight/FareStructureSearchItineraries"
-                                segments:
-                                    $ref: "#/components/schemas/SearchComponents/Flight/TripSegments"
-                                flight_details:
-                                    $ref: "#/components/schemas/SearchComponents/Flight/FlightDetails"
-                hotel_results:
-                    description: Consists of all the hotel results
-                    type: object
-                    properties:
-                        hotel_{flight_id}_response:
-                            description: The hotel response that correlates to the a specific flight's ID when searching. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
-                            type: object
-                            properties:
-                                hotel_trace_id:
-                                    description: An identifier to refer to the hotel for searching room availability
-                                    type: string
-                                    example: "ndsf6sjf6sdf7sdf6"
-                                hotels:
-                                    description: A list of hotels available based on the search request details.
-                                    type: array
-                                    items:
-                                        type: object
-                                        properties:
-                                            location_iata:
-                                                description: The location of the hotel.
-                                                type: string
-                                                example: 'LON'
-                                            location_full:
-                                                description: The full location name as provided by the GDS.
-                                                type: string
-                                                example: "London, England"
-                                            rating:
-                                                type: object
-                                                properties:
-                                                    rating:
-                                                        description: The hotel rating
-                                                        type: int
-                                                        example: 4
-                                                    rating_provider:
-                                                        description: The provider of the rating.
-                                                        type: string
-                                                        example: "Giata"
-                                                    rating_maximum:
-                                                        description: The best possible rating.
-                                                        type: int
-                                                        example: 10
-                                                    rating_minimum:
-                                                        description: The worst possible rating.
-                                                        type: int
-                                                        example: 0
-                                            hotel_chain:
-                                                description: The refence for the hotel chain.
-                                                type: string
-                                                example: "GI"
-                                            hotel_code:
-                                                description: The reference for the hotel code
-                                                type: string
-                                                example: "35573"
-                                            hotel_name:
-                                                description: The name of the hotel
-                                                type: string
-                                                example: "Cambridge Suites Hotel Halifax"
-                                            minimum_charge:
-                                                description: The minimun total for the requested search available (in the currency provided in the search request)
-                                                type: float
-                                                example: 400.32
-                                            maximum_charge:
-                                                description: The maximum total priced room option available (in the currency provided in the search request)
-                                                type: float
-                                                example: 780.65
-                                            address:
-                                                type: object
-                                                properties:
-                                                    street_address:
-                                                        description: The street address of the hotel.
-                                                        type: string
-                                                        example: "1583 Brunswick St, Halifax, NS B3J 3P5"
-                                                    longitude:
-                                                        description: The longitude of the hotel.
-                                                        type: float
-                                                        example: 44.64511447836071
-                                                    lattitude:
-                                                        description: The lattitude of the hotel.
-                                                        type: float
-                                                        example: -63.575245615440565
-                                                    distance_from_reference_point_km:
-                                                        description: The distance that the hotel is from the reference submitted in the search.
-                                                        type: float
-                                                        example: 7.5
-                                                    phone_number:
-                                                        type: str
-                                                        description: The contact phone number for the hotel.
-                                                        example: "+1 902-420-0555"
-                                            ammenities:
-                                                type: array
-                                                description: A list of the amenities provided at this hotel.
-                                                items:
+                                    example: 0.78
+                    should_include_hotel_results:
+                        description: When set to true, hotel results will also be included in the response. The default of this field is true.
+                        default: true
+                        type: boolean
+                        example: false
+
+        Responses:
+            MSDPSearchResponse:
+                properties:
+                    flight_results:
+                        description: Consists of all the flight results
+                        type: object
+                        properties:
+                            fare_structure:
+                                $ref: "#/components/schemas/SearchComponents/Flight/FareStructure"
+                    hotel_results:
+                        description: Consists of all the hotel results
+                        type: object
+                        properties:
+                            hotel_{flight_id}_response:
+                                description: The hotel response that correlates to the a specific flight's ID when searching. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
+                                type: object
+                                properties:
+                                    hotel_trace_id:
+                                        description: An identifier to refer to the hotel for searching room availability
+                                        type: string
+                                        example: "ndsf6sjf6sdf7sdf6"
+                                    hotels:
+                                        description: A list of hotels available based on the search request details.
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                location_iata:
+                                                    description: The location of the hotel.
+                                                    type: string
+                                                    example: 'LON'
+                                                location_full:
+                                                    description: The full location name as provided by the GDS.
+                                                    type: string
+                                                    example: "London, England"
+                                                rating:
                                                     type: object
                                                     properties:
-                                                        amenity_type:
+                                                        rating:
+                                                            description: The hotel rating
+                                                            type: int
+                                                            example: 4
+                                                        rating_provider:
+                                                            description: The provider of the rating.
                                                             type: string
-                                                            description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
-                                                            example: "HA"
-                                                        amenity_title:
-                                                            type: string
-                                                            description: A title or descriptor of the amenity provided.
-                                                            example: High speed internet connection
-                                            credential_info:
-                                                $ref: "#/components/schemas/SearchComponents/Credentials"
-                                            conversion_rate:
-                                                description: The conversion rate to get the price in the currency requested.
-                                                type: float
-                                                example: 0.45
-                                            neighbourhood:
-                                                description: The neighbourhood or locality of the hotel.
-                                                type: string
-                                                example: Saint Boniface
-                                hotel_itinerary_reference:
-                                    $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
-                                next_result_reference:
-                                    $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
-                                hotels_media:
-                                    description: "A list of media items for all the hotels returned in the search."
-                                    type: array
-                                    items:
-                                        type: object
-                                        properties:
-                                            hotel_chain:
-                                                description: The refence for the hotel chain.
-                                                type: string
-                                                example: "GI"
-                                            hotel_code:
-                                                description: The reference for the hotel code
-                                                type: string
-                                                example: "35573"
-                                            hotel_media_items:
-                                                description: A selection of media items for the above referenced hotel.
-                                                type: array
-                                                items:
+                                                            example: "Giata"
+                                                        rating_maximum:
+                                                            description: The best possible rating.
+                                                            type: int
+                                                            example: 10
+                                                        rating_minimum:
+                                                            description: The worst possible rating.
+                                                            type: int
+                                                            example: 0
+                                                hotel_chain:
+                                                    description: The refence for the hotel chain.
+                                                    type: string
+                                                    example: "GI"
+                                                hotel_code:
+                                                    description: The reference for the hotel code
+                                                    type: string
+                                                    example: "35573"
+                                                hotel_name:
+                                                    description: The name of the hotel
+                                                    type: string
+                                                    example: "Cambridge Suites Hotel Halifax"
+                                                minimum_charge:
+                                                    description: The minimun total for the requested search available (in the currency provided in the search request)
+                                                    type: float
+                                                    example: 400.32
+                                                maximum_charge:
+                                                    description: The maximum total priced room option available (in the currency provided in the search request)
+                                                    type: float
+                                                    example: 780.65
+                                                address:
                                                     type: object
                                                     properties:
-                                                        title:
-                                                            description: The title / descriptor of the photos contained in this media item.
+                                                        street_address:
+                                                            description: The street address of the hotel.
                                                             type: string
-                                                            example: "Front desk."
-                                                        large:
-                                                            description: The url for the image of the above titled part of the hotel of size large.
-                                                            type: string
-                                                            example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                                        thumbnail:
-                                                            description: The url for the image of the above titled part of the hotel of size thumbnail.
-                                                            type: string
-                                                            example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                hotel_neighbourhoods:
-                                    description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
-                                    type: array of strings
-                                    example: [ "St. Vital Center", "Downtown", "River Heights", "Saint Boniface", "Fort Garry" ]
-                total_trip_price:
-                    description: Total trip price with the cheapest flights and hotels combined
-                    type: float
-                    example: 123.23
-                msdp_package_id:
-                    description: A unique identifier for each msdp search
-                    type: string
+                                                            example: "1583 Brunswick St, Halifax, NS B3J 3P5"
+                                                        longitude:
+                                                            description: The longitude of the hotel.
+                                                            type: float
+                                                            example: 44.64511447836071
+                                                        lattitude:
+                                                            description: The lattitude of the hotel.
+                                                            type: float
+                                                            example: -63.575245615440565
+                                                        distance_from_reference_point_km:
+                                                            description: The distance that the hotel is from the reference submitted in the search.
+                                                            type: float
+                                                            example: 7.5
+                                                        phone_number:
+                                                            type: str
+                                                            description: The contact phone number for the hotel.
+                                                            example: "+1 902-420-0555"
+                                                ammenities:
+                                                    type: array
+                                                    description: A list of the amenities provided at this hotel.
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            amenity_type:
+                                                                type: string
+                                                                description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
+                                                                example: "HA"
+                                                            amenity_title:
+                                                                type: string
+                                                                description: A title or descriptor of the amenity provided.
+                                                                example: High speed internet connection
+                                                credential_info:
+                                                    $ref: "#/components/schemas/SearchComponents/Credentials"
+                                                conversion_rate:
+                                                    description: The conversion rate to get the price in the currency requested.
+                                                    type: float
+                                                    example: 0.45
+                                                neighbourhood:
+                                                    description: The neighbourhood or locality of the hotel.
+                                                    type: string
+                                                    example: Saint Boniface
+                                    hotel_itinerary_reference:
+                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
+                                    next_result_reference:
+                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
+                                    hotels_media:
+                                        description: "A list of media items for all the hotels returned in the search."
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                hotel_chain:
+                                                    description: The refence for the hotel chain.
+                                                    type: string
+                                                    example: "GI"
+                                                hotel_code:
+                                                    description: The reference for the hotel code
+                                                    type: string
+                                                    example: "35573"
+                                                hotel_media_items:
+                                                    description: A selection of media items for the above referenced hotel.
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            title:
+                                                                description: The title / descriptor of the photos contained in this media item.
+                                                                type: string
+                                                                example: "Front desk."
+                                                            large:
+                                                                description: The url for the image of the above titled part of the hotel of size large.
+                                                                type: string
+                                                                example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                                            thumbnail:
+                                                                description: The url for the image of the above titled part of the hotel of size thumbnail.
+                                                                type: string
+                                                                example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                    hotel_neighbourhoods:
+                                        description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
+                                        type: array of strings
+                                        example: [ "St. Vital Center", "Downtown", "River Heights", "Saint Boniface", "Fort Garry" ]
+                    total_trip_price:
+                        description: Total trip price with the cheapest flights and hotels combined
+                        type: float
+                        example: 123.23
+                    msdp_package_id:
+                        description: A unique identifier for each msdp search
+                        type: string
+
+
+            MSDPGetFlightResultsResponse:
+                description: Consists of all the flight results
+                type: object
+                properties:
+                    fare_structure:
+                        $ref: "#/components/schemas/SearchComponents/Flight/FareStructure"
+
 
         SearchComponents:
             Hotel:
@@ -640,6 +734,31 @@ components:
                     example: "1"
 
             Flight:
+                FareStructure:
+                    type: object
+                    description: Contains the JSON object of the response.
+                    properties:
+                        currency:
+                            type: string
+                            description: Currency
+                            example: CAD
+                        markup:
+                            type: float
+                            description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+                            example: 25.0
+                        path_sequence:
+                            type: array
+                            description: An array of IATA codes representing the chronological order of your trip.
+                            example: [ 'LON-CDG', 'CDG-YUL', 'YUL-LON' ]
+                        trip_id:
+                            type: string
+                            description: A unique key used for identification and when booking a trip.
+                        itineraries:
+                            $ref: "#/components/schemas/SearchComponents/Flight/FareStructureSearchItineraries"
+                        segments:
+                            $ref: "#/components/schemas/SearchComponents/Flight/TripSegments"
+                        flight_details:
+                            $ref: "#/components/schemas/SearchComponents/Flight/FlightDetails"
                 Flights:
                     description: parameters for each flight search
                     type: array
@@ -1500,3 +1619,4 @@ components:
                         description: Indicates the currency that the PCC is charged in.
                         type: string
                         example: "CAD"
+
