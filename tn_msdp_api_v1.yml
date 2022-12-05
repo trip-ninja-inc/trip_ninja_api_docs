@@ -1506,9 +1506,62 @@ components:
                             description: When will the cancel penality apply at
                             example: "Anytime"
 
+                FareInfoBrandDetails:
+                    type: object
+                    description: Contains brand information for the fare
+                    properties:
+                        name:
+                            type: string
+                            description: Name of the brand
+                            example: "STANDARD"
+                        brand_description:
+                            type: string
+                            description: Description of the brand
+                            example: "Standard: Carry on baggage only"
+                        tag_line:
+                            type: string
+                            description: Tag line of the brand
+                            example: "Low Fares for Carefee Travel"
+                        brand_services:
+                            type: object
+                            description: Contains information of what the brand offers
+                            properties:
+                                carry_on_hand_baggage:
+                                    type: boolean or string
+                                    description: Are carry on bags permittied on this ticket. True/False or "$"
+                                    example: true
+                                checked_baggage:
+                                    type: boolean or string
+                                    description: Are checked bags permittied on this ticket. True/False or "$"
+                                    example: true
+                                rebooking:
+                                    type: string
+                                    description: Rebooking available on this ticket.
+                                    example: $
+                                refund:
+                                    type: boolean
+                                    description: Refundability of the ticket.
+                                    example: true
+                                seat_assignment:
+                                    type: string
+                                    description: Seat assignment availability on this ticket.
+                                    example: $
+                                meals_and_beverages:
+                                    type: boolean
+                                    description: Are meals and beverages provided as part of this ticket.
+                                    example: true
+                                wifi:
+                                    type: string
+                                    description: Wifi availability on the flight.
+                                    example: $
+                        tier:
+                            type: string
+                            description: Brand tier
+                            example: "0002"
+
                 BrandFareInfo:
-                    description: Contains fare info for the brand
                     type: array
+                    description: Contains fare info for the brand
                     items:
                         type: object
                         properties:
@@ -1533,58 +1586,7 @@ components:
                                 type: string
                                 example: "E"
                             brand:
-                                description: Contains brand information for the fare
-                                type: object
-                                properties:
-                                    name:
-                                        description: Name of the brand
-                                        type: string
-                                        example: "STANDARD"
-                                    brand_description:
-                                        description: Description of the brand
-                                        type: string
-                                        example: "Standard: Carry on baggage only"
-                                    tag_line:
-                                        description: Tag line of the brand
-                                        type: string
-                                        example: "Low Fares for Carefee Travel"
-                                    brand_services:
-                                        description: Contains information of what the brand offers
-                                        type: object
-                                        properties:
-                                            carry_on_hand_baggage:
-                                                description: Are carry on bags permittied on this ticket. True/False or "$"
-                                                type: boolean or string
-                                                example: "true"
-                                            checked_baggage:
-                                                description: Are checked bags permittied on this ticket. True/False or "$"
-                                                type: boolean or string
-                                                example: true
-                                            rebooking:
-                                                description: Rebooking available on this ticket.
-                                                type: string
-                                                example: $
-                                            refund:
-                                                description: Refundability of the ticket.
-                                                type: boolean
-                                                example: true
-                                            seat_assignment:
-                                                description: Seat assignment availability on this ticket.
-                                                type: string
-                                                example: $
-                                            meals_and_beverages:
-                                                description: Are meals and beverages provided as part of this ticket.
-                                                type: boolean
-                                                example: true
-                                            wifi:
-                                                description: Wifi availability on the flight.
-                                                type: string
-                                                example: $
-                                    tier:
-                                        description: Brand tier
-                                        type: string
-                                        example: "0002"
-
+                                $ref: "#/components/schemas/SearchComponents/Flight/FareInfoBrandDetails"
                 Brands:
                     type: array
                     description: List of branded fares for the current segment
