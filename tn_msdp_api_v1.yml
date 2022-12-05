@@ -173,6 +173,118 @@ paths:
                 500:
                     description: Server Error
 
+    /results/hotels/?hotel_trace_id={hotel_trace_id}&rating={rating}&area={area}&min_price={min_price}&max_price={max_price}&min_distance={min_distance}&max_distance={max_distance}&hotel_chain={hotel_chain}&amenities={amenities}&sort_by={sort_by}:
+        get:
+            parameters:
+                -   in: path
+                    name: hotel_trace_id
+                    required: true
+                    schema:
+                        type: string
+                        example: bdf876sf6sfsdf87sdf
+                    description: Parameter to retrieve the hotel results
+                -   in: path
+                    name: rating
+                    schema:
+                        type: array of strings or string
+                        example: 1
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: area
+                    schema:
+                        type: array of strings or string
+                        example: Bedford
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: min_price
+                    schema:
+                        type: string
+                        example: 100
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: max_price
+                    schema:
+                        type: string
+                        example: 1000
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: min_distance
+                    schema:
+                        type: string
+                        example: 10
+                    description: Parameter to filter the hotel results (in km)
+                -   in: path
+                    name: max_distance
+                    schema:
+                        type: string
+                        example: 100
+                    description: Parameter to filter the hotel results (in km)
+                -   in: path
+                    name: hotel_chain
+                    schema:
+                        type: array of strings or string
+                        example: WA
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: amenities
+                    schema:
+                        type: array of strings or string
+                        example: Air Conditioner,Wifi
+                    description: Parameter to filter the hotel results
+                -   in: path
+                    name: sort_by
+                    schema:
+                        type: string
+                        example: price_low_to_high
+                    description: |
+                        Parameter to filter the hotel results<br />
+                        Available Options:<br />
+                            `closest`<br />
+                            `price_low_to_high`<br />
+                            `price_high_to_low`<br />
+                            `rating_high_to_low`<br />
+                            `rating_low_to_high`<br />
+            summary: "MSDP Get Hotel Results"
+            description: |
+                This endpoint retrieves the hotel results from the prior msdp search
+                Example URL: `/results/hotels/?hotel_trace_id=bdf876sf6sfsdf87sdf&rating=1,2,3&area=Bedford,Dartmouth&min_price=100&max_price=1000&min_distance=2&max_distance=50&hotel_chain=WA&amenities=Air Conditioning,Wifi&sort_by=closest`
+            operationId: Get Hotel Results
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Responses/MSDPSearchResponse/properties/hotel_results/properties/hotel_{flight_id}_response"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "hotel_trace_id is not found"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE44"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                500:
+                    description: Server Error
+
     /msdp/search/removehotel/hotel_trace_id={hotel_trace_id}:
         patch:
             parameters:
