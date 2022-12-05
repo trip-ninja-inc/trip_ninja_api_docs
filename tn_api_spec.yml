@@ -19,6 +19,15 @@ info:
         - IP addresses have been provided to be whitelisted for our servers.<br  />
         - PCC / OfficeID emulation via Trip Ninja’s PCC/OfficeID has been set up.<br  />
         - API username and password have been provided by Trip Ninja.<br  />
+    
+    <h2>FareStructure</h2>
+    The FareStructure product returns the set of best GDS responses that create the specified route. It finds the best fare structure via
+    split ticketing and does not reorder the destinations. Each of the returned segments must be ticketed in its own PNR. <br><br>The “structure” seen in the
+    FareStructure response determines how you will carry out price confirmation as well as PNR creation. We starting counting flights at 0. 
+    For example if structure is [[0, 2] , 1], this implies flight 0 and flight 2 are to be priced/ticketed together as one openjaw.
+    Flight 1 should be priced as a oneway. [1, 2, 3] would be 3 separate oneways to be priced/ticketed individually.
+    [[0, 1], [2, 3]] would be two openjaws, flight 0 and flight 1 priced/ticketed together as one openjaw and flights
+    2 and 3 ticketed together as one openjaw.
 
     <h2>Workflow</h2>
     The following diagram shows the typical data flow of API calls to Trip Ninja for a FareStructure integration with both a partner website
@@ -71,7 +80,7 @@ info:
       <tr><td>IE33</td><td>Stops must be one of 'any', 'direct', '1', '2'</td></tr>
       <tr><td>IE34</td><td>Incorrect value for no_overnight_layovers, must be boolean</td></tr>
       <tr><td>IE36</td><td>Invalid LCC name</td></tr>
-    <table>
+     <table>
 
   x-logo:
     url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png'
@@ -83,91 +92,7 @@ servers:
     description: Pre-Production server
 
 paths:
-    /fare-structure-prod/:
-        post:
-            summary: "FareStructure"
-            description: |
-              The FareStructure product returns the set of best GDS responses that create the specified route. It finds the best fare structure via
-              split ticketing and does not reorder the destinations. Each of the returned segments must be ticketed in its own PNR. <br><br>The “structure” seen in the
-              FareStructure response determines how you will carry out price confirmation as well as PNR creation. We starting counting flights at 0.
-              For example: if structure is [[0, 2] , 1], this implies flight 0 and flight 2 are to be priced/ticketed together as one openjaw.
-              Flight 1 should be priced as a oneway. [1, 2, 3] would be 3 separate oneways to be priced/ticketed individually.
-              [[0, 1], [2, 3]] would be two openjaws, flight 0 and flight 1 priced/ticketed together as one openjaw and flights
-              2 and 3 ticketed together as one openjaw.
-
-              Please note that the "total_cost" field and "price" fields in the response do not contain the markup amount. The "total_cost" field is only to display the cheapest trip in the results.
-              The "price" fields displayed at the itinerary or segment level do not include the markup amount either. When displaying the trip costs using "include_itineraries" = true, use the
-              "price" at the itinerary level plus the "tn_net_fare_markup" amount. If using the segment response type, add the "price" value for each of the segments chosen for the trip plus the "tn_net_fare_markup"
-              amount to get the total trip price.
-
-            operationId: FareStructure
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/FareStructureRequest'
-
-            responses:
-                200:
-                    description: Success
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/FareStructureResponse'
-                400:
-                    description: Invalid Input
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    trip:
-                                        type: object
-                                        description: Trip Request Object
-                                    FareStructure:
-                                        type: object
-                                        description: Contains the JSON object provided as the response
-                                        properties:
-                                            ErrorDetails:
-                                                type: object
-                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
-                                                properties:
-                                                    IE01:
-                                                        type: string
-                                                        example: General ordered input error
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                        error:
-                                            type: string
-                                            description: Error Code
-                                            example: "user is not authorized"
-                206:
-                    description: Partial Content (Flight not found)
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    trip:
-                                        type: object
-                                        description: Contains the JSON object provided as the request
-                                    FareStructure:
-                                        type: object
-                                        description: Contains the JSON object provided as the response
-                                        properties:
-                                            ErrorDetails:
-                                                type: object
-                                                description: Usually an empty string, but will contain a helpful message if something goes wrong! Listed inside are the possible input error codes that can occur.
-                                                example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
-                500:
-                    description: Server Error
-
-    /search/{endpoint}/:
+    /search/flights/{endpoint}/:
         post:
             parameters:
                 - in: path
@@ -177,16 +102,21 @@ paths:
                     type: string
                     enum: [preprod, prod]
                   description: Parameter toggles Data Source production and pre-production endpoints
-            summary: "Search"
+            summary: "Flight Search"
             description: |
-              This endpoint triggers farestrucutre for any number of city search
+              This endpoint triggers FareStructure for any number of city search
 
-            operationId: Search
+              Please note that the "total_cost" field and "price" fields in the response do not contain the markup amount. The "total_cost" field is only to display the cheapest trip in the results.
+              The "price" fields displayed at the itinerary or segment level do not include the markup amount either. When displaying the trip costs using "include_itineraries" = true, use the
+              "price" at the itinerary level plus the "tn_net_fare_markup" amount. If using the segment response type, add the "price" value for each of the segments chosen for the trip plus the "tn_net_fare_markup"
+              amount to get the total trip price.
+
+            operationId: Flight Search
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/FareStructureRequest'
+                            $ref: '#/components/schemas/FlightSearchRequest'
 
             responses:
                 200:
@@ -194,7 +124,11 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/FSSearchResponse'
+                              oneOf:
+                                - $ref: '#/components/schemas/SegmentFSSearchResponse'
+                                - $ref: '#/components/schemas/SegmentFSSearchResponseWithFlexTrip'
+                                - $ref: '#/components/schemas/ItineraryFSSearchResponse'
+                                - $ref: '#/components/schemas/ItineraryFsSerachResposneWithFlexTrip'
                 400:
                     description: Invalid Input
                     content:
@@ -243,116 +177,12 @@ paths:
                 500:
                     description: Server Error
 
-    /flex-trip-prod/:
-        post:
-            summary: "FlexTrip"
-            description: |
-                FlexTrip allows users to express their trip parameters without having to pre-specify a route, they simply state the number of nights in
-                each destination, any destinations that must be visited first or last, and search for the best route. The response contains the best
-                route found that satisfies their input parameters.
-            operationId: FlexTrip
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/FlexTripRequest'
-
-            responses:
-                200:
-                    description: Success
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/FlexTripSearchResponse'
-                400:
-                    description: Invalid Input
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    trip:
-                                        type: object
-                                        description: Contains the JSON object provided as the request
-                                    FlexTrip:
-                                        type: object
-                                        description: Contains the JSON object of the response.
-                                        properties:
-                                            ErrorDetails:
-                                                type: object
-                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
-                                                properties:
-                                                    IE11:
-                                                        type: string
-                                                        description: An example error code, refer to the error codes section for further details.
-                                                        example: General Input Error.
-                                                    IE24:
-                                                        type: string
-                                                        description: An example error code, refer to the error codes section for further details.
-                                                        example: Too many or too few travellers found.
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                        error:
-                                            type: string
-                                            description: Error Code
-                                            example: "user is not authorized"
-                206:
-                    description: Partial Content (Flight not found)
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    FlexTrip:
-                                        type: object
-                                        description: Contains the JSON object of the response.
-                                        properties:
-                                            best_path:
-                                                type: array
-                                                description:
-                                                example: []
-                                            total_cost:
-                                                type: float
-                                                description: Total cost of cheapest segments recommended, in currency specified.
-                                                example: 0
-                                            segments:
-                                                type: object
-                                                description: List of segments in the itinerary
-                                                example: {}
-                                            ErrorDetails:
-                                                type: object
-                                                description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
-                                                properties:
-                                                    CE01:
-                                                        type: string
-                                                        example: Failed to find flights
-                                            path_sequence:
-                                                type: array
-                                                description: An array of IATA codes representing the chronological order of your trip.
-                                                example: []
-                                            structure:
-                                                type: array
-                                                description:
-                                                example: [0, -2]
-                                    trip:
-                                        type: object
-                                        description: Contains the JSON object provided as the request.
-                500:
-                    description: Server Error
-
-
-
     /pre-booking/:
             post:
                 summary: "Price Confirmation Report"
-                description: "When performing an availability or price confirmation request - when a user has selected their flights or is arriving on the site from
-    metasearch - please send a request to the following endpoint. This provides valuable data to our revenue management system in
-    determining markups for trips."
+                description: "When performing an availability or price confirmation request - when a user has selected their flights or is arriving on the site from 
+                metasearch - please send a request to the following endpoint. This provides valuable data to our revenue management system in
+                determining markups for trips."
                 operationId: "PriceConfirmationReport"
                 requestBody:
                     content:
@@ -381,7 +211,6 @@ paths:
                                                 type: string
                                                 description: States whether request to book was successful.
                                                 example: Not booked
-
 
     /booking/:
           post:
@@ -449,6 +278,7 @@ paths:
                                                 type: string
                                                 description: States whether request to book was successful.
                                                 example: Not booked
+    
     /cancel/:
             post:
                 summary: "Cancel Booking Report"
@@ -486,35 +316,96 @@ paths:
 
 components:
   schemas:
-    FSSearchResponse:
-      title: Response
+
+    ItinerarySearchResponse:
+        title: Search Response
+        type: object
+        properties:
+          currency:
+            type: string
+            description: Currency
+            example: CAD
+          itineraries:
+              $ref: '#/components/schemas/FSSearchItineraries'
+          ErrorDetails:
+              $ref: '#/components/schemas/ErrorDetails'
+          trip_id:
+              type: string
+              description: A unique key used for identification and when booking a trip.
+          tn_net_fare_markup:
+              type: float
+              description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+              example: 25.0
+
+    SegmentSearchResponse:
+      title: Search Response
       type: object
       properties:
-        fare_structure:
-            type: object
-            description: Contains the JSON object of the response.
-            properties:
-                currency:
-                  type: string
-                  description: Currency
-                  example: CAD
-                markup:
-                    type: float
-                    description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
-                    example: 25.0
-                path_sequence:
-                    type: array
-                    description: An array of IATA codes representing the chronological order of your trip.
-                    example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
-                trip_id:
-                    type: string
-                    description: A unique key used for identification and when booking a trip.
-                itineraries:
-                    $ref: '#/components/schemas/FSSearchItineraries'
-                segments:
-                    $ref: '#/components/schemas/TripOptions'
-                flight_details:
-                    $ref: '#/components/schemas/FlightDetails'
+          currency:
+            type: string
+            description: Currency
+            example: CAD
+          markup:
+              type: float
+              description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
+              example: 25.0
+          path_sequence:
+              type: array
+              description: An array of IATA codes representing the chronological order of your trip.
+              example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
+          trip_id:
+              type: string
+              description: A unique key used for identification and when booking a trip.
+          segments:
+              $ref: '#/components/schemas/TripOptions'
+          flight_details:
+              $ref: '#/components/schemas/FlightDetails'
+
+    ItineraryFSSearchResponse:
+      title: include_itineraries = true and route_flexible = false
+      type: object
+      properties:
+          fare_structure:
+              $ref: '#/components/schemas/ItinerarySearchResponse'
+
+    ItineraryFlexTripSearchResponse:
+      title: Itinerary FlexTrip Search Response
+      type: object
+      properties:
+          flex_trip:
+              $ref: '#/components/schemas/ItinerarySearchResponse'
+
+    SegmentFSSearchResponse:
+      title: include_itineraries = false and route_flexible = false
+      type: object
+      properties:
+          fare_structure:
+              $ref: '#/components/schemas/SegmentSearchResponse'
+            
+    SegmentFlexTripSearchResponse:
+      title: Segment FlexTrip Search Response
+      type: object
+      properties:
+          flex_trip:
+              $ref: '#/components/schemas/SegmentSearchResponse'
+            
+    SegmentFSSearchResponseWithFlexTrip:
+      title: include_itineraries = false and route_flexible = true
+      type: object
+      properties:
+          fare_structure:
+              $ref: '#/components/schemas/SegmentFSSearchResponse'
+          flex_trip:
+              $ref: '#/components/schemas/SegmentFlexTripSearchResponse'
+
+    ItineraryFsSerachResposneWithFlexTrip:
+      title: include_itineraries = true and route_flexible = true
+      type: object
+      properties:
+          fare_structure:
+              $ref: '#/components/schemas/ItineraryFSSearchResponse'
+          flex_trip:
+              $ref: '#/components/schemas/ItineraryFlexTripSearchResponse'
 
     TripOptions:
       title: Trip Options
@@ -961,115 +852,7 @@ components:
                     type: array
                     description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
                 ErrorDetails:
-                    description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
-                    type: object
-                    properties:
-                        IE01:
-                            type: string
-                            description: Need minimum 2 destinations
-                        IE02:
-                            type: string
-                            description: Duplicate city in list
-                        IE03:
-                            type: string
-                            description: Home city in cities list
-                        IE04:
-                            type: string
-                            description: There are non-compliant IATA codes in your city list
-                        IE05:
-                            type: string
-                            description: Multiple lockfirst found
-                        IE06:
-                            type: string
-                            description: Multiple locklast found
-                        IE07:
-                            type: string
-                            description: Incorrect item provided for "locked" (must be “Lock Last”, Lock First” or “None”)
-                        IE08:
-                            type: string
-                            description: Zero nights found for some city/cities
-                        IE09:
-                            type: string
-                            description: Can't run any queries for flight dates in the past
-                        IE10:
-                            type: string
-                            description: Incorrect city_type value - expected one of ‘C’ or ‘A’
-                        IE11:
-                            type: string
-                            description: General Input Error (FlexTrip)
-                        IE13:
-                            type: string
-                            description: "Check the id's on your flights - should be in order starting from 1. For example: 1,2,3,4"
-                        IE14:
-                            type: string
-                            description: Make sure your departure_dates are in order
-                        IE15:
-                            type: string
-                            description: Each flight in flights must contain ‘to_city’, ‘from_city’ - to_city and from_city must be in the format of 3 character IATA code
-                        IE16:
-                            type: string
-                            description: Please provide a PCC
-                        IE17:
-                            type: string
-                            description: Invalid Carrier
-                        IE18:
-                            type: string
-                            description: Time Value (Original Alpha) outside of expected range [$0,$200]/hr
-                        IE19:
-                            type: string
-                            description: Incorrect region - expected one of ‘emea’,’apac’,’americas’
-                        IE20:
-                            type: string
-                            description: Incorrect provider - expected one of '1V','1G','1P','1A'
-                        IE21:
-                            type: string
-                            description: No currency input or currency input not 3 characters long (must be in the format USD, AUD, CAD, etc)
-                        IE22:
-                            type: string
-                            description: Not a valid cabin option - expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'
-                        IE23:
-                            type: string
-                            description: Not a valid alliance - expected one of *A, *S, *O
-                        IE24:
-                            type: string
-                            description: Too many or too few travellers found (must be 1 to 10) - or not a valid type for travellers, must be int or list
-                        IE25:
-                            type: string
-                            description: FlexTrip cannot contain gaps in from/to destination pairs
-                        IE26:
-                            type: string
-                            description: exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one
-                        IE27:
-                            type: string
-                            description: num_results should be an integer between 50 and 5000
-                        IE28:
-                            type: string
-                            description: refundable parameter must be a boolean value true or false
-                        IE29:
-                            type: string
-                            description: Invalid traveller type in list, should be one of ADT, CHD, MIL, INF
-                        IE30:
-                            type: string
-                            description: User not been mapped to any LCC
-                        IE31:
-                            type: string
-                            description: No LCC token associated with user
-                        IE32:
-                            type: string
-                            description: include_itineraries must be a boolean value (true or false)
-                        IE33:
-                            type: string
-                            description: stops must be one of “any”, “direct”, “1”, “2”
-                        IE34:
-                            type: string
-                            description: no_overnight_layovers must be a boolean value (true or false)
-                        IE35:
-                            type: string
-                            description: baggage must be one of “any”, “1”, “2”
-                        IE39:
-                            type: string
-                            description: |
-                                Provider missing, expected one of "1V, 1G, 1P, 1A, 1S"
+                    $ref: '#/components/schemas/ErrorDetails'
                 path_sequence:
                     type: array
                     description: An array of IATA codes representing the chronological order of your trip.
@@ -1086,6 +869,117 @@ components:
                     $ref: '#/components/schemas/Segments'
                 flight_details:
                     $ref: '#/components/schemas/FlightDetails'
+
+    ErrorDetails:
+        description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
+        type: object
+        properties:
+            IE01:
+                type: string
+                description: Need minimum 2 destinations
+            IE02:
+                type: string
+                description: Duplicate city in list
+            IE03:
+                type: string
+                description: Home city in cities list
+            IE04:
+                type: string
+                description: There are non-compliant IATA codes in your city list
+            IE05:
+                type: string
+                description: Multiple lockfirst found
+            IE06:
+                type: string
+                description: Multiple locklast found
+            IE07:
+                type: string
+                description: Incorrect item provided for "locked" (must be “Lock Last”, Lock First” or “None”)
+            IE08:
+                type: string
+                description: Zero nights found for some city/cities
+            IE09:
+                type: string
+                description: Can't run any queries for flight dates in the past
+            IE10:
+                type: string
+                description: Incorrect city_type value - expected one of ‘C’ or ‘A’
+            IE11:
+                type: string
+                description: General Input Error (FlexTrip)
+            IE13:
+                type: string
+                description: "Check the id's on your flights - should be in order starting from 1. For example: 1,2,3,4"
+            IE14:
+                type: string
+                description: Make sure your departure_dates are in order
+            IE15:
+                type: string
+                description: Each flight in flights must contain ‘to_city’, ‘from_city’ - to_city and from_city must be in the format of 3 character IATA code
+            IE16:
+                type: string
+                description: Please provide a PCC
+            IE17:
+                type: string
+                description: Invalid Carrier
+            IE18:
+                type: string
+                description: Time Value (Original Alpha) outside of expected range [$0,$200]/hr
+            IE19:
+                type: string
+                description: Incorrect region - expected one of ‘emea’,’apac’,’americas’
+            IE20:
+                type: string
+                description: Incorrect provider - expected one of '1V','1G','1P','1A'
+            IE21:
+                type: string
+                description: No currency input or currency input not 3 characters long (must be in the format USD, AUD, CAD, etc)
+            IE22:
+                type: string
+                description: Not a valid cabin option - expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'
+            IE23:
+                type: string
+                description: Not a valid alliance - expected one of *A, *S, *O
+            IE24:
+                type: string
+                description: Too many or too few travellers found (must be 1 to 10) - or not a valid type for travellers, must be int or list
+            IE25:
+                type: string
+                description: FlexTrip cannot contain gaps in from/to destination pairs
+            IE26:
+                type: string
+                description: exclude_carriers, alliance and permitted_carriers are mutually exclusive - please choose one
+            IE27:
+                type: string
+                description: num_results should be an integer between 50 and 5000
+            IE28:
+                type: string
+                description: refundable parameter must be a boolean value true or false
+            IE29:
+                type: string
+                description: Invalid traveller type in list, should be one of ADT, CHD, MIL, INF
+            IE30:
+                type: string
+                description: User not been mapped to any LCC
+            IE31:
+                type: string
+                description: No LCC token associated with user
+            IE32:
+                type: string
+                description: include_itineraries must be a boolean value (true or false)
+            IE33:
+                type: string
+                description: stops must be one of “any”, “direct”, “1”, “2”
+            IE34:
+                type: string
+                description: no_overnight_layovers must be a boolean value (true or false)
+            IE35:
+                type: string
+                description: baggage must be one of “any”, “1”, “2”
+            IE39:
+                type: string
+                description: |
+                    Provider missing, expected one of "1V, 1G, 1P, 1A, 1S"
 
     Itineraries:
         allOf:
@@ -1167,6 +1061,20 @@ components:
             type: integer
             description: Total transportation time for the itinerary
             example: 425
+          flight_numbers:
+            type: array
+            description: Array of flight numbers included in this itinerary
+            example : [
+                    "AC226",
+                    "AC850",
+                    "AC8811",
+                    "UA2278",
+                    "UA986"
+                ]
+            structure:
+                type: array
+                description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
+
 
     SegmentInfo:
         allOf:
@@ -1428,7 +1336,7 @@ components:
                 type: float
                 example: 0.78
 
-    FareStructureRequest:
+    FlightSearchRequest:
       title: Request
       type: object
       required:
@@ -1631,246 +1539,6 @@ components:
               description: Add itinerary markup to the search result and set trip markup to 0
               default: false
               type: boolean
-
-    FlexTripRequest:
-        title: Request
-        type: object
-        properties:
-            departure_city:
-                type: string
-                description: Departure city/airport IATA code.
-                example: YHZ
-            departure_city_type:
-                type: string
-                description: Upper-case letter “C” for city or “A” for airport
-                example: C
-            end_city:
-                type: string
-                default: departure_city
-                description: Used to return to a different city than the departure_city, if none specified will default to always returning to the departure_city.
-                example: LON
-            end_city_type:
-                type: string
-                description: Upper-case letter “C” for city or “A” for airport
-                example: C
-            departure_date:
-                type: string
-                description: "Departure date for trip<br  />Format: YYYY-MM-DD. Any trailing characters after do not affect the API’s functionality."
-                example: "2018-06-20"
-            travellers:
-                description: "Array of passenger types, values include ‘ADT’, ’MIL’, ’CHD’ and ‘INF’"
-                required: true
-                type: array
-                example: ['ADT','ADT','CHD']
-            cities:
-                type: array
-                description: List of elements containing the destination cities, nights, and locked status. Up to 7 destination cities can be listed.
-                items:
-                    type: object
-                    properties:
-                        city:
-                            type: string
-                            description: Destination city/airport IATA code.
-                            example: YHZ
-                        city_type:
-                            type: string
-                            description: Upper-case letter “C” for city or “A” for airport
-                            example: C
-                        nights:
-                            type: integer
-                            description: "Number of nights to spend in destination. The nights start counting from the arrival date to the destination, not the departure date of the previous flight.<br  />
-                            Example:<br  />
-                            Depart New York 2017-10-02 arrive London 2017-10-03, to stay 3 nights. Departure from London is 2017-10-06, not 2017-10-05."
-                        locked:
-                            type: string
-                            default: "None"
-                            description: |
-                                Option to lock a destination as the first or
-                                last to visit in the route. Maximum one destination
-                                can have the value of “Lock First” and maximum
-                                on destination can have the value of “Lock Last”.
-
-                                Example: Departing from New York to visit London,
-                                Berlin, and Paris and returning to New York. If
-                                Paris is labeled as “Lock First”, the itinerary
-                                returned will have New York-> Paris as the first
-                                leg and decide whether it is better to visit
-                                Berlin or London as the next destination.
-            provider:
-                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
-                type: string
-                example: 1V
-            PCC:
-                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
-                required: true
-                type: string
-                example: 2G3C
-            max_cache:
-                default: 24
-                description: "Hours to retain data queried from provider to be cached for use in future requests. Higher values result in: 1) faster queries as more data is available for re-use, 2) lower look-to-book ratios from the GDS perspective which may lower costs, and 3) less accurate pricing data which may cause issues in AirPriceReq when ticketing. Minimum value is 0.04 hours, maximum value is 720 hours. Please discuss with your Trip Ninja Account Manager if you need access to caching outside these limits."
-                required: false
-                type: integer
-            currency:
-                description: Currency to be used for provider query requests in three digit code.
-                example: USD
-                required: true
-                type: string
-            time_value:
-                default: 0
-                description: |
-                    This parameter helps set the value of a passenger’s time, in
-                    terms of the currency selected. It is used to trade off flight
-                    prices versus flight durations. The parameter is in units of
-                    [currency]/hour. Flight durations are calculated as the difference
-                    in minutes from the arrival time of the last flight in a leg to
-                    the departure time of the first flight in the leg.
-
-                    True Cost of Flight = [Flight Price] * [time_value/60] * [Flight Duration]
-
-                    The itinerary which provides the lowest True Cost of Flight is
-                    what is returned in the response. If you provide a time_value
-                    of 0 or do not provide the parameter, it will sort by price.
-                required: false
-                type: integer
-            cabin_class:
-                default: E
-                description: Parameter toggles the permitted cabin class for your query.
-                example: E
-                required: false
-                type: string
-            alliance:
-                description: Parameter toggles the preferred alliance for your query. If there are results containing flights from the given alliance, only flights from that alliance will be returned. Otherwise it will return flights from any alliance. *Travelport Only*
-                required: false
-                type: string
-                example: "*A"
-            schema:
-                default: 40
-                description: Toggles which Travelport schema version to use. *Travelport Only*
-                required: false
-                type: integer
-            exclude_carriers:
-                description: Parameter toggles a list of a carriers to exclude from the query results. This option can not be applied together with the alliance option. They are mutually exclusive.
-                required: false
-                type: array
-                example: []
-                items:
-                    type: string
-            permitted_carriers:
-                description: Toggles permitted carriers in GDS request *Travelport Only*
-                required: false
-                type: array
-                example: ["AC"]
-            no_overnight_layovers:
-                description: Toggles whether to return results with no overnight layovers *Travelport Only*
-                type: boolean
-                default: false
-            stops:
-                description: Toggles number of stop for GDS request *Travelport Only*
-                default: "any"
-                type: string
-                enum: ["any", "direct", "1", "2"]
-            baggage:
-                description: Toggles minimum number of bags included with flights for GDS request *Travelport Only*
-                default: "any"
-                type: string
-                enum: ["any", "1", "2"]
-            refundable:
-                description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
-                default: false
-                type: boolean
-            region:
-                description: Parameter toggles which travelport endpoint you hit *Travelport Only*
-                default: "americas"
-                type: string
-                enum: ["emea","apac","americas"]
-            num_results:
-                description: Parameter sets the number of segments in the response *Travelport Only*
-                default: 50
-                type: integer
-                minimum: 50
-                maximum: 5000
-
-    FlexTripSearchResponse:
-      title: Response
-      type: object
-      properties:
-        flex_trip:
-          type: object
-          description: Contains the JSON object of the response.
-          properties:
-            currency:
-              type: string
-              description: Currency
-              example: CAD
-            markup:
-              type: float
-              description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
-              example: 25.0
-            path_sequence:
-              type: array
-              description: An array of IATA codes representing the chronological order of your trip.
-              example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
-            trip_id:
-              type: string
-              description: A unique key used for identification and when booking a trip.
-            segments:
-              $ref: '#/components/schemas/TripOptions'
-            flight_details:
-              $ref: '#/components/schemas/FlightDetails'
-
-    FlexTripResponse:
-      title: Response
-      type: object
-      properties:
-        trip:
-          type: object
-          description: Contains the JSON object provided as the request
-          example:
-            endpoint: Prod
-            num_results: 50
-            cabin_class: E
-            exclude_carriers: []
-            region: "americas"
-            refundable: false
-            currency: USD
-            time_value: 0
-            max_cache: 24
-            travellers: ['ADT','ADT','CHD']
-            provider: 1V
-            alliance: ""
-            alpha: 0.1
-            schema: 40
-            PCC: 2G3C
-        FlexTrip:
-            type: object
-            description: Contains the JSON object of the response.
-            properties:
-                total_cost:
-                    type: float
-                    description: Total cost of cheapest segments recommended, in currency specified.
-                    example: 693.6
-                tn_net_fare_markup:
-                    type: float
-                    description: Markup specified by the Trip Ninja Net Fare to be applied at the itinerary level.
-                    example: 0.0
-                structure:
-                    type: array
-                    description: "Array representing the structure of the trip in terms of one-ways and open-jaw segments. For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, one with key “34” and a one-way with key ‘2”."
-                ErrorDetails:
-                    type: string
-                    description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
-                path_sequence:
-                    type: array
-                    description: An array of IATA codes representing the chronological order of your trip.
-                    example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
-                trip_id:
-                    type: string
-                    description: A unique key used for identification and when booking a trip.
-                total_transportation_minutes:
-                    type: integer
-                    description: Total transportation minutes for recommended cheapest segments.
-                segments:
-                    $ref: '#/components/schemas/Segments'
 
     PriceConfirmationReportRequest:
         title: Request
