@@ -255,7 +255,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: "#/components/schemas/Responses/MSDPSearchResponse/properties/hotel_results/properties/hotel_{flight_id}_response"
+                                $ref: "#/components/schemas/Responses/MSDPSearchResponse/properties/hotel_results/properties/hotel_{flight_index}_response"
                 400:
                     description: Invalid Input
                     content:
@@ -593,8 +593,8 @@ components:
                         description: Consists of all the hotel results
                         type: object
                         properties:
-                            hotel_{flight_id}_response:
-                                description: The hotel response that correlates to the a specific flight's ID when searching. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
+                            hotel_{flight_index}_response:
+                                description: The hotel response that correlates to the a specific flight's index when searching. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
                                 type: object
                                 properties:
                                     hotel_trace_id:
@@ -1515,11 +1515,11 @@ components:
                             origin:
                                 description: Origin of the segment
                                 type: string
-                                example: YHZ
+                                example: "YHZ"
                             destination:
                                 description: Destination of the segment
                                 type: string
-                                example: YVR
+                                example: "YVR"
                             fare_basis:
                                 description: Fare Basis Code for the segment.
                                 type: string
@@ -1555,7 +1555,7 @@ components:
                                             carry_on_hand_baggage:
                                                 description: Are carry on bags permittied on this ticket. True/False or "$"
                                                 type: boolean or string
-                                                example: true
+                                                example: "true"
                                             checked_baggage:
                                                 description: Are checked bags permittied on this ticket. True/False or "$"
                                                 type: boolean or string
