@@ -5,7 +5,7 @@ info:
     title: Trip Ninja API Documentation
     description: |
         <h2>Introduction</h2>
-        Trip Ninja uses a REST API with requests and responses in JSON format. For development and testring, the pre-production servers
+        Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
         are to be used. Once ready for live use, access to the production servers will be provided. All search endpoints have both production
         and pre-production endpoints - these correspond to the GDS’s production and pre-production services, and can be used as desired.<br  />
         <h2>Trip Ninja API URLs</h2>
