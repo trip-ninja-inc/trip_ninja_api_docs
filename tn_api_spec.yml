@@ -23,7 +23,7 @@ info:
     <h2>FareStructure</h2>
     The FareStructure product returns the set of best GDS responses that create the specified route. It finds the best fare structure via
     split ticketing and does not reorder the destinations. Each of the returned segments must be ticketed in its own PNR. <br><br>The “structure” seen in the
-    FareStructure response determines how you will carry out price confirmation as well as PNR creation. We starting counting flights at 0. 
+    FareStructure response determines how you will carry out price confirmation as well as PNR creation. We start counting flights at 0. 
     For example if structure is [[0, 2] , 1], this implies flight 0 and flight 2 are to be priced/ticketed together as one openjaw.
     Flight 1 should be priced as a oneway. [1, 2, 3] would be 3 separate oneways to be priced/ticketed individually.
     [[0, 1], [2, 3]] would be two openjaws, flight 0 and flight 1 priced/ticketed together as one openjaw and flights
@@ -80,7 +80,7 @@ info:
       <tr><td>IE33</td><td>Stops must be one of 'any', 'direct', '1', '2'</td></tr>
       <tr><td>IE34</td><td>Incorrect value for no_overnight_layovers, must be boolean</td></tr>
       <tr><td>IE36</td><td>Invalid LCC name</td></tr>
-     <table>
+    <table>
 
   x-logo:
     url: 'https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png'
@@ -1525,7 +1525,7 @@ components:
               items:
                 type: string
           include_itineraries:
-              description: Enables itineraries to be constructed and returned from segments found for the requested trip. Changes the response, see examples for details.
+              description: Enables itineraries to be constructed and returned from segments found for the requested trip. Changes the response structure, see examples for details.
               default: false
               type: boolean
           should_compress_itinerary:
