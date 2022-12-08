@@ -255,7 +255,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: "#/components/schemas/Responses/MSDPSearchResponse/properties/hotel_results/properties/hotel_{flight_index}_response"
+                                $ref: "#/components/schemas/Responses/MSDPSearchResponse/properties/hotel_results/items"
                 400:
                     description: Invalid Input
                     content:
@@ -562,10 +562,6 @@ components:
                                     description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
                                     type: string
                                     example: "americas"
-                                itx:
-                                    description: toggles if this is an itx search
-                                    type: bool
-                                    example: true
                                 pcc_currency:
                                     description: Indicates the currency that the PCC is charged in.
                                     type: string
@@ -590,157 +586,159 @@ components:
                             fare_structure:
                                 $ref: "#/components/schemas/SearchComponents/Flight/FareStructure"
                     hotel_results:
-                        description: Consists of all the hotel results
-                        type: object
-                        properties:
-                            hotel_{flight_index}_response:
-                                description: The hotel response that correlates to the a specific flight's index when searching. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
-                                type: object
-                                properties:
-                                    hotel_trace_id:
-                                        description: An identifier to refer to the hotel for searching room availability
-                                        type: string
-                                        example: "ndsf6sjf6sdf7sdf6"
-                                    hotels:
-                                        description: A list of hotels available based on the search request details.
-                                        type: array
-                                        items:
-                                            type: object
-                                            properties:
-                                                location_iata:
-                                                    description: The location of the hotel.
-                                                    type: string
-                                                    example: 'LON'
-                                                location_full:
-                                                    description: The full location name as provided by the GDS.
-                                                    type: string
-                                                    example: "London, England"
-                                                rating:
+                        description: Consists of all the hotel results. If should_include_hotel_results is false, only the hotel_trace_id will be returned.
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                id:
+                                    description: An identifier to refer to the flight index
+                                    type: int
+                                    example: 1
+                                hotel_trace_id:
+                                    description: An identifier to refer to the hotel for searching room availability
+                                    type: string
+                                    example: "ndsf6sjf6sdf7sdf6"
+                                hotels:
+                                    description: A list of hotels available based on the search request details.
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            location_iata:
+                                                description: The location of the hotel.
+                                                type: string
+                                                example: 'LON'
+                                            location_full:
+                                                description: The full location name as provided by the GDS.
+                                                type: string
+                                                example: "London, England"
+                                            rating:
+                                                type: object
+                                                properties:
+                                                    rating:
+                                                        description: The hotel rating
+                                                        type: int
+                                                        example: 4
+                                                    rating_provider:
+                                                        description: The provider of the rating.
+                                                        type: string
+                                                        example: "Giata"
+                                                    rating_maximum:
+                                                        description: The best possible rating.
+                                                        type: int
+                                                        example: 10
+                                                    rating_minimum:
+                                                        description: The worst possible rating.
+                                                        type: int
+                                                        example: 0
+                                            hotel_chain:
+                                                description: The refence for the hotel chain.
+                                                type: string
+                                                example: "GI"
+                                            hotel_code:
+                                                description: The reference for the hotel code
+                                                type: string
+                                                example: "35573"
+                                            hotel_name:
+                                                description: The name of the hotel
+                                                type: string
+                                                example: "Cambridge Suites Hotel Halifax"
+                                            minimum_charge:
+                                                description: The minimun total for the requested search available (in the currency provided in the search request)
+                                                type: float
+                                                example: 400.32
+                                            maximum_charge:
+                                                description: The maximum total priced room option available (in the currency provided in the search request)
+                                                type: float
+                                                example: 780.65
+                                            address:
+                                                type: object
+                                                properties:
+                                                    street_address:
+                                                        description: The street address of the hotel.
+                                                        type: string
+                                                        example: "1583 Brunswick St, Halifax, NS B3J 3P5"
+                                                    longitude:
+                                                        description: The longitude of the hotel.
+                                                        type: float
+                                                        example: 44.64511447836071
+                                                    lattitude:
+                                                        description: The lattitude of the hotel.
+                                                        type: float
+                                                        example: -63.575245615440565
+                                                    distance_from_reference_point_km:
+                                                        description: The distance that the hotel is from the reference submitted in the search.
+                                                        type: float
+                                                        example: 7.5
+                                                    phone_number:
+                                                        type: str
+                                                        description: The contact phone number for the hotel.
+                                                        example: "+1 902-420-0555"
+                                            ammenities:
+                                                type: array
+                                                description: A list of the amenities provided at this hotel.
+                                                items:
                                                     type: object
                                                     properties:
-                                                        rating:
-                                                            description: The hotel rating
-                                                            type: int
-                                                            example: 4
-                                                        rating_provider:
-                                                            description: The provider of the rating.
+                                                        amenity_type:
                                                             type: string
-                                                            example: "Giata"
-                                                        rating_maximum:
-                                                            description: The best possible rating.
-                                                            type: int
-                                                            example: 10
-                                                        rating_minimum:
-                                                            description: The worst possible rating.
-                                                            type: int
-                                                            example: 0
-                                                hotel_chain:
-                                                    description: The refence for the hotel chain.
-                                                    type: string
-                                                    example: "GI"
-                                                hotel_code:
-                                                    description: The reference for the hotel code
-                                                    type: string
-                                                    example: "35573"
-                                                hotel_name:
-                                                    description: The name of the hotel
-                                                    type: string
-                                                    example: "Cambridge Suites Hotel Halifax"
-                                                minimum_charge:
-                                                    description: The minimun total for the requested search available (in the currency provided in the search request)
-                                                    type: float
-                                                    example: 400.32
-                                                maximum_charge:
-                                                    description: The maximum total priced room option available (in the currency provided in the search request)
-                                                    type: float
-                                                    example: 780.65
-                                                address:
+                                                            description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
+                                                            example: "HA"
+                                                        amenity_title:
+                                                            type: string
+                                                            description: A title or descriptor of the amenity provided.
+                                                            example: High speed internet connection
+                                            credential_info:
+                                                $ref: "#/components/schemas/SearchComponents/Credentials"
+                                            conversion_rate:
+                                                description: The conversion rate to get the price in the currency requested.
+                                                type: float
+                                                example: 0.45
+                                            neighbourhood:
+                                                description: The neighbourhood or locality of the hotel.
+                                                type: string
+                                                example: Saint Boniface
+                                hotel_itinerary_reference:
+                                    $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
+                                next_result_reference:
+                                    $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
+                                hotels_media:
+                                    description: "A list of media items for all the hotels returned in the search."
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            hotel_chain:
+                                                description: The refence for the hotel chain.
+                                                type: string
+                                                example: "GI"
+                                            hotel_code:
+                                                description: The reference for the hotel code
+                                                type: string
+                                                example: "35573"
+                                            hotel_media_items:
+                                                description: A selection of media items for the above referenced hotel.
+                                                type: array
+                                                items:
                                                     type: object
                                                     properties:
-                                                        street_address:
-                                                            description: The street address of the hotel.
+                                                        title:
+                                                            description: The title / descriptor of the photos contained in this media item.
                                                             type: string
-                                                            example: "1583 Brunswick St, Halifax, NS B3J 3P5"
-                                                        longitude:
-                                                            description: The longitude of the hotel.
-                                                            type: float
-                                                            example: 44.64511447836071
-                                                        lattitude:
-                                                            description: The lattitude of the hotel.
-                                                            type: float
-                                                            example: -63.575245615440565
-                                                        distance_from_reference_point_km:
-                                                            description: The distance that the hotel is from the reference submitted in the search.
-                                                            type: float
-                                                            example: 7.5
-                                                        phone_number:
-                                                            type: str
-                                                            description: The contact phone number for the hotel.
-                                                            example: "+1 902-420-0555"
-                                                ammenities:
-                                                    type: array
-                                                    description: A list of the amenities provided at this hotel.
-                                                    items:
-                                                        type: object
-                                                        properties:
-                                                            amenity_type:
-                                                                type: string
-                                                                description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
-                                                                example: "HA"
-                                                            amenity_title:
-                                                                type: string
-                                                                description: A title or descriptor of the amenity provided.
-                                                                example: High speed internet connection
-                                                credential_info:
-                                                    $ref: "#/components/schemas/SearchComponents/Credentials"
-                                                conversion_rate:
-                                                    description: The conversion rate to get the price in the currency requested.
-                                                    type: float
-                                                    example: 0.45
-                                                neighbourhood:
-                                                    description: The neighbourhood or locality of the hotel.
-                                                    type: string
-                                                    example: Saint Boniface
-                                    hotel_itinerary_reference:
-                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
-                                    next_result_reference:
-                                        $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
-                                    hotels_media:
-                                        description: "A list of media items for all the hotels returned in the search."
-                                        type: array
-                                        items:
-                                            type: object
-                                            properties:
-                                                hotel_chain:
-                                                    description: The refence for the hotel chain.
-                                                    type: string
-                                                    example: "GI"
-                                                hotel_code:
-                                                    description: The reference for the hotel code
-                                                    type: string
-                                                    example: "35573"
-                                                hotel_media_items:
-                                                    description: A selection of media items for the above referenced hotel.
-                                                    type: array
-                                                    items:
-                                                        type: object
-                                                        properties:
-                                                            title:
-                                                                description: The title / descriptor of the photos contained in this media item.
-                                                                type: string
-                                                                example: "Front desk."
-                                                            large:
-                                                                description: The url for the image of the above titled part of the hotel of size large.
-                                                                type: string
-                                                                example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                                            thumbnail:
-                                                                description: The url for the image of the above titled part of the hotel of size thumbnail.
-                                                                type: string
-                                                                example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
-                                    hotel_neighbourhoods:
-                                        description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
-                                        type: array of strings
-                                        example: [ "St. Vital Center", "Downtown", "River Heights", "Saint Boniface", "Fort Garry" ]
+                                                            example: "Front desk."
+                                                        large:
+                                                            description: The url for the image of the above titled part of the hotel of size large.
+                                                            type: string
+                                                            example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                                        thumbnail:
+                                                            description: The url for the image of the above titled part of the hotel of size thumbnail.
+                                                            type: string
+                                                            example: https://media-cdn.tripadvisor.com/media/photo-m/1280/1b/45/0b/f8/lobby.jpg
+                                hotel_neighbourhoods:
+                                    description: The top 5 most common neighbourhoods found in the hotel search location, ordered from most common to least common.
+                                    type: array of strings
+                                    example: [ "St. Vital Center", "Downtown", "River Heights", "Saint Boniface", "Fort Garry" ]
                     total_trip_price:
                         description: Total trip price with the cheapest flights and hotels combined
                         type: float
@@ -748,6 +746,8 @@ components:
                     msdp_package_id:
                         description: A unique identifier for each msdp search
                         type: string
+                    msdp_search_details:
+                        $ref: "#/components/schemas/Requests/MSDPSearchRequest"
 
 
             MSDPGetFlightResultsResponse:
