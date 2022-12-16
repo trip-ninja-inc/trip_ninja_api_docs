@@ -285,18 +285,15 @@ paths:
                 500:
                     description: Server Error
 
-    /msdp/search/removehotel/hotel_trace_id={hotel_trace_id}:
+    /msdp/search/removehotel/:
         patch:
-            parameters:
-                -   in: path
-                    name: hotel_trace_id
-                    required: true
-                    schema:
-                        type: string
-                        example: bdf876sf6sfsdf87sdf
-                    description: Parameter to remove the hotel result from the searched msdp package
             summary: "MSDP Remove Hotel Result"
             description:  This endpoint removes a specific hotel result from the prior msdp search
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Requests/MSDPSearchRemoveHotelRequest"
             operationId: Remove Hotel Result
             responses:
                 200:
@@ -767,6 +764,20 @@ components:
                         type: boolean
                         example: false
 
+            MSDPSearchRemoveHotelRequest:
+                required:
+                    - msdp_package_id
+                    - hotel_trace_id
+                properties:
+                    msdp_package_id:
+                        description: A unique identifier for each msdp search
+                        type: string
+                        example: "ndsf6sjf6sdf7sdf6"
+                    hotel_trace_id:
+                        type: string
+                        example: "ndsf6sjf6sdf7sdf6"
+                        description: An identifier to refer to the hotel for searching room availability
+
             MSDPGetHotelDetailsRequest:
                 required:
                     - hotel_trace_id
@@ -1082,6 +1093,7 @@ components:
                     msdp_package_id:
                         description: A unique identifier for each msdp search
                         type: string
+                        example: "ndsf6sjf6sdf7sdf6"
                     msdp_search_details:
                         $ref: "#/components/schemas/Requests/MSDPSearchRequest"
 
