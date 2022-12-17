@@ -2382,6 +2382,10 @@ components:
                         type: string
                         description: The guarantee type for the room.
                         example: "Guarantee"
+                    cancel_deadline:
+                        type: string
+                        format: date
+                        description: "Last date of cancel deadline to cancel hotel. format: YYYY-MM-DD."
 
             hotel_room_details:
                 type: object
