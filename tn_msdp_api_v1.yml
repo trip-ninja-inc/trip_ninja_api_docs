@@ -46,16 +46,8 @@ servers:
         description: Pre-Production server
 
 paths:
-    /msdp/search/{endpoint}:
+    /msdp/search/prod:
         post:
-            parameters:
-                -   in: path
-                    name: endpoint
-                    required: true
-                    schema:
-                        type: string
-                        enum: [ preprod, prod ]
-                    description: Parameter toggles data source production and pre-production endpoints
             summary: "MSDP Search"
             description: |
                 This endpoint initiates a msdp search for one or more flights and one or more hotels, and returns a list of available flights and hotels options. A separate endpoint needs to be called to obtain information about flight details, hotel room types, etc.
