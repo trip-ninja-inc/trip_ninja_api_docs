@@ -2,7 +2,7 @@ openapi: "3.0.0"
 
 info:
     version: 1.0.0
-    title: Trip Ninja API Documentation
+    title: Trip Ninja MSDP API Documentation
     description: |
         <h2>Introduction</h2>
         Trip Ninja uses a REST API with requests and responses in JSON format. For development and testing, the pre-production servers
@@ -124,11 +124,11 @@ paths:
                     required: true
                     schema:
                         type: string
-                        example: bdf876sf6sfsdf87sdf
+                        example: 04187ebd88c965919a2b8d54ca98390a56cd48c5
                     description: Parameter to retrieve the flight results
             summary: "MSDP Get Flight Results"
             description: |
-                This endpoint retrieves the flight results from the prior msdp search
+                This endpoint retrieves a all the flight results from the prior msdp search
             operationId: Get Flight Results
             responses:
                 200:
@@ -180,7 +180,7 @@ paths:
                     required: true
                     schema:
                         type: string
-                        example: bdf876sf6sfsdf87sdf
+                        example: 4f499298b303c55a1ee522118afce28abe2f68e4
                     description: Parameter to retrieve the hotel results
                 -   in: path
                     name: rating
@@ -245,8 +245,8 @@ paths:
                             `rating_low_to_high`<br />
             summary: "MSDP Get Hotel Results"
             description: |
-                This endpoint retrieves the hotel results from the prior msdp search
-                Example URL: `/results/hotels/?hotel_trace_id=bdf876sf6sfsdf87sdf&rating=1,2,3&area=Bedford,Dartmouth&min_price=100&max_price=1000&min_distance=2&max_distance=50&hotel_chain=WA&amenities=Air Conditioning,Wifi&sort_by=closest`
+                This endpoint retrieves a specific MSDP hotel search result from the prior MSDP search
+                Example URL: `/results/hotels/?hotel_trace_id=4f499298b303c55a1ee522118afce28abe2f68e4&rating=1,2,3&area=Bedford,Dartmouth&min_price=100&max_price=1000&min_distance=2&max_distance=50&hotel_chain=WA&amenities=Air Conditioning,Wifi&sort_by=closest`
             operationId: Get Hotel Results
             responses:
                 200:
@@ -343,6 +343,7 @@ components:
     schemas:
         Requests:
             MSDPSearchRequest:
+                description: Contains the searched parameters for the MSDP package search
                 required:
                     - currency
                     - hotel_data
@@ -548,14 +549,14 @@ components:
                                 data_source:
                                     description: data source to call.
                                     type: string
-                                    enum: [ "amadeus", "travelport" ]
-                                    example: "amadeus"
+                                    enum: [ "webbeds", "travelport" ]
+                                    example: "travelport"
                                 pcc:
                                     description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
                                     type: string
                                     example: "MEL49f839"
                                 provider:
-                                    description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                    description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus, “webbeds” - Webbeds
                                     type: string
                                     example: "1A"
                                 region:
@@ -584,10 +585,10 @@ components:
                     msdp_package_id:
                         description: A unique identifier for each msdp search
                         type: string
-                        example: "ndsf6sjf6sdf7sdf6"
+                        example: "d8af3a35dd77333f99510ad7373c98cf7fe502bf"
                     hotel_trace_id:
                         type: string
-                        example: "ndsf6sjf6sdf7sdf6"
+                        example: "4f499298b303c55a1ee522118afce28abe2f68e4"
                         description: An identifier to refer to the hotel for searching room availability
 
         Responses:
@@ -664,7 +665,7 @@ components:
                     msdp_package_id:
                         description: A unique identifier for each msdp search
                         type: string
-                        example: "ndsf6sjf6sdf7sdf6"
+                        example: "d8af3a35dd77333f99510ad7373c98cf7fe502bf"
                     msdp_search_details:
                         $ref: "#/components/schemas/Requests/MSDPSearchRequest"
 
@@ -701,7 +702,7 @@ components:
                             hotel_trace_id:
                                 description: An identifier to refer to the hotel for searching room availability
                                 type: string
-                                example: "ndsf6sjf6sdf7sdf6"
+                                example: "4f499298b303c55a1ee522118afce28abe2f68e4"
                             hotels:
                                 description: A list of hotels available based on the search request details.
                                 type: array
@@ -857,7 +858,7 @@ components:
                             hotel_trace_id:
                                 description: An identifier to refer to the hotel for searching room availability
                                 type: string
-                                example: "ndsf6sjf6sdf7sdf6"
+                                example: "4f499298b303c55a1ee522118afce28abe2f68e4"
 
                 HotelLocation:
                     description: location (city, airport, or reference point) to search for hotels in.
@@ -936,7 +937,7 @@ components:
                                 example: 'GvCe60ac0/ca8J7rRpzT99+A990Uzoz9uPnDvrR9vlPYyiAdwA/4TedEKvTDZyf87Yyw51a62Z0vr9lr1UD15D2BfyUpgIOXDnCDubYq+Qg9pzbZYLqUbA=='
                                 type: string
                             provider:
-                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus, “webbeds” - Webbeds
                                 type: string
                                 example: "1V"
                 HotelItineraryReference:
@@ -964,6 +965,7 @@ components:
                         trip_id:
                             type: string
                             description: A unique key used for identification and when booking a trip.
+                            example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
                         itineraries:
                             $ref: "#/components/schemas/SearchComponents/Flight/FareStructureSearchItineraries"
 
@@ -986,9 +988,9 @@ components:
                         trip_id:
                             type: string
                             description: A unique key used for identification and when booking a trip.
-                            example: "ndsf6sjf6sdf7sdf6"
+                            example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
                         segments:
-                            $ref: "#/components/schemas/SearchComponents/Flight/TripSegments"
+                            $ref: "#/components/schemas/SearchComponents/Flight/SegmentOptions"
                         flight_details:
                             $ref: "#/components/schemas/SearchComponents/Flight/FlightDetails"
 
@@ -1262,11 +1264,7 @@ components:
                                 type: string
                                 description: Leg's fare type
                                 example: "PublicFare"
-                TripSegments:
-                    title: Trip Options
-                    type: array
-                    items:
-                        $ref: "#/components/schemas/SearchComponents/Flight/SegmentOptions"
+
                 SegmentOptions:
                     title: Segment Options
                     type: array
@@ -1733,14 +1731,14 @@ components:
                     data_source:
                         description: data source to call.
                         type: string
-                        enum: [ "amadeus", "travelport" ]
-                        example: "amadeus"
+                        enum: [ "webbeds", "travelport" ]
+                        example: "travelport"
                     pcc:
                         description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
                         type: string
                         example: "MEL49f839"
                     provider:
-                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus
+                        description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus, “webbeds” - Webbeds
                         type: string
                         example: "1A"
                     pcc_currency:
