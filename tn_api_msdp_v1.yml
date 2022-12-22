@@ -789,11 +789,11 @@ components:
                 properties:
                     super_trip_id:
                         type: string
-                        example: "bdf876sf6sfsdf87sdf"
+                        example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
                         description: id of the super trip
                     hotel_trace_id:
                         type: string
-                        example: 'ndsf6sjf6sdf7sdf6'
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
                         description: An identifier to refer to the hotel for searching room availability
                     hotel_itinerary_reference:
                         type: string
@@ -852,7 +852,7 @@ components:
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
-                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
                     segment_ids:
                         $ref: "#/components/schemas/ReportComponents/segment_ids"
                     hotel_room_details:
@@ -873,7 +873,7 @@ components:
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
-                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
                     segment_ids:
                         $ref: "#/components/schemas/ReportComponents/segment_ids"
                     hotel_trace_ids:
@@ -898,7 +898,7 @@ components:
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
-                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
                     segment_ids:
                         $ref: "#/components/schemas/ReportComponents/segment_ids"
                     hotel_trace_ids:
@@ -1018,11 +1018,11 @@ components:
                 properties:
                     super_trip_id:
                         type: string
-                        example: "bdf876sf6sfsdf87sdf"
+                        example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
                         description: id of the super trip
                     hotel_trace_id:
                         type: string
-                        example: 'ndsf6sjf6sdf7sdf6'
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
                         description: An identifier to refer to the hotel for searching room availability
                     hotel_itinerary_reference:
                         type: string
@@ -1177,12 +1177,12 @@ components:
                                     example: 1
                                 hotel_trace_id:
                                     type: string
-                                    example: 'ndsf6sjf6sdf7sdf6'
+                                    example: '4f499298b303c55a1ee522118afce28abe2f68e4'
                                     description: An identifier to refer to the hotel for searching room availability
                                 allocation_details:
                                     type: array
                                     description: A time-limited token for further booking steps for Webbeds Hotels
-                                    example: ['1293jjjd889d2s2s']
+                                    example: ['1671746519000001B1029B0']
 
 
         SearchComponents:
@@ -2310,7 +2310,7 @@ components:
                         description: Matching id from the flight id for the msdp package
                     hotel_trace_id:
                         type: string
-                        example: 'ndsf6sjf6sdf7sdf6'
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
                         description: The reference for the hotel search.
                     hotel_code:
                         type: string
