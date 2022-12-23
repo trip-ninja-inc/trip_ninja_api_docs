@@ -133,7 +133,7 @@ paths:
                     description: Parameter to retrieve the flight results
             summary: "MSDP Get Flight Results"
             description: |
-                This endpoint retrieves a all the flight results from the prior msdp search
+                This endpoint retrieves all the flight results from the prior msdp search
             operationId: Get Flight Results
             responses:
                 200:
@@ -292,7 +292,7 @@ paths:
     /msdp/search/removehotel/:
         patch:
             summary: "MSDP Remove Hotel Result"
-            description:  This endpoint removes a specific hotel result from the prior msdp search
+            description:  This endpoint removes a specific hotel result from the prior msdp search. All msdp packages must have at least 1 hotel. An error will be thrown if you attempt to remove the final hotel from a package.
             requestBody:
                 content:
                     application/json:
@@ -1261,6 +1261,7 @@ components:
                                             example: 780.65
                                         address:
                                             type: object
+                                            description: Contains hotel address details
                                             properties:
                                                 street_address:
                                                     description: The street address of the hotel.
@@ -1934,17 +1935,21 @@ components:
                                             example: 1
                                         booking_code:
                                             type: string
+                                            description: booking code to flight info in flight_details
                                             minLength: 1
                                             maxLength: 1
                                             example: B
                                         fare_type:
                                             type: string
+                                            description: fare type to flight info in flight_details
                                             example: Published fare
                                         fare_basis_code:
                                             type: string
+                                            description: fare basis code to flight info in flight_details
                                             example: LP7J2LBS
                                         cabin_class:
                                             type: string
+                                            description: cabin class to flight info in flight_details
                                             example: Economic Standard
                             brands:
                                 $ref: "#/components/schemas/SearchComponents/Flight/Brands"
@@ -2226,10 +2231,6 @@ components:
             Credentials:
                 type: object
                 description: Indicate data source to call and required credentials
-                required:
-                    - data_source
-                    - pcc
-                    - provider
                 properties:
                     data_source:
                         description: data source to call.
