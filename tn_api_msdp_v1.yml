@@ -20,6 +20,11 @@ info:
             - PCC / OfficeID emulation via Trip Ninja’s PCC/OfficeID has been set up.<br  />
             - API username and password have been provided by Trip Ninja.<br  />
         
+        <h2>MSDP</h2>
+        Multi Stop Dynamic Packaging (MSDP) provides an alternative to traditional, static packaging. 
+        It allows users to build packages as they go. While users search for multi-destination flights, 
+        MSDP will find eligible hotels with which to bundle.
+        
         <h2>Authentication</h2>
         Trip Ninja uses Basic Authentication standards. Simply encode your username and password string using base64 and pass it in the
         authorization headers. See the python example below on how this is done. In the example, the payload and API endpoint url are not
