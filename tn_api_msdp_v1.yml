@@ -853,7 +853,7 @@ components:
                     msdp_package_id:
                         type: string
                         example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
-                        description: MSDP Pacakge ID returned in msdp search response
+                        description: MSDP Package ID returned in msdp search response
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
@@ -874,7 +874,7 @@ components:
                     msdp_package_id:
                         type: string
                         example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
-                        description: MSDP Pacakge ID returned in msdp search response
+                        description: MSDP Package ID returned in msdp search response
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
@@ -899,7 +899,7 @@ components:
                     msdp_package_id:
                         type: string
                         example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
-                        description: MSDP Pacakge ID returned in msdp search response
+                        description: MSDP Package ID returned in msdp search response
                     trip_id:
                         type: string
                         description: Trip ID returned in search response
