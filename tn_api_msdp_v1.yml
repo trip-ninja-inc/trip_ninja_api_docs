@@ -495,7 +495,7 @@ paths:
     /msdp/cancel/:
         post:
             summary: "Cancel Booking Report"
-            description: "To cancel a booking you have previously booked, report it to the Trip Ninja Service endpoint: “/cancel/”"
+            description: "To cancel a booking you have previously booked, report it to the Trip Ninja Service endpoint: “/msdp/cancel/”"
             operationId: "CancelBookingReport"
             requestBody:
                 content:
@@ -791,6 +791,7 @@ components:
                     - currency
                     - check_in_date
                     - check_out_date
+                    - hotel_location
                 properties:
                     super_trip_id:
                         type: string
@@ -840,6 +841,33 @@ components:
                         format: date
                         description: "Date to checkout from the hotel. format: YYYY-MM-DD."
                         example: '2021-05-15'
+                    hotel_location:
+                        type: object
+                        description: location (city, airport, or reference point) to search for hotels in.
+                        required:
+                            - type
+                            - IATA
+                        properties:
+                            type:
+                                type: string
+                                description: Defines whether it's a city ('C'), airport ('A'), or reference point ('R')
+                                example: 'R'
+                            IATA:
+                                type: string
+                                description: The IATA code for the city/airport, or nearest IATA for the reference point
+                                example: 'PAR'
+                            name:
+                                type: string
+                                description: The IATA code for the city/airport, or nearest IATA for the reference point. Required for reference point.
+                                example: 'Eiffel Tower'
+                            region:
+                                type: string
+                                description: The state/province for the reference point. Only required for reference point if there are multiple reference points with same name in the same country.
+                                example: 'NS'
+                            country:
+                                type: string
+                                description: The 2-letter country code for the reference point. Required for reference point.
+                                example: 'FR'
 
             PriceConfirmationReportRequest:
                 title: Request
@@ -1035,6 +1063,7 @@ components:
                         description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
                     address:
                         type: object
+                        description: The address of the hotel.
                         properties:
                             street_address:
                                 type: string
@@ -1070,10 +1099,11 @@ components:
                         example: "3pm"
                     check_out_time:
                         type: string
-                        description: The check out time
+                        description: The check out time.
                         example: "10am"
                     rooms:
                         type: array
+                        description: The list of rooms available at the hotel.
                         items:
                             type: object
                             properties:
@@ -1087,6 +1117,7 @@ components:
                                     example: 141.02
                                 meals:
                                     type: object
+                                    description: Indicates if meal is provided with the room.
                                     properties:
                                         breakfast:
                                             type: boolean
@@ -1164,7 +1195,157 @@ components:
                                     type: object
                                     description: The various rate rules - includes types such as Cancellation, Deposit, Location Text, Miscellaneous, Promotional, and PropertyText
                                     example: { "Guarantee": "Accept all guarantee methods", "Checkin Checkout": "Check in time 15:00, check out time 11:00" }
-
+                    hotel_description:
+                        type: string
+                        description: Description of the hotel.
+                        example: PROPERTY DESCRIPTION Midscale Unspecified3 Welcome to Best Western Plus Hawthorne Terrace a oneofakind boutique hotel experience at the center of one of Chicagos most popular neighborhoods Lakeview East.
+                    search_request:
+                        description: parameters to search for this hotel
+                        type: object
+                        properties:
+                            credential_info:
+                                $ref: "#/components/schemas/SearchComponents/Credentials"
+                            hotel_location:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelLocation"
+                            check_in_date:
+                                type: string
+                                format: date
+                                description: "Date of check-in. format: YYYY-MM-DD."
+                                example: "2023-06-20"
+                            check_out_date:
+                                type: string
+                                format: date
+                                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                                example: "2023-06-25"
+                            next_result_reference:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
+                            hotel_itinerary_reference:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
+                            traveller_total:
+                                description: Number of people that will be staying at the hotel.
+                                type: int
+                                example: 3
+                            rooms_total:
+                                description: The number of rooms required for the above travellers.
+                                type: int
+                                example: 2
+                            rooms:
+                                description: List of guest info for 1 room required to make hotel search requests.
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        num_adults:
+                                            description: Number of adults staying in the room.
+                                            type: int
+                                            example: 2
+                                        num_children:
+                                            description: Number of children staying in the room, if none use 0.
+                                            type: int
+                                            example: 3
+                                        children_age_list:
+                                            description: List of ages for children staying in room. Optional if num_children = 0, Required if num_children > 0.
+                                            type: array of ints
+                                            example: [ 5, 7, 11 ]
+                                        nationality:
+                                            description: 2 letter country code of nationality of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+                                            type: string
+                                            example: "CA"
+                                        country_of_residence:
+                                            description: 2 letter country code of country of residence of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+                                            type: string
+                                            example: "CA"
+                            currency:
+                                type: string
+                                description: Currency
+                                example: CAD
+                            endpoint:
+                                type: string
+                                description: GDS endpoint called.
+                                example: prod
+                            hotel_trace_id:
+                                type: string
+                                example: "4f499298b303c55a1ee522118afce28abe2f68e4"
+                                description: An identifier to refer to the hotel for searching room availability
+                    detail_request:
+                        type: object
+                        description: Parameters to search for the hotel details.
+                        properties:
+                            super_trip_id:
+                                type: string
+                                example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+                                description: id of the super trip
+                            hotel_trace_id:
+                                type: string
+                                example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                                description: An identifier to refer to the hotel for searching room availability
+                            hotel_itinerary_reference:
+                                type: string
+                                example: '1'
+                                description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                            credential_info:
+                                $ref: "#/components/schemas/SearchComponents/Credentials"
+                            hotel_chain:
+                                type: string
+                                description: The refence for the hotel chain.
+                                example: 'GI'
+                            hotel_code:
+                                type: string
+                                description: The reference for the hotel code
+                                example: '35573'
+                            traveller_total:
+                                type: int
+                                example: 3
+                                description: Number of people that will be staying at the hotel.
+                            rooms_total:
+                                type: int
+                                example: 2
+                                description: The number of rooms required for the above travellers.
+                            room_type:
+                                type: string
+                                example: 'Double'
+                                description: The type of room to price.
+                            currency:
+                                type: string
+                                example: 'CAD'
+                                description: The currency that the details should be presented in.
+                            check_in_date:
+                                type: string
+                                format: date
+                                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                                example: '2021-05-10'
+                            check_out_date:
+                                type: string
+                                format: date
+                                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                                example: '2021-05-15'
+                            hotel_location:
+                                type: object
+                                description: location (city, airport, or reference point) to search for hotels in.
+                                required:
+                                    - type
+                                    - IATA
+                                properties:
+                                    type:
+                                        type: string
+                                        description: Defines whether it's a city ('C'), airport ('A'), or reference point ('R')
+                                        example: 'R'
+                                    IATA:
+                                        type: string
+                                        description: The IATA code for the city/airport, or nearest IATA for the reference point
+                                        example: 'PAR'
+                                    name:
+                                        type: string
+                                        description: The IATA code for the city/airport, or nearest IATA for the reference point. Required for reference point.
+                                        example: 'Eiffel Tower'
+                                    region:
+                                        type: string
+                                        description: The state/province for the reference point. Only required for reference point if there are multiple reference points with same name in the same country.
+                                        example: 'NS'
+                                    country:
+                                        type: string
+                                        description: The 2-letter country code for the reference point. Required for reference point.
+                                        example: 'FR'
 
             MSDPPreBookingResponse:
                 description: Consists of the hotel status response
@@ -1221,6 +1402,7 @@ components:
                                             type: string
                                             example: "London, England"
                                         rating:
+                                            description: The rating of the hotel.
                                             type: object
                                             properties:
                                                 rating:
@@ -2272,9 +2454,9 @@ components:
                 example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
 
             hotel_trace_ids:
-                type: array
+                type: array of strings
                 description: Array of hotel_trace_ids for the searched hotels.
-                example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
+                example: ["18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
 
             hotel_amenities:
                 type: array
@@ -2388,6 +2570,12 @@ components:
             hotel_room_details:
                 type: object
                 description: Consist of details of the hotel rooms that is selected for price confirm
+                required:
+                    - currency
+                    - rooms_total
+                    - traveller_total
+                    - credential_info
+                    - rooms
                 properties:
                     currency:
                         type: string
@@ -2402,7 +2590,31 @@ components:
                         example: 3
                         description: Number of people that will be staying at the hotel.
                     credential_info:
-                        $ref: "#/components/schemas/SearchComponents/Credentials"
+                        required:
+                            - data_source
+                            - pcc
+                            - provider
+                            - pcc_currency
+                        type: object
+                        description: Indicate data source to call and required credentials
+                        properties:
+                            data_source:
+                                description: data source to call.
+                                type: string
+                                enum: [ "webbeds", "travelport" ]
+                                example: "travelport"
+                            pcc:
+                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                                type: string
+                                example: "MEL49f839"
+                            provider:
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus, “webbeds” - Webbeds
+                                type: string
+                                example: "1A"
+                            pcc_currency:
+                                description: Indicates the currency that the PCC is charged in.
+                                type: string
+                                example: "CAD"
                     rooms:
                         type: array
                         description: Array of rooms for the booked hotel rooms
