@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "4.11.0"
+  version: "4.13.0"
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
