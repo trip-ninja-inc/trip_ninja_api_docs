@@ -201,7 +201,10 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateBookingRequest'
+                            oneOf:
+                                - $ref: '#/components/schemas/CreateBookingCashRequest'
+                                - $ref: '#/components/schemas/CreateBookingPlainCCRequest'
+                                - $ref: '#/components/schemas/CreateBookingPCIRequest'
             responses:
                 200:
                     description: Success
@@ -1340,15 +1343,12 @@ components:
                 description: Provides status of the hotel, indicating whether this individual hotel booking was a success.
                 example: success
 
-
-    CreateBookingRequest:
-        title: Request
+    GenericCreateBookingRequest:
         type: object
         required:
             - super_trip_id
             - hotel_trace_ids
             - passengers
-            - billing
             - endpoint
             - segment_additional_details
             - additional_markup
@@ -1538,6 +1538,55 @@ components:
                                       type: string
                                       description: Reference for the additional baggage option
                                       example: C9O
+            segment_additional_details:
+              type: object
+              description: Additional flight and fare family details.
+              required:
+                - additional_details
+                - brands
+              properties:
+                additional_details:
+                  $ref: '#/components/schemas/additional_details'
+                brands:
+                  $ref: '#/components/schemas/brand'
+            additional_markup:
+              type: float
+              description: Additional markup to be applied to the booking price. Must be positive.
+              example: 15.00
+            consolidate_ticket:
+              type: boolean
+              description: Indicates whether all bookings from one GDS are stored under a single UR locator code *Travelport only*.
+              example: True
+
+    CashBillingObject:
+        type: object
+        description: Billing information for the booking.
+        required:
+            - billing
+        properties:
+            billing:
+                type: object
+                description: Billing information for the booking.
+                required:
+                    - email
+                properties:
+                    email:
+                        type: string
+                        required: true
+                        description: The contact and billing email address.
+                        example: email.address@email.com
+                    payment_included:
+                        type: boolean
+                        description: Payment information is not included in booking.
+                        default: false
+                        example: false
+
+    RegularBillingObject:
+        type: object
+        description: Billing information for the booking.
+        required:
+            - billing
+        properties:
             billing:
                 type: object
                 description: Billing information for the booking.
@@ -1578,25 +1627,70 @@ components:
                                 type: string
                                 description: The card's expiry date.
                                 example: 2021-10
-            segment_additional_details:
-              type: object
-              description: Additional flight and fare family details.
-              required:
-                - additional_details
-                - brands
-              properties:
-                additional_details:
-                  $ref: '#/components/schemas/additional_details'
-                brands:
-                  $ref: '#/components/schemas/brand'
-            additional_markup:
-              type: float
-              description: Additional markup to be applied to the booking price. Must be positive.
-              example: 15.00
-            consolidate_ticket:
-              type: boolean
-              description: Indicates whether all bookings from one GDS are stored under a single UR locator code *Travelport only*.
-              example: True
+
+    PCIBillingObject:
+        type: object
+        description: Billing information for the booking.
+        required:
+            - billing
+        properties:
+            billing:
+                type: object
+                description: Billing information for the booking.
+                required:
+                    - email
+                properties:
+                    email:
+                        type: string
+                        required: true
+                        description: The contact and billing email address.
+                        example: email.address@email.com
+                    payment_included:
+                        type: boolean
+                        description: Set to True if payment information is included in booking.
+                        default: false
+                        example: true
+                    payment_info:
+                        type: object
+                        description: Credit card payment information for booking.
+                        properties:
+                            card_type:
+                                type: string
+                                description: The two digit credit card code.
+                                example: VI
+                            cardholder_name:
+                                type: string
+                                description: The full name of the cardholder as it appears on the card.
+                                example: John David Smith
+                            card_expiration_date:
+                                type: string
+                                description: The card's expiry date.
+                                example: 2021-10
+                            transactionId:
+                                type: string
+                                description: The tokenised pci transaction ID with the given credit card.
+                                example: "230116210000000000"
+
+    CreateBookingCashRequest:
+        title: Booking Request when payment_included = false
+        type: object
+        allOf:
+            - $ref: '#/components/schemas/GenericCreateBookingRequest'
+            - $ref: '#/components/schemas/CashBillingObject'
+
+    CreateBookingPlainCCRequest:
+        title: Booking Request with Credit Card Payment
+        type: object
+        allOf:
+            - $ref: '#/components/schemas/GenericCreateBookingRequest'
+            - $ref: '#/components/schemas/RegularBillingObject'
+
+    CreateBookingPCIRequest:
+        title: Booking Request with PCI-Proxy Tokenised Credit Card
+        type: object
+        allOf:
+            - $ref: '#/components/schemas/GenericCreateBookingRequest'
+            - $ref: '#/components/schemas/PCIBillingObject'
 
     AddBookingToTicketingQueueRequest:
         title: Request
