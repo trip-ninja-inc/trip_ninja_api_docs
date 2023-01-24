@@ -56,7 +56,7 @@ paths:
             summary: "MSDP Search"
             description: |
                 This endpoint initiates a msdp search for one or more flights and one or more hotels, and returns a list of available flights and hotels options. A separate endpoint needs to be called to obtain information about flight details, hotel room types, etc.
-            operationId: Search
+            operationId: MSDPSearch
             requestBody:
                 content:
                     application/json:
@@ -134,7 +134,7 @@ paths:
             summary: "MSDP Get Flight Results"
             description: |
                 This endpoint retrieves all the flight results from the prior msdp search
-            operationId: Get Flight Results
+            operationId: MSDPGetFlightResults
             responses:
                 200:
                     description: Success
@@ -252,7 +252,7 @@ paths:
             description: |
                 This endpoint retrieves a specific MSDP hotel search result from the prior MSDP search
                 Example URL: `/results/hotels/?hotel_trace_id=4f499298b303c55a1ee522118afce28abe2f68e4&rating=1,2,3&area=Bedford,Dartmouth&min_price=100&max_price=1000&min_distance=2&max_distance=50&hotel_chain=WA&amenities=Air Conditioning,Wifi&sort_by=closest`
-            operationId: Get Hotel Results
+            operationId: MSDPGetHotelResults
             responses:
                 200:
                     description: Success
@@ -298,7 +298,7 @@ paths:
                     application/json:
                         schema:
                             $ref: "#/components/schemas/Requests/MSDPSearchRemoveHotelRequest"
-            operationId: Remove Hotel Result
+            operationId: MSDPRemoveHotelResult
             responses:
                 200:
                     description: Success
@@ -342,6 +342,189 @@ paths:
                                         example: "User is not authorized"
                 500:
                     description: Server Error
+
+    /msdp/detail/hotel/prod:
+        post:
+            summary: "MSDP Get Hotel Details"
+            description: |
+                This endpoint initiates a hotel search to get all the available rooms in a hotel, and returns a list of available hotel rooms options.
+            operationId: MSDPGetHotelDetails
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Requests/MSDPGetHotelDetailsRequest"
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Responses/MSDPGetHotelDetailsResponse"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE23"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "Not a valid city."
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: Error code and 0 for success response
+                                        example: "IE44"
+                                    message:
+                                        type: string
+                                        description: Contains the error message
+                                        example: "User is not authorized"
+                500:
+                    description: Server Error
+
+    /msdp/pre-booking/:
+        post:
+            summary: "MSDP Price Confirmation Report"
+            description: "When performing an availability or price confirmation request - when a user has selected their MSDP package or is arriving on the site from
+        metasearch - please send a request to the following endpoint. This provides valuable data to our revenue management system in
+        determining markups for trips."
+            operationId: "MSDPPriceConfirmationReport"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Requests/PriceConfirmationReportRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Responses/MSDPPreBookingResponse"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: States whether request to book was successful.
+                                        example: Not booked
+
+
+    /msdp/booking/:
+        post:
+            summary: "MSDP Booking Report"
+            description: "When a booking is completed from a trip generated by Trip Ninja, report the booking to Trip Ninja via the booking endpoint."
+            operationId: "MSDPBookingReport"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Requests/BookingReportRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: "success"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: States whether request to book was successful.
+                                        example: Not booked
+
+    /msdp/ticketing/:
+        post:
+            summary: "MSDP Ticketing Report"
+            description: |
+                When tickets are issued for a trip, please hit the following endpoint
+            operationId: "MSDPTicketingReport"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Requests/TicketingReportRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: "success"
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        description: States whether request to book was successful.
+                                        example: Not booked
+    /msdp/cancel/:
+        post:
+            summary: "MSDP Cancel Booking Report"
+            description: "To cancel a booking you have previously booked, report it to the Trip Ninja Service endpoint: “/msdp/cancel/”"
+            operationId: "MSDPCancelBookingReport"
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Requests/CancelRequest'
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: "Trip has been cancelled."
+                400:
+                    description: Invalid Input
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    response:
+                                        type: string
+                                        description: States whether request to cancel was successful.
+                                        example: Could not cancel trip, check your trip_id.
+
 
 
 components:
@@ -596,6 +779,179 @@ components:
                         example: "4f499298b303c55a1ee522118afce28abe2f68e4"
                         description: An identifier to refer to the hotel for searching room availability
 
+            MSDPGetHotelDetailsRequest:
+                required:
+                    - hotel_trace_id
+                    - hotel_itinerary_reference
+                    - credential_info
+                    - hotel_chain
+                    - hotel_code
+                    - traveller_total
+                    - rooms_total
+                    - currency
+                    - check_in_date
+                    - check_out_date
+                    - hotel_location
+                properties:
+                    super_trip_id:
+                        type: string
+                        example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+                        description: id of the super trip
+                    hotel_trace_id:
+                        type: string
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                        description: An identifier to refer to the hotel for searching room availability
+                    hotel_itinerary_reference:
+                        type: string
+                        example: '1'
+                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                    credential_info:
+                        $ref: "#/components/schemas/SearchComponents/Credentials"
+                    hotel_chain:
+                        type: string
+                        description: The refence for the hotel chain.
+                        example: 'GI'
+                    hotel_code:
+                        type: string
+                        description: The reference for the hotel code
+                        example: '35573'
+                    traveller_total:
+                        type: int
+                        example: 3
+                        description: Number of people that will be staying at the hotel.
+                    rooms_total:
+                        type: int
+                        example: 2
+                        description: The number of rooms required for the above travellers.
+                    room_type:
+                        type: string
+                        example: 'Double'
+                        description: The type of room to price.
+                    currency:
+                        type: string
+                        example: 'CAD'
+                        description: The currency that the details should be presented in.
+                    check_in_date:
+                        type: string
+                        format: date
+                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                        example: '2021-05-10'
+                    check_out_date:
+                        type: string
+                        format: date
+                        description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                        example: '2021-05-15'
+                    hotel_location:
+                        type: object
+                        description: location (city, airport, or reference point) to search for hotels in.
+                        required:
+                            - type
+                            - IATA
+                        properties:
+                            type:
+                                type: string
+                                description: Defines whether it's a city ('C'), airport ('A'), or reference point ('R')
+                                example: 'R'
+                            IATA:
+                                type: string
+                                description: The IATA code for the city/airport, or nearest IATA for the reference point
+                                example: 'PAR'
+                            name:
+                                type: string
+                                description: The IATA code for the city/airport, or nearest IATA for the reference point. Required for reference point.
+                                example: 'Eiffel Tower'
+                            region:
+                                type: string
+                                description: The state/province for the reference point. Only required for reference point if there are multiple reference points with same name in the same country.
+                                example: 'NS'
+                            country:
+                                type: string
+                                description: The 2-letter country code for the reference point. Required for reference point.
+                                example: 'FR'
+
+            PriceConfirmationReportRequest:
+                title: Request
+                type: object
+                required:
+                    - msdp_package_id
+                    - trip_id
+                    - segment_ids
+                    - hotel_room_details
+                properties:
+                    msdp_package_id:
+                        type: string
+                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        description: MSDP Package ID returned in msdp search response
+                    trip_id:
+                        type: string
+                        description: Trip ID returned in search response
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
+                    segment_ids:
+                        $ref: "#/components/schemas/ReportComponents/segment_ids"
+                    hotel_room_details:
+                        $ref: "#/components/schemas/ReportComponents/hotel_room_details"
+
+            BookingReportRequest:
+                title: Request
+                type: object
+                required:
+                    - msdp_package_id
+                    - trip_id
+                    - segment_ids
+                properties:
+                    msdp_package_id:
+                        type: string
+                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        description: MSDP Package ID returned in msdp search response
+                    trip_id:
+                        type: string
+                        description: Trip ID returned in search response
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
+                    segment_ids:
+                        $ref: "#/components/schemas/ReportComponents/segment_ids"
+                    hotel_trace_ids:
+                        $ref: "#/components/schemas/ReportComponents/hotel_trace_ids"
+                    customer_booking_reference_id:
+                        type: string
+                        description: Customer booking reference ID from the client.
+                        example: "cust-book-1234aa94d"
+
+            TicketingReportRequest:
+                title: Request
+                type: object
+                required:
+                    - msdp_package_id
+                    - trip_id
+                    - segment_ids
+                properties:
+                    msdp_package_id:
+                        type: string
+                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+                        description: MSDP Package ID returned in msdp search response
+                    trip_id:
+                        type: string
+                        description: Trip ID returned in search response
+                        example: "04187ebd88c965919a2b8d54ca98390a56cd48c5"
+                    segment_ids:
+                        $ref: "#/components/schemas/ReportComponents/segment_ids"
+                    hotel_trace_ids:
+                        $ref: "#/components/schemas/ReportComponents/hotel_trace_ids"
+                    queue:
+                        type: string
+                        description: Length of the queue number has to be within 3 letters.
+                        example: "001"
+
+            CancelRequest:
+                title: Request
+                type: object
+                required:
+                    - msdp_package_id
+                properties:
+                    msdp_package_id:
+                        type: string
+                        description: MSDP Package ID returned in MSDP search response
+                        example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
+
         Responses:
             ItineraryNoHotelResultsSearchResponse:
                 title: include_itineraries = true and should_include_hotel_results = false
@@ -691,6 +1047,329 @@ components:
                     fare_structure:
                         $ref: "#/components/schemas/SearchComponents/Flight/SegmentFareStructure"
 
+            MSDPGetHotelDetailsResponse:
+                properties:
+                    super_trip_id:
+                        type: string
+                        example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+                        description: id of the super trip
+                    hotel_trace_id:
+                        type: string
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                        description: An identifier to refer to the hotel for searching room availability
+                    hotel_itinerary_reference:
+                        type: string
+                        example: '1'
+                        description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                    address:
+                        type: object
+                        description: The address of the hotel.
+                        properties:
+                            street_address:
+                                type: string
+                                description: The street address of the hotel. This is more details than the one returned at search.
+                                example: '1583 Brunswick St, Halifax, NS B3J 3P5'
+                            longitude:
+                                type: float
+                                description: The longitude of the hotel.
+                                example: 44.64511447836071
+                            lattitude:
+                                type: float
+                                description: The lattitude of the hotel.
+                                example: -63.575245615440565
+                            distance_from_reference_point_km:
+                                type: float
+                                description: The distance that the hotel is from the reference submitted in the search.
+                                example: 7.5
+                            phone_number:
+                                type: str
+                                description: The contact phone number for the hotel.
+                                example: '+1 902-420-0555'
+                    location_iata:
+                        type: string
+                        description: The location of the hotel.
+                        example: 'LON'
+                    hotel_name:
+                        type: string
+                        description: The name of the hotel.
+                        example: "Cambridge Suites Hotel Halifax"
+                    check_in_time:
+                        type: string
+                        description: The check in time for the hotel.
+                        example: "3pm"
+                    check_out_time:
+                        type: string
+                        description: The check out time.
+                        example: "10am"
+                    rooms:
+                        type: array
+                        description: The list of rooms available at the hotel.
+                        items:
+                            type: object
+                            properties:
+                                total_price:
+                                    type: float
+                                    description: The total price of the entire stay at the hotel for this room.
+                                    example: 705.10
+                                price_per_room_per_night:
+                                    type: float
+                                    description: The price of the room per night.
+                                    example: 141.02
+                                meals:
+                                    type: object
+                                    description: Indicates if meal is provided with the room.
+                                    properties:
+                                        breakfast:
+                                            type: boolean
+                                            description: Indicates if breakfast is provided with the room.
+                                            example: True
+                                        lunch:
+                                            type: boolean
+                                            description: Indicates if lunch is provided with the room.
+                                            example: True
+                                        dinner:
+                                            type: boolean
+                                            description: Indicates if dinner is provided with the room.
+                                            example: True
+                                bed_types:
+                                    type: object
+                                    description: An object where the key is the name of the room type and the value is the number of those beds in the room.
+                                    example: { "Queen bed": 2, "King Single": 1 }
+                                original_total_string:
+                                    type: string
+                                    description: The original total price as a string in the hotels currency is required for the rules request and is presented here.
+                                    example: "SGD172.00"
+                                room_name:
+                                    type: string
+                                    description: A name of the room.
+                                    example: 'Room'
+                                guarantee:
+                                    type: string
+                                    description: The guarantee type for the room - needed for pricing.
+                                    example: "Guarantee"
+                                room_description:
+                                    type: string
+                                    description: A description of the room.
+                                    example: 'Executive Suite Room'
+                                rate_descriotion:
+                                    type: string
+                                    description: A description of the rate.
+                                    example: '2 Double Bed Non Smoking Featuring All The Modern-day Essentials Including A Flat Screen'
+                                refundable:
+                                    type: boolean
+                                    description: Explains whether the booking will be refundable.
+                                    example: True
+                                smoking:
+                                    type: boolean
+                                    description: Indicates whether you are allowed to smoke in the room.
+                                    example: False
+                                max_occupancy:
+                                    type: int
+                                    description: Indicates the max occupancy in the room.
+                                    example: 1
+                                cancel_deadline:
+                                    type: string
+                                    format: date
+                                    description: "Last date of cancel deadline to cancel hotel. format: YYYY-MM-DD."
+                                base_price:
+                                    type: string
+                                    description: The base price as a string in the hotels currency is required for the rules request and is presented here.
+                                    example: "SGD172.00"
+                                cancellation_policy:
+                                    type: string
+                                    description: The cancellation policy
+                                    example: 'non-refundable rate cancellation permitted up to 1days before arrival'
+                                guarantee_policy:
+                                    type: string
+                                    description: The guarantee policy.
+                                    example: ''
+                                deposit:
+                                    type: string
+                                    description: The deposit requirements
+                                    example: 'book 7 days before arrival full room , tax payment due 174.40 gbp deposit due -at time of booking credit card deposit only'
+                                room_rate_descriptions:
+                                    type: object
+                                    description: The various rate descriptions - includes types such as Extra Charges, Rate comment, Rate description, Room detail, Room rate, Room text.
+                                    example: { "Rate description": "Early check in and check out when available.", "Room rate": "Maximum occupancy - 1" }
+                                rule_descriptions:
+                                    type: object
+                                    description: The various rate rules - includes types such as Cancellation, Deposit, Location Text, Miscellaneous, Promotional, and PropertyText
+                                    example: { "Guarantee": "Accept all guarantee methods", "Checkin Checkout": "Check in time 15:00, check out time 11:00" }
+                    hotel_description:
+                        type: string
+                        description: Description of the hotel.
+                        example: PROPERTY DESCRIPTION Midscale Unspecified3 Welcome to Best Western Plus Hawthorne Terrace a oneofakind boutique hotel experience at the center of one of Chicagos most popular neighborhoods Lakeview East.
+                    search_request:
+                        description: parameters to search for this hotel
+                        type: object
+                        properties:
+                            credential_info:
+                                $ref: "#/components/schemas/SearchComponents/Credentials"
+                            hotel_location:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelLocation"
+                            check_in_date:
+                                type: string
+                                format: date
+                                description: "Date of check-in. format: YYYY-MM-DD."
+                                example: "2023-06-20"
+                            check_out_date:
+                                type: string
+                                format: date
+                                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                                example: "2023-06-25"
+                            next_result_reference:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelNextResultReference"
+                            hotel_itinerary_reference:
+                                $ref: "#/components/schemas/SearchComponents/Hotel/HotelItineraryReference"
+                            traveller_total:
+                                description: Number of people that will be staying at the hotel.
+                                type: int
+                                example: 3
+                            rooms_total:
+                                description: The number of rooms required for the above travellers.
+                                type: int
+                                example: 2
+                            rooms:
+                                description: List of guest info for 1 room required to make hotel search requests.
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        num_adults:
+                                            description: Number of adults staying in the room.
+                                            type: int
+                                            example: 2
+                                        num_children:
+                                            description: Number of children staying in the room, if none use 0.
+                                            type: int
+                                            example: 3
+                                        children_age_list:
+                                            description: List of ages for children staying in room. Optional if num_children = 0, Required if num_children > 0.
+                                            type: array of ints
+                                            example: [ 5, 7, 11 ]
+                                        nationality:
+                                            description: 2 letter country code of nationality of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+                                            type: string
+                                            example: "CA"
+                                        country_of_residence:
+                                            description: 2 letter country code of country of residence of primary guest. e.g. CA for Canada, GB for United Kingdom, CO for Colombia.
+                                            type: string
+                                            example: "CA"
+                            currency:
+                                type: string
+                                description: Currency
+                                example: CAD
+                            endpoint:
+                                type: string
+                                description: GDS endpoint called.
+                                example: prod
+                            hotel_trace_id:
+                                type: string
+                                example: "4f499298b303c55a1ee522118afce28abe2f68e4"
+                                description: An identifier to refer to the hotel for searching room availability
+                    detail_request:
+                        type: object
+                        description: Parameters to search for the hotel details.
+                        properties:
+                            super_trip_id:
+                                type: string
+                                example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+                                description: id of the super trip
+                            hotel_trace_id:
+                                type: string
+                                example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                                description: An identifier to refer to the hotel for searching room availability
+                            hotel_itinerary_reference:
+                                type: string
+                                example: '1'
+                                description: A reference that indicates the itineraries position in the flow of itineraries in the super_trip with the index starting at 0.
+                            credential_info:
+                                $ref: "#/components/schemas/SearchComponents/Credentials"
+                            hotel_chain:
+                                type: string
+                                description: The refence for the hotel chain.
+                                example: 'GI'
+                            hotel_code:
+                                type: string
+                                description: The reference for the hotel code
+                                example: '35573'
+                            traveller_total:
+                                type: int
+                                example: 3
+                                description: Number of people that will be staying at the hotel.
+                            rooms_total:
+                                type: int
+                                example: 2
+                                description: The number of rooms required for the above travellers.
+                            room_type:
+                                type: string
+                                example: 'Double'
+                                description: The type of room to price.
+                            currency:
+                                type: string
+                                example: 'CAD'
+                                description: The currency that the details should be presented in.
+                            check_in_date:
+                                type: string
+                                format: date
+                                description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                                example: '2021-05-10'
+                            check_out_date:
+                                type: string
+                                format: date
+                                description: "Date to checkout from the hotel. format: YYYY-MM-DD."
+                                example: '2021-05-15'
+                            hotel_location:
+                                type: object
+                                description: location (city, airport, or reference point) to search for hotels in.
+                                required:
+                                    - type
+                                    - IATA
+                                properties:
+                                    type:
+                                        type: string
+                                        description: Defines whether it's a city ('C'), airport ('A'), or reference point ('R')
+                                        example: 'R'
+                                    IATA:
+                                        type: string
+                                        description: The IATA code for the city/airport, or nearest IATA for the reference point
+                                        example: 'PAR'
+                                    name:
+                                        type: string
+                                        description: The IATA code for the city/airport, or nearest IATA for the reference point. Required for reference point.
+                                        example: 'Eiffel Tower'
+                                    region:
+                                        type: string
+                                        description: The state/province for the reference point. Only required for reference point if there are multiple reference points with same name in the same country.
+                                        example: 'NS'
+                                    country:
+                                        type: string
+                                        description: The 2-letter country code for the reference point. Required for reference point.
+                                        example: 'FR'
+
+            MSDPPreBookingResponse:
+                description: Consists of the hotel status response
+                type: object
+                properties:
+                    hotel_results:
+                        type: array
+                        description: Consists of the hotel status response
+                        items:
+                            type: object
+                            properties:
+                                id:
+                                    type: int
+                                    description: Matching id from the flight id for the msdp package
+                                    example: 1
+                                hotel_trace_id:
+                                    type: string
+                                    example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                                    description: An identifier to refer to the hotel for searching room availability
+                                allocation_details:
+                                    type: array
+                                    description: A time-limited token for further booking steps for Webbeds Hotels
+                                    example: ['1671746519000001B1029B0']
+
 
         SearchComponents:
             Hotel:
@@ -723,6 +1402,7 @@ components:
                                             type: string
                                             example: "London, England"
                                         rating:
+                                            description: The rating of the hotel.
                                             type: object
                                             properties:
                                                 rating:
@@ -1751,6 +2431,195 @@ components:
                         description: Indicates the currency that the PCC is charged in.
                         type: string
                         example: "CAD"
+
+        ReportComponents:
+            segment_ids:
+                type: Array of strings and/or Array of arrays
+                description: |
+                    Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
+
+                    This is the example structure but should be generalized for all combinations as Trip Ninja’s technology handles more than just 3-segment trips.
+                    1) structure: [0, 1]
+                        - `segment_ids: ["segment_id_0", "segment_id_1"]`
+                    2) structure: [(0, 1)]
+                        - `segment_ids: [["segment_id_0", "segment_id_1"]]`
+                    3) structure: [0, 1, 2]
+                        - `segment_ids: ["segment_id_0", "segment_id_1", "segment_id_2"]`
+                    4) structure: [(0, 1), 2]
+                        - `segment_ids: [["segment_id_0", "segment_id_1"], "segment_id_2"]`
+                    5) structure: [(0, 2), 1]
+                        - `segment_ids: [["segment_id_0", "segment_id_2"], "segment_id_1"]`
+                    6) structure: [0, (1, 2)]
+                        - `segment_ids: ["segment_id_0", ["segment_id_1", "segment_id_2"]]`
+                example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
+
+            hotel_trace_ids:
+                type: array of strings
+                description: Array of hotel_trace_ids for the searched hotels.
+                example: ["18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1"]
+
+            hotel_amenities:
+                type: array
+                description: A list of the amenities provided at this hotel.
+                items:
+                    type: object
+                    properties:
+                        amenity_type:
+                            type: string
+                            description: The amenity type, can be either HA (Hotel Amenity) or RA (Room amenity)
+                            example: "HA"
+                        amenity_title:
+                            type: string
+                            description: A title or descriptor of the amenity provided.
+                            example: High speed internet connection
+
+            hotel_price_confirm_details:
+                required:
+                    - id
+                    - hotel_trace_id
+                    - hotel_code
+                    - hotel_name
+                    - hotel_chain
+                    - iata
+                    - check_in_date
+                    - check_out_date
+                    - check_in_time
+                    - check_out_time
+                    - room_type
+                    - rate_plan_type
+                    - rating
+                    - base_price
+                    - original_total_string
+                    - amenities
+                properties:
+                    id:
+                        type: int
+                        example: 1
+                        description: Matching id from the flight id for the msdp package
+                    hotel_trace_id:
+                        type: string
+                        example: '4f499298b303c55a1ee522118afce28abe2f68e4'
+                        description: The reference for the hotel search.
+                    hotel_code:
+                        type: string
+                        description: The reference for the hotel code.
+                        example: '35573'
+                    hotel_name:
+                        type: string
+                        description: The name of the hotel to be priced.
+                        example: Comfort Inn
+                    hotel_chain:
+                        type: string
+                        description: The refence for the hotel chain.
+                        example: 'GI'
+                    iata:
+                        type: string
+                        description: The location of the hotel.
+                        example: 'LON'
+                    check_in_date:
+                        type: string
+                        format: date
+                        description: "Date of check-in to search hotel availibilities on. format: YYYY-MM-DD."
+                    check_out_date:
+                        type: string
+                        format: date
+                        description: "Date to checkout from the hotel. Format: YYYY-MM-DD."
+                    check_in_time:
+                        type: string
+                        description: The check in time for the hotel.
+                        example: "3pm"
+                    check_out_time:
+                        type: string
+                        description: The check out time
+                        example: "10am"
+                    room_type:
+                        type: string
+                        example: 'Double'
+                        description: The type of room to price.
+                    rate_plan_type:
+                        type: string
+                        example: 'A00BOB'
+                        description: The type reference for the rate plan selected for this hotel and this room.
+                    rating:
+                        type: int
+                        description: The hotel rating
+                        example: 4
+                    converted_total_price:
+                        type: float
+                        example: 127.0
+                        description: The total price converted into the currency searched in. This can used as a reference to the price billed at booking when retrieving the booking at a later date.
+                    base_price:
+                        type: string
+                        description: The base price as a string in the hotels currency is required for the rules request and is presented here.
+                        example: "SGD172.00"
+                    original_total_string:
+                        type: string
+                        description: The original total price as a string in the hotels currency is required for the rules request and is presented here.
+                        example: "SGD172.00"
+                    amenities:
+                        $ref: "#/components/schemas/ReportComponents/hotel_amenities"
+                    guarantee:
+                        type: string
+                        description: The guarantee type for the room.
+                        example: "Guarantee"
+                    cancel_deadline:
+                        type: string
+                        format: date
+                        description: "Last date of cancel deadline to cancel hotel. format: YYYY-MM-DD."
+
+            hotel_room_details:
+                type: object
+                description: Consist of details of the hotel rooms that is selected for price confirm
+                required:
+                    - currency
+                    - rooms_total
+                    - traveller_total
+                    - credential_info
+                    - rooms
+                properties:
+                    currency:
+                        type: string
+                        description: Currency
+                        example: CAD
+                    rooms_total:
+                        type: int
+                        example: 2
+                        description: The number of rooms required for the above travellers.
+                    traveller_total:
+                        type: int
+                        example: 3
+                        description: Number of people that will be staying at the hotel.
+                    credential_info:
+                        required:
+                            - data_source
+                            - pcc
+                            - provider
+                            - pcc_currency
+                        type: object
+                        description: Indicate data source to call and required credentials
+                        properties:
+                            data_source:
+                                description: data source to call.
+                                type: string
+                                enum: [ "webbeds", "travelport" ]
+                                example: "travelport"
+                            pcc:
+                                description: PCC/OfficeID to emulate transactions under. Must have emulation enabled for the relevant Service Bureau PCC used by Trip Ninja to conduct queries. Please contact Trip Ninja to get this set up.
+                                type: string
+                                example: "MEL49f839"
+                            provider:
+                                description: Fare provider to use.<br  />“1V” - Apollo, “1G” - Galileo, “1P” - Worldspan, “1A” - Amadeus, “webbeds” - Webbeds
+                                type: string
+                                example: "1A"
+                            pcc_currency:
+                                description: Indicates the currency that the PCC is charged in.
+                                type: string
+                                example: "CAD"
+                    rooms:
+                        type: array
+                        description: Array of rooms for the booked hotel rooms
+                        items:
+                            $ref: "#/components/schemas/ReportComponents/hotel_price_confirm_details"
 
         ErrorDetails:
             description: When an error occurs, there will be a list of error codes detailing the issue(s). For more information regarding the errors refer to the error codes section.
