@@ -91,6 +91,8 @@ servers:
   - url: https://preprodapi.tripninja.io
     description: Pre-Production server
 
+
+
 paths:
     /search/flights/{endpoint}/:
         post:
