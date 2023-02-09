@@ -2747,7 +2747,7 @@ components:
                         example: "MSDP requests need a minimum of one flight and one hotel in the request."
             INVALID_MSDP_ID:
                 type: object
-                title: "Un-matching flights and hotels ID"
+                title: "Mis-matching flights and hotels ID"
                 properties:
                     status:
                         type: string
