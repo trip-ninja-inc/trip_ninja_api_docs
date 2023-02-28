@@ -19,7 +19,7 @@ info:
             - API username and password have been provided by Trip Ninja.<br  />
         
         <h2>Workflow</h2>
-        The following diagram shows the typical data flow of API calls to Trip Ninja for a typical OTA integration.
+        The following diagram shows the typical data flow of API calls to Trip Ninja for a typical OTA integration using our new core non-emulation architecture.
         
         ![Workflow diagram](https://s3.amazonaws.com/tn-api-docs/ota_flowchart.png)
         
@@ -69,8 +69,7 @@ paths:
         post:
             summary: "Get Searches"
             description: |
-                This endpoint carries out FareStructure and if applicable Virtual Interlining logic to determine the datasource
-                searches required. The response contains a list of searches to be done by the OTA, which are then passed in the next
+                This endpoint carries out FareStructure and if applicable Virtual Interlining logic to determine the optimal searches predicted to provide the best flight search results. The response contains a list of searches to be done by the OTA, which are then passed in the next
                 endpoint (generate-solutions) to get the results.
 
             operationId: GetSearchesRequest
