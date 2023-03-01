@@ -455,7 +455,9 @@ components:
 
         DatasourceSegmentDetails:
             type: object
-            description: Contains extra information about the segment that was sent by the OTA
+            description: "Contains extra information about the segment that was sent by the OTA.
+                This field is completely optional and we will not alter the data within this object.
+                Whatever passed within this object will be returned as-is back to the OTA."
             properties:
                 segment_id:
                     type: string
@@ -561,6 +563,7 @@ components:
                 - departure_time
                 - arrival_time
                 - flight_number
+                - plating_carrier
                 - transportation_type
             properties:
                 departure_time:
@@ -575,6 +578,10 @@ components:
                     type: string
                     description: Flight number. Example = "391"
                     example: "391"
+                plating_carrier:
+                    type: string
+                    description: Plating carrier. Example = "WS"
+                    example: "WS"
                 transportation_type:
                     type: string
                     description: "Transportation vehicle used for this segment."
@@ -712,13 +719,15 @@ components:
                         type: Array of ints and/or Array of tuple/or Array of tuple and int
                         description: |
                             "Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
-                            For example: [(0, 1), (3, 4), 2] means there would be three segments. One openjaw with key “01”, 
+                            For example: [(0, 1), (3, 4), 2] means there would be three bookings. One openjaw with key “01”, 
                             one with key “34” and a one-way with key ‘2”."
                             See Price Confirm Report segment_ids field for more detail.
                         example: "[(0, 1), 2]"
                     segment_metadata:
                         type: array
-                        description: Contains extra information about the segment that was sent by the OTA
+                        description: "Contains extra information about the segment that was sent by the OTA.
+                            This field is completely optional and we will not alter the data within this object.
+                            Whatever passed within this object will be returned as-is back to the OTA."
                         items:
                             allOf:
                                 -   $ref: '#/components/schemas/DatasourceSegmentDetails'
