@@ -123,7 +123,15 @@ paths:
     /generate-solutions/:
         post:
             summary: "Generate Solutions"
-            description: This is called after get-searches and the datasource requests have been carried out OTA-side. This call takes those results and generates itineraries based on the results and the original request.
+            description: "
+            There are two ways to approach this endpoint. For each search the OTA performed, we have provided a optional metadata field per pricing solution.
+            This allows the customer to pass in any metadata (branded fares, tax info, ect) regarding that specific pricing solution.
+            When we have finished generating the itineraries for the search, we will pass these values in a list inside the corresponding itinerary.<br/>
+            This will allow the response from the generate-solutions endpoint to be totally FE ready, in whatever format the OTA decides.
+            The downside of this approach is this will inflate the request/response size considerably.<br/>
+            An alternative is to simply ignore the metadata field. Using this minimal approach the OTA simply sends all the required fields listed in our docs.
+            This will result in a much smaller request/response, however it will be up to the OTA to process the data on their end and add any additional metadata to the itineraries returned.
+            "
             operationId: GenerateSolutionsRequest
             requestBody:
                 content:
