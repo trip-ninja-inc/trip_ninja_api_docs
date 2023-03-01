@@ -578,9 +578,9 @@ components:
                     type: string
                     description: Flight number. Example = "391"
                     example: "391"
-                plating_carrier:
+                operating_carrier:
                     type: string
-                    description: Plating carrier. Example = "WS"
+                    description: Operating carrier. Example = "WS"
                     example: "WS"
                 transportation_type:
                     type: string
