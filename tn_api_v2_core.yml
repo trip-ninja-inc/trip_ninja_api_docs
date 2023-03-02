@@ -138,7 +138,6 @@ paths:
                     application/json:
                         schema:
                             oneOf:
-                                -   $ref: '#/components/schemas/MinimalGenerateSolutionsRequest'
                                 -   $ref: '#/components/schemas/FullGenerateSolutionsRequest'
             responses:
                 200:
@@ -361,25 +360,9 @@ components:
                     enum: [ "E", "PE", "BC", "FC", "PFC" ]
                     example: "E"
 
-
-        MinimalGenerateSolutionsRequest:
-            type: object
-            title: Generate Solutions Request (Minimal)
-            properties:
-                trip_id:
-                    description: The trip id of the search. This will be used in all future requests relating to this search.
-                    type: string
-                    example: "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
-                datasource_responses:
-                    description: The list of datasource responses to be used to generate solutions.
-                    type: object
-                    allOf:
-                        -   $ref: '#/components/schemas/MinimalDatasourceResponse'
-
-
         FullGenerateSolutionsRequest:
             type: object
-            title: Generate Solutions Request (With Extra Details)
+            title: Generate Solutions Request
             properties:
                 trip_id:
                     description: The trip id of the search. This will be used in all future requests relating to this search.
