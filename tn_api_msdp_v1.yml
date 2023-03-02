@@ -79,16 +79,11 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: "IE23"
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: "Not a valid city."
+                                oneOf:
+                                    - $ref: "#/components/schemas/MSDPSearchErrorDetails/MISSING_MSDP_SEARCH_FIELD"
+                                    - $ref: "#/components/schemas/MSDPSearchErrorDetails/INVALID_MSDP_SEARCH_REQUEST"
+                                    - $ref: "#/components/schemas/MSDPSearchErrorDetails/INVALID_MSDP_ID"
+                                    - $ref: "#/components/schemas/MSDPSearchErrorDetails/INVALID_MSDP_PACKAGE_DATES"
                 401:
                     description: Unauthorized
                     content:
@@ -315,16 +310,9 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: "400"
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: "Query parameters are wrong or cached request is expired."
+                                oneOf:
+                                    - $ref: "#/components/schemas/MSDPRemoveHotelErrorDetails/INVALID_REQUEST"
+                                    - $ref: "#/components/schemas/MSDPRemoveHotelErrorDetails/INVALID_NUM_OF_HOTELS"
                 401:
                     description: Unauthorized
                     content:
@@ -366,16 +354,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: Error code and 0 for success response
-                                        example: "IE23"
-                                    message:
-                                        type: string
-                                        description: Contains the error message
-                                        example: "Not a valid city."
+                                oneOf:
+                                    - $ref: "#/components/schemas/MSDPHotelDetailErrorDetails/MISSING_FIELDS"
+                                    - $ref: "#/components/schemas/MSDPHotelDetailErrorDetails/INVALID_IATA"
+                                    - $ref: "#/components/schemas/MSDPHotelDetailErrorDetails/INVALID_FIELD_TYPE"
+                                    - $ref: "#/components/schemas/MSDPHotelDetailErrorDetails/INVALID_FIELD_VALUE"
+                                    - $ref: "#/components/schemas/MSDPHotelDetailErrorDetails/HOTEL_LOCATION_MISSING_TYPE_R"
                 401:
                     description: Unauthorized
                     content:
@@ -394,7 +378,7 @@ paths:
                 500:
                     description: Server Error
 
-    /msdp/pre-booking/:
+    /msdp/pre-booking/prod:
         post:
             summary: "MSDP Price Confirmation Report"
             description: "When performing an availability or price confirmation request - when a user has selected their MSDP package or is arriving on the site from
@@ -413,17 +397,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Responses/MSDPPreBookingResponse"
+                206:
+                    description: Partial Content
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/MSDPOTAPreBookingErrorDetails/NO_ROOM_AVAILABLE"
                 400:
                     description: Invalid Input
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: States whether request to book was successful.
-                                        example: Not booked
+                                oneOf:
+                                    - $ref: "#/components/schemas/MSDPOTAPreBookingErrorDetails/MISSING_DATASOURCE"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/NOT_BOOKED"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/INVALID_FIELD_TYPE"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/MISSING_FIELDS"
+                500:
+                    description: Server Error
 
 
     /msdp/booking/:
@@ -452,12 +443,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: States whether request to book was successful.
-                                        example: Not booked
+                                oneOf:
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/NOT_BOOKED"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/INVALID_FIELD_TYPE"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/MISSING_FIELDS"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/INVALID_TRIP_ID"
+                                    - $ref: "#/components/schemas/MSDPOTABookingErrorDetails/UNABLE_TO_RETRIEVE_ITINERARY_PROFILE"
+                500:
+                    description: Server Error
 
     /msdp/ticketing/:
         post:
@@ -486,12 +479,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        description: States whether request to book was successful.
-                                        example: Not booked
+                                oneOf:
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/NOT_BOOKED"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/INVALID_FIELD_TYPE"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/MISSING_FIELDS"
+                                    - $ref: "#/components/schemas/GeneralErrorDetails/INVALID_TRIP_ID"
+                                    - $ref: "#/components/schemas/MSDPOTATicketingCancelErrorDetails/INVALID_MSDP_PACKAGE_ID"
+                500:
+                    description: Server Error
     /msdp/cancel/:
         post:
             summary: "MSDP Cancel Booking Report"
@@ -518,12 +513,9 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    response:
-                                        type: string
-                                        description: States whether request to cancel was successful.
-                                        example: Could not cancel trip, check your trip_id.
+                                $ref: "#/components/schemas/MSDPOTATicketingCancelErrorDetails/INVALID_MSDP_PACKAGE_ID"
+                500:
+                    description: Server Error
 
 
 
@@ -2731,3 +2723,229 @@ components:
                     type: string
                     description: |
                         Provider missing, expected one of "1V, 1G, 1P, 1A, 1S"
+
+        MSDPSearchErrorDetails:
+            MISSING_MSDP_SEARCH_FIELD:
+                type: object
+                title: "Missing field"
+                properties:
+                    field:
+                        type: array or object or string
+                        description: Contains the error message
+                        example: "This field is required."
+            INVALID_MSDP_SEARCH_REQUEST:
+                type: object
+                title: "Invalid MSDP search request"
+                properties:
+                    status:
+                        type: string
+                        description: Error code
+                        example: "218"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "MSDP requests need a minimum of one flight and one hotel in the request."
+            INVALID_MSDP_ID:
+                type: object
+                title: "Mis-matching flights and hotels ID"
+                properties:
+                    status:
+                        type: string
+                        description: Error code
+                        example: "218"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "MSDP ID validation failed. MSDP flights and hotels require matching and unique IDs for all MSDP requests"
+            INVALID_MSDP_PACKAGE_DATES:
+                type: object
+                title: "Un-matching flights and hotels dates"
+                properties:
+                    status:
+                        type: string
+                        description: Error code
+                        example: "218"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "MSDP search requests require flight departure dates to occur before hotel check in dates for each package"
+
+        MSDPRemoveHotelErrorDetails:
+            INVALID_REQUEST:
+                type: object
+                title: "Expired request or hotel_trace_id not found"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Query parameters are wrong or cached request is expired."
+            INVALID_NUM_OF_HOTELS:
+                type: object
+                title: "Invalid number of hotels in the package"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "218"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "MSDP requests need a minimum of one flight and one hotel in the request."
+
+        MSDPHotelDetailErrorDetails:
+            MISSING_FIELDS:
+                type: object
+                title: "Missing Fields"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Value missing for field traveller_total"
+            INVALID_IATA:
+                type: object
+                title: "Invalid IATA Code"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "IATA code must be 3 letters you passed TEST"
+            INVALID_FIELD_TYPE:
+                type: object
+                title: "Invalid field type"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Type wrong for field traveller_total, expected int but was passed str"
+            INVALID_FIELD_VALUE:
+                type: object
+                title: "Invalid field value"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Bad traveller_total value of 25. 1 <= traveller_total <= 20"
+            HOTEL_LOCATION_MISSING_TYPE_R:
+                type: object
+                title: "Hotel location name missing with hotel_location_type='R'"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "if hotel location type is R then the hotel location name must be passed"
+
+        MSDPOTAPreBookingErrorDetails:
+            NO_ROOM_AVAILABLE:
+                type: object
+                title: "Hotel room not available"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "IE38"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "No room available"
+            MISSING_DATASOURCE:
+                type: object
+                title: "Missing Datasource (wrong format of the response)"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Failed to save pre-booked flight: Data source is not found in the request"
+
+        GeneralErrorDetails:
+            NOT_BOOKED:
+                type: object
+                title: "Failed to book"
+                properties:
+                    status:
+                        type: string
+                        description: States whether request to book was successful.
+                        example: Not booked
+            INVALID_FIELD_TYPE:
+                type: object
+                title: "Invalid field type"
+                properties:
+                    field:
+                        type: string
+                        description: Contains the error message
+                        example: "A valid integer is required"
+            MISSING_FIELDS:
+                type: object
+                title: "Missing field"
+                properties:
+                    field:
+                        type: string
+                        description: Contains the error message
+                        example: "This field is required."
+            INVALID_TRIP_ID:
+                type: object
+                title: "Invalid trip_id"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Failed to save booked flight: Trip ID not found"
+
+        MSDPOTABookingErrorDetails:
+            UNABLE_TO_RETRIEVE_ITINERARY_PROFILE:
+                type: object
+                title: "Invalid msdp_pacakge_id"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Error while getting itinerary profile for hotel 4f8d0f694db55e220c5749ee48f1962252beda41: ItineraryProfile matching query does not exist."
+
+        MSDPOTATicketingCancelErrorDetails:
+            INVALID_MSDP_PACKAGE_ID:
+                type: object
+                title: "Invalid msdp_package_id"
+                properties:
+                    status:
+                        type: string
+                        description: Error code and 0 for success response
+                        example: "400"
+                    message:
+                        type: string
+                        description: Contains the error message
+                        example: "Error while saving ticketing status for d8af3a35dd77333f99510ad7373c98cf7fe502bf: SuperTrip matching query does not exist."
