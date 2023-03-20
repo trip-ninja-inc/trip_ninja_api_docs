@@ -64,7 +64,7 @@ info:
       <tr><td>IE10</td><td>Incorrect city_type, expected one of ['C', 'A']</td></tr>
       <tr><td>IE16</td><td>Please provide a PCC</td></tr>
       <tr><td>IE17</td><td>Invalid carrier</td></tr>
-      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas','edge'</td></tr>
+      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas', 'edge'</td></tr>
       <tr><td>IE20</td><td>Incorrect provider, expected one of '1V','1G','1P','1A'</td></tr>
       <tr><td>IE21</td><td>Wrong currency</td></tr>
       <tr><td>IE22</td><td>Not a valid cabin option. expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'</td></tr>
@@ -938,7 +938,7 @@ components:
                 description: Time Value (Original Alpha) outside of expected range [$0,$200]/hr
             IE19:
                 type: string
-                description: Incorrect region - expected one of ‘emea’,’apac’,’americas’,’edge’
+                description: Incorrect region - expected one of ‘emea’, ’apac’, ’americas’, ’edge’
             IE20:
                 type: string
                 description: Incorrect provider - expected one of '1V','1G','1P','1A'
