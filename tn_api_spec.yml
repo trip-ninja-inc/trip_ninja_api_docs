@@ -1331,7 +1331,7 @@ components:
                 description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
                 required: false
                 type: string
-                enum: ["emea","apac","americas","edge"]
+                enum: ["emea", "apac", "americas", "edge"]
                 default: "americas"
                 example: americas
             itx:
