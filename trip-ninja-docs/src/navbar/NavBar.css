@@ -2,6 +2,7 @@
 .navbar {
   background-color: var(--grey-lighter);
   border-bottom: 1px solid var(--grey-mid);
+  height: 130px;
 }
 
 .logo-text {
