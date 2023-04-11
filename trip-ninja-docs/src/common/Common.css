@@ -1,0 +1,6 @@
+.connect-banner {
+  padding: 20px;
+  border-radius: 6px;
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--grey-mid);
+}
