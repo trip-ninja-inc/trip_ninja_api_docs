@@ -21,3 +21,33 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.link-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.body-text {
+  font-size: 14px;
+  font-weight: 500;
+}
