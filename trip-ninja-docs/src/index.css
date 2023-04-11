@@ -44,9 +44,14 @@ h3 {
 .link-text {
   font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .body-text {
   font-size: 14px;
   font-weight: 500;
+}
+
+.primary-text {
+  color: var(--primary);
 }
