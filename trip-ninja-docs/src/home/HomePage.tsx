@@ -1,7 +1,7 @@
 import React from "react";
 import MetricLabel from "./MetricLabel";
 import ConnectWithSales from "../common/ConnectWithSales";
-
+import homepageImage from "../assets/homepage-image.png";
 
 export default function HomePage() {
   return(
@@ -21,7 +21,7 @@ export default function HomePage() {
             </a>
           </div>
           <div className="col-md-6">
-            
+            <img src={homepageImage} alt="homepage" className="image" />
           </div>
         </div>
         <div className="row mt-5 text-center">

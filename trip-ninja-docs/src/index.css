@@ -66,3 +66,7 @@ a:hover {
   font-size: 12px;
   -webkit-text-stroke: 1px;
 }
+
+.image {
+  width: 100%;
+}
