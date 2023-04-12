@@ -15,7 +15,7 @@ export default function NavBar() {
     `nav-link ${navType == pathName ? 'selected-link' : ''}`;
 
   return(
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-expand">
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-12 mt-4">
@@ -36,19 +36,6 @@ export default function NavBar() {
               id="contact-sales-button">
                 Contact Sales
             </a>
-            <div className="col-sm-12">
-              <button 
-                className="navbar-toggler ms-auto" 
-                type="button" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#navbarNavAltMarkup" 
-                aria-controls="navbarNavAltMarkup" 
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-            </div>
             <div className="collapse navbar-collapse pt-3 ms-2" id="navbarNavAltMarkup">
               <div className="navbar-nav ms-auto">
                 <a className={addNavLinkClass(NavLinkUrls.HOME)} aria-current="page" href={NavLinkUrls.HOME}>

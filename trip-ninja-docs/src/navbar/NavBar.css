@@ -3,6 +3,7 @@
   background-color: var(--grey-lighter);
   border-bottom: 1px solid var(--grey-mid);
   height: 130px;
+  overflow-x: auto;
 }
 
 .logo-text {
@@ -16,7 +17,7 @@
   font-weight: 500;
   display: inline-block;
   position: relative;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .nav-link:hover, .selected-link {
