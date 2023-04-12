@@ -12,6 +12,8 @@
 }
 
 .nav-link {
+  margin-right: 10px;
+  display: inline-block;
   position: relative;
 }
 
@@ -20,10 +22,19 @@
   font-weight: 700;
 }
 
-.nav-link::after {
-  content: "";
+.nav-link::before {
+  transition: 100ms;
   height: 2px;
+  content: "";
+  position: absolute;
+  background-color: var(--primary);
+  height: 0%;
   width: 100%;
-  background: var(--primary);
-  display: block;
+  bottom: -3px;
+  font-weight: bold;
+}
+
+.nav-link:hover::before {
+  height: 2px;
+  bottom: -3px
 }
