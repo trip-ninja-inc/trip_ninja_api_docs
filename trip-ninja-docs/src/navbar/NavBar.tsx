@@ -32,7 +32,7 @@ export default function NavBar() {
             </div>
             <div className="collapse navbar-collapse pt-3 ms-2" id="navbarNavAltMarkup">
               <div className="navbar-nav ms-auto">
-                <a className="nav-link active" aria-current="page" href="/">Home</a>
+                <a className="nav-link active-link" aria-current="page" href="/">Home</a>
                 <a className="nav-link" href="/farestructure/overview/">Farestructure</a>
                 <a className="nav-link" href="/">Virtual Interlining</a>
                 <a className="nav-link" href="/">Dynamic Packaging</a>

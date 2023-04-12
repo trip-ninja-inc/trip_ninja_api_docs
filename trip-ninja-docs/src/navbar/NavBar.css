@@ -10,3 +10,20 @@
   font-weight: 800;
   font-size: 22px; 
 }
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary) !important;
+  font-weight: 700;
+}
+
+.nav-link::after {
+  content: "";
+  height: 2px;
+  width: 100%;
+  background: var(--primary);
+  display: block;
+}
