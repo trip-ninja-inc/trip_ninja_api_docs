@@ -19,7 +19,7 @@
   text-align: center;
 }
 
-.nav-link:hover {
+.nav-link:hover, .selected-link {
   color: var(--primary) !important;
   text-shadow: 0px 0px 1px var(--primary), 0px 0px 1px var(--primary);
 }
@@ -35,7 +35,7 @@
   bottom: -3px;
 }
 
-.nav-link:hover::before {
+.nav-link:hover::before, .selected-link::before {
   content: "";
   height: 2px;
   bottom: -3px;

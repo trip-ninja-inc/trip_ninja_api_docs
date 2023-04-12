@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./NavBar.css"
+import history from '../History';
+import { NavLinkUrls } from "../common/GeneralConstants";
 
 export default function NavBar() {
+
+  const [pathName, setPathName] = useState('');
+
+  history.listen((location: any, _: any) => setPathName(location.pathname));
+  useEffect(() => setPathName(history.location.pathname), []);
+  useEffect(() => console.log(pathName), [pathName]);
+
+  const addNavLinkClass = (navType: string) => 
+    `nav-link ${navType == pathName ? 'selected-link' : ''}`;
+
   return(
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
@@ -32,10 +44,10 @@ export default function NavBar() {
             </div>
             <div className="collapse navbar-collapse pt-3 ms-2" id="navbarNavAltMarkup">
               <div className="navbar-nav ms-auto">
-                <a className="nav-link active-link" aria-current="page" href="/">Home</a>
-                <a className="nav-link" href="/farestructure/overview/">Farestructure</a>
-                <a className="nav-link" href="/virtual-interlining/overview">Virtual Interlining</a>
-                <a className="nav-link" href="/dynamic-packaging/overview">Dynamic Packaging</a>
+                <a className={addNavLinkClass("/")} aria-current="page" href="/">Home</a>
+                <a className={addNavLinkClass(NavLinkUrls.FARESTRUCTURE)} href={NavLinkUrls.FARESTRUCTURE}>Farestructure</a>
+                <a className={addNavLinkClass(NavLinkUrls.VI)} href={NavLinkUrls.VI}>Virtual Interlining</a>
+                <a className={addNavLinkClass(NavLinkUrls.MSDP)} href={NavLinkUrls.MSDP}>Dynamic Packaging</a>
               </div>
             </div>
           </div>
