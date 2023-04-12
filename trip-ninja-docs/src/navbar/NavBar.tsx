@@ -17,17 +17,19 @@ export default function NavBar() {
               />
               <span className="logo-text ms-2 align-text-top">DOCS</span>
             </a>
-            <button 
-              className="navbar-toggler ms-auto" 
-              type="button" 
-              data-bs-toggle="collapse" 
-              data-bs-target="#navbarNavAltMarkup" 
-              aria-controls="navbarNavAltMarkup" 
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
+            <div className="col-sm-12">
+              <button 
+                className="navbar-toggler ms-auto" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navbarNavAltMarkup" 
+                aria-controls="navbarNavAltMarkup" 
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span className="navbar-toggler-icon"></span>
+              </button>
+            </div>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav ms-auto">
                 <a className="nav-link active" aria-current="page" href="/">Home</a>
