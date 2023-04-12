@@ -40,3 +40,19 @@
   height: 2px;
   bottom: -3px;
 }
+
+#contact-sales-button {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+
+#contact-sales-button:hover {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+#contact-sales-button:active {
+  background-color: var(--primary-dark);
+  color: white;
+}
