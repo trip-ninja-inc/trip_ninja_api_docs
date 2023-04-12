@@ -6,8 +6,8 @@ export default function NavBar() {
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-sm-12">
-            <a className="navbar-brand" href="/">
+          <div className="col-sm-12 mt-4">
+            <a className="navbar-brand ms-2" href="/">
               <img 
                 src="https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png" 
                 alt="Trip Ninja Logo" 
@@ -30,7 +30,7 @@ export default function NavBar() {
                 <span className="navbar-toggler-icon"></span>
               </button>
             </div>
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="collapse navbar-collapse pt-3 ms-2" id="navbarNavAltMarkup">
               <div className="navbar-nav ms-auto">
                 <a className="nav-link active" aria-current="page" href="/">Home</a>
                 <a className="nav-link" href="/farestructure/overview/">Farestructure</a>
