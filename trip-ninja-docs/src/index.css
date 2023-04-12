@@ -37,6 +37,11 @@ h3 {
   font-weight: 600;
 }
 
+p {
+  font-size: 14px;
+  font-weight: 400;
+}
+
 a:hover {
   color: var(--primary);
   opacity: 0.8;
