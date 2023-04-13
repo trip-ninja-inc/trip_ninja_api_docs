@@ -18,6 +18,7 @@ export default function Pagination(props: PaginationProps) {
         </div>
         <div>
           <p>Next Page</p>
+          
         </div>
       </div>
     </div>
