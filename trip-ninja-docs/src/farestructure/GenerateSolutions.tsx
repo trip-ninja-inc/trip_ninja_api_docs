@@ -1,5 +1,6 @@
 import React from "react";
 import generateSolutionsFlow from "../assets/core-generate-solutions-flow.png"
+import { redocConfig } from "../common/RedocConfig";
 import { RedocStandalone } from 'redoc';
 import "./Redoc.css";
 
@@ -58,24 +59,7 @@ export default function GenerateSolutions() {
       <hr className="mt-5 mb-0"/>
       <RedocStandalone 
         specUrl="https://api.redocly.com/registry/bundle/trip-ninja/FareStructure%20-%20Core%20-%20Generate%20Solutions/v0/openapi.yaml?branch=main" 
-        options={{
-          hideDownloadButton: true,
-          pathInMiddlePanel: true,
-          theme: {
-            breakpoints: {
-              medium: '200rem'
-            },
-            typography: {
-              fontFamily: 'Montserrat, sans-serif',
-            },
-            sidebar: {
-              width: '0px'
-            },
-            rightPanel: {
-              backgroundColor: '#fff',
-            }
-          }
-        }}
+        options={redocConfig}
       />
     </div>
   );

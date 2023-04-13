@@ -1,5 +1,6 @@
 import React from "react";
 import getSearchesFlow from "../assets/core-get-searches-flow.png"
+import { redocConfig } from "../common/RedocConfig";
 import { RedocStandalone } from 'redoc';
 import "./Redoc.css";
 
@@ -30,24 +31,7 @@ export default function GetSearches() {
       <hr className="mt-5 mb-0"/>
       <RedocStandalone 
         specUrl="https://api.redocly.com/registry/bundle/trip-ninja/FareStructure%20-%20Core/v0/openapi.yaml?branch=main" 
-        options={{
-          hideDownloadButton: true,
-          pathInMiddlePanel: true,
-          theme: {
-            breakpoints: {
-              medium: '200rem'
-            },
-            typography: {
-              fontFamily: 'Montserrat, sans-serif',
-            },
-            sidebar: {
-              width: '0px'
-            },
-            rightPanel: {
-              backgroundColor: '#fff',
-            }
-          }
-        }}
+        options={redocConfig}
       />
     </div>
   );
