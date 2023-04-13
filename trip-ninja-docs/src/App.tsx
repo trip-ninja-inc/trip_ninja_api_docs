@@ -4,6 +4,7 @@ import history from "./History";
 import NavBar from "./navbar/NavBar";
 import HomePage from "./home/HomePage";
 import FareStructure from "./farestructure/FareStructure";
+import DynamicPackaging from "./msdp/DynamicPackaging";
 
 
 export default function App() {
@@ -19,6 +20,10 @@ export default function App() {
           <Route 
             exact path="/farestructure/:view" 
             component={() => <FareStructure /> } 
+          />
+          <Route
+            exact path="/dynamic_packaging/:view"
+            component={() => <DynamicPackaging />}
           />
         </Switch>
       </Router>

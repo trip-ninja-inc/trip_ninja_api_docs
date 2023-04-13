@@ -31,7 +31,7 @@ export default function NavBar() {
             <a className="nav-link active" aria-current="page" href="/">Home</a>
             <a className="nav-link" href="/farestructure/overview/">Farestructure</a>
             <a className="nav-link" href="/">Virtual Interlining</a>
-            <a className="nav-link" href="/">Dynamic Packaging</a>
+            <a className="nav-link" href="/dynamic_packaging/overview/">Dynamic Packaging</a>
         </div>
       </div>
     </div>
