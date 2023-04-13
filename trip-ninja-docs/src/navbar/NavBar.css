@@ -76,3 +76,7 @@
 .support-faq-link {
   color: var(--grey-dark);
 }
+
+.support-faq-link:hover {
+  color: var(--primary-dark);
+}
