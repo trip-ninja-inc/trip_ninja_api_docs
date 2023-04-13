@@ -6,14 +6,18 @@ interface SideBarNavProps {
 
 export default function SideBarNav() {
   return(
-    <div className="sidebar p-5">
-      <nav className="nav flex-column">
+    <div className="sidebar">
+      <div className="sidebar-item sidebar-border">
         <a className="nav-link sidebar-link active" aria-current="page" href="/farestructure/overview/">Overview</a>
+      </div>
+      <div className="sidebar-item sidebar-border">
         <a className="nav-link sidebar-link" href="/farestructure/setup/">Setup</a>
-        <p className="fw-semibold nav-link sidebar-link">Endpoints</p>
-        <a className="nav-link sidebar-link" href="/farestructure/get-searches/">Get Searches</a>
+      </div>
+      <div className="sidebar-item">
+        <p className="fw-semibold sidebar-link">Endpoints</p>
+        <a className="nav-link sidebar-link mb-2" href="/farestructure/get-searches/">Get Searches</a>
         <a className="nav-link sidebar-link" href="/farestructure/generate-solutions/">Generate Solutions</a>
-      </nav>
+      </div>
     </div>
   );
 }
