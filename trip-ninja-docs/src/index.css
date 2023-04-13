@@ -55,3 +55,7 @@ h3 {
 .primary-text {
   color: var(--primary);
 }
+
+.secondary-text {
+  color: var(--grey-dark);
+}
