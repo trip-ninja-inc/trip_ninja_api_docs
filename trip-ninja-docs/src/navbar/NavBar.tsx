@@ -8,13 +8,12 @@ export default function NavBar() {
 
   history.listen((location: any, _: any) => setPathName(location.pathname));
   useEffect(() => setPathName(history.location.pathname), []);
-  useEffect(() => console.log(pathName), [pathName]);
 
   const addNavLinkClass = (navType: string) =>
     `nav-link ${navType == pathName ? "selected-link" : ""}`;
 
   return (
-    <>
+    <nav className="sticky-top">
       <nav className="navbar navbar-top navbar-expand">
         <div className="d-flex flex-row container-fluid">
           <a className="navbar-brand ms-3" href="/">
@@ -78,6 +77,6 @@ export default function NavBar() {
           </a>
         </div>
       </nav>
-    </>
+    </nav>
   );
 }
