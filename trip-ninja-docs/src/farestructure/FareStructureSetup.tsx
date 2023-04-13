@@ -1,5 +1,7 @@
 import React from "react";
 import fareStructureFlow from "../assets/farestructure-flow.png"
+import Authentication from "../common/Authentication";
+
 
 export default function FareStructureSetup() {
   return(
@@ -26,6 +28,13 @@ export default function FareStructureSetup() {
           For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact 
           your account manager to whitelist the IPs you will be using.
         </p>
+        <p className="fw-bold mb-0">Before you start, please ensure that:</p>
+        <p className="mb-0">1. You have sent us your IP addresses to be whitelisted for Trip Ninja's servers.</p>
+        <p>2. You have been provided with an API username and password by Trip Ninja.</p>
+        <div className="info-chip-teal">
+          If you don’t have an API username and password, or need any other help, 
+          please reach out to us at support@tripninja.io.
+        </div>
       </div>
       <hr className="my-4" />
       <div>
@@ -34,33 +43,41 @@ export default function FareStructureSetup() {
           The following diagram shows the typical data flow of API calls to Trip Ninja for a typical 
           OTA integration using our core non-emulation architecture.
         </p>
-        <p className="fw-bold">Step 1 - /get-searches/</p>
-        <p></p>
-        <p className="fw-bold">Your Infrastructure</p>
-        <p>
-          You make the queries to the content providers identified in the set of content search queries 
-          from Step 1 (via your existing API connections to these providers).
-        </p>
-        <p className="fw-bold">
+        <p className="fw-bold mb-0">Step 1 - /get-searches/</p>
+        <ul>
+          <li>
+            A traveller makes a search request on your platform for an itinerary and you send this request 
+            from your platform to Trip Ninja.
+          </li> 
+          <li>
+            Trip Ninja reviews this search request, builds a set of optimal content search queries using 
+            machine learning for you to send to your content provider(s), and returns this set of content 
+            search queries to you.
+          </li>
+        </ul>
+        <p className="fw-bold mb-0">Your Infrastructure</p>
+        <ul>
+          <li>
+            You make the queries to the content providers identified in the set of content search queries 
+            from Step 1 (via your existing API connections to these providers).
+          </li>
+        </ul>
+        <p className="fw-bold mb-0">
           Step 2 - /generate-solutions/
         </p>
-        <p>
-          You then pass the resulting content payloads along to Trip Ninja.
-          Trip Ninja consumes these content payloads, uses its algorithms to generate a set of optimal 
-          itineraries and the ideal markup, and returns these itineraries to you.
-        </p>
+        <ul>
+          <li>
+            You then pass the resulting content payloads along to Trip Ninja.
+          </li>
+          <li>
+            Trip Ninja consumes these content payloads, uses its algorithms to generate a set of optimal 
+            itineraries and the ideal markup, and returns these itineraries to you.
+          </li>
+        </ul>
         <img src={fareStructureFlow} alt="farestructure flow diagram" className="image" />
       </div>
       <hr className="my-4" />
-      <div>
-        <h3>Authentication</h3>
-        <p>
-          Trip Ninja uses Basic Authentication standards. To authenticate, simply encode your API username 
-          and password string using base64 and pass it to all authorization headers. The following example 
-          shows how this can be done. Note: in the example, the payload and API endpoint URL are not shown.
-        </p>
-        <p className="subtitle">Python Example:</p>
-      </div>
+      <Authentication />
       <hr className="my-4" />
       <div>
         <h3>Error Codes</h3>
