@@ -4,3 +4,16 @@
   background-color: var(--grey-lighter);
   border: 1px solid var(--grey-mid);
 }
+
+.sidebar {
+  height: 100%;
+  border-right: 1px solid var(--grey-mid);
+}
+
+.sidebar-link {
+  color: var(--grey-dark)
+}
+
+.sidebar-link:hover {
+  color: var(--grey-darker)
+}

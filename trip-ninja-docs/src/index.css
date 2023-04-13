@@ -3,9 +3,10 @@
   --primary: #2953A6;
   --primary-dark: #315280;
   --primary-darker: #1D2D52;
+  --primary-light: #DFE8F7;
   --secondary: #DC140A;
   --secondary-yellow: #FABC40;
-  --secondary-green: #62D9C5;
+  --secondary-teal: #62D9C5;
   --grey-lighter: #F7F9FC;
   --grey-light: #DFE8F7;
   --grey-mid: #C3CAD9;
@@ -37,7 +38,7 @@ h3 {
   font-weight: 600;
 }
 
-p {
+p, li {
   font-size: 14px;
   font-weight: 400;
 }
@@ -45,6 +46,13 @@ p {
 a:hover {
   color: var(--primary);
   opacity: 0.8;
+}
+
+p > code, li > code {
+  color: var(--primary);
+  background-color: var(--primary-light);
+  border-radius: 4px;
+  padding: 4px;
 }
 
 .subtitle {
@@ -74,4 +82,13 @@ a:hover {
 
 .image {
   width: 100%;
+}
+
+.info-chip-teal {
+  background-color: var(--secondary-teal);
+  color: var(--grey-darker);
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
 }
