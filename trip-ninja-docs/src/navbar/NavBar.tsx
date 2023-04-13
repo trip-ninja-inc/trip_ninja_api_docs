@@ -74,7 +74,7 @@ export default function NavBar() {
             href="https://help.tripninja.io/"
             target="_blank"
           >
-            Support / FAQ
+            Support/FAQ
           </a>
         </div>
       </nav>

@@ -57,6 +57,7 @@
   color: white;
   font-weight: 600;
   height: 40px;
+  margin-right: 40px;
 }
 
 #contact-sales-button:hover {
@@ -75,6 +76,7 @@
 
 .support-faq-link {
   color: var(--grey-dark);
+  margin-right: 30px;
 }
 
 .support-faq-link:hover {
