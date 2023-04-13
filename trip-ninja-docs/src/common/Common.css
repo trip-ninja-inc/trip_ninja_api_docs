@@ -2,3 +2,7 @@
     margin: 25px;
     color: var(--grey-dark);
 }
+
+.footer-link:hover {
+    color: var(--grey-darker);
+}
