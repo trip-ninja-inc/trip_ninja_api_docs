@@ -17,7 +17,7 @@ export default function FareStructure() {
         <SideBarNav />
       </div>
       <div className="col-md-9">
-        <div className="row justify-content-center my-5">
+        <div className="row justify-content-center my-4">
           <div className="col-md-9">
             {view === "overview" &&
               <FareStructureOverview />
