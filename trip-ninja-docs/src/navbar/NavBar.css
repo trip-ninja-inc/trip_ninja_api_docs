@@ -1,8 +1,8 @@
 
 .navbar-top {
   background-color: var(--grey-lighter);
-  /* border-bottom: 1px solid var(--grey-mid); */
   height: 90px;
+  width: 100%;
   overflow-x: auto;
 }
 

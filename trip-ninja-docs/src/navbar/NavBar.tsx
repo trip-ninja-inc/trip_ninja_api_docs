@@ -16,8 +16,8 @@ export default function NavBar() {
   return (
     <>
       <nav className="navbar navbar-top navbar-expand">
-        <div className="d-flex flex-row">
-          <a className="navbar-brand ms-4" href="/">
+        <div className="d-flex flex-row container-fluid">
+          <a className="navbar-brand ms-3" href="/">
             <img
               src="https://s3.amazonaws.com/tn-api-docs/trip_ninja_logo.png"
               alt="Trip Ninja Logo"
