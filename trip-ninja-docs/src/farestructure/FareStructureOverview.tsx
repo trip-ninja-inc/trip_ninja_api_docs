@@ -1,6 +1,6 @@
 import React from "react";
 import ConnectWithSales from "../common/ConnectWithSales";
-
+import fareStructureOverviewImage from "../assets/farestructure-overview.png"
 
 export default function FareStructureOverview() {
   return(
@@ -20,7 +20,7 @@ export default function FareStructureOverview() {
           </a>
         </div>
         <div className="col-md-6">
-
+          <img src={fareStructureOverviewImage} alt="farestructure flow diagram" className="image" />
         </div>
       </div>
       <hr className="my-4" />
