@@ -1,6 +1,7 @@
 import React from "react";
 import fareStructureFlow from "../assets/farestructure-flow.png"
 import Authentication from "../common/Authentication";
+import ErrorCodes from "../common/ErrorCodes";
 
 
 export default function FareStructureSetup() {
@@ -79,9 +80,7 @@ export default function FareStructureSetup() {
       <hr className="my-4" />
       <Authentication />
       <hr className="my-4" />
-      <div>
-        <h3>Error Codes</h3>
-      </div>
+      <ErrorCodes />
     </div>
   );
 }
