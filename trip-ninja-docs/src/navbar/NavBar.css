@@ -1,8 +1,16 @@
 
-.navbar {
+.navbar-top {
+  background-color: var(--grey-lighter);
+  /* border-bottom: 1px solid var(--grey-mid); */
+  height: 90px;
+  overflow-x: auto;
+}
+
+
+.navbar-bottom {
   background-color: var(--grey-lighter);
   border-bottom: 1px solid var(--grey-mid);
-  height: 130px;
+  height: 60px;
   overflow-x: auto;
 }
 
@@ -28,7 +36,7 @@
 .nav-link::before {
   content: "";
   transition: 300ms;
-  height: 2px;
+  height: 3px;
   position: absolute;
   background-color: var(--primary);
   height: 0%;
@@ -38,7 +46,7 @@
 
 .nav-link:hover::before, .selected-link::before {
   content: "";
-  height: 2px;
+  height: 3px;
   bottom: -3px;
 }
 
@@ -46,6 +54,7 @@
   background-color: var(--primary);
   color: white;
   font-weight: 600;
+  height: 40px;
 }
 
 #contact-sales-button:hover {
@@ -56,4 +65,8 @@
 #contact-sales-button:active {
   background-color: var(--primary-dark);
   color: white;
+}
+
+.vertical-align-middle {
+  vertical-align: -8px;
 }
