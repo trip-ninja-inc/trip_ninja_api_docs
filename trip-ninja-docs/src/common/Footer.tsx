@@ -8,10 +8,30 @@ export default function Footer() {
   return(
     <nav className="navbar container-fluid body-text secondary-text">
       <div className="d-flex flex-row mx-auto">
-        <a className="footer-link">Privacy Policy</a>
-        <a className="footer-link">Terms of Use</a>
-        <a className="footer-link">Data Processing</a>
-        <a className="footer-link">GDPR Data Protection</a>
+        <a className="footer-link" 
+          href="https://quicktrip-documents.s3-us-west-2.amazonaws.com/Privacy+Policy.pdf"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+        <a className="footer-link" 
+          href="https://quicktrip-documents.s3-us-west-2.amazonaws.com/Terms+of+Use.pdf"
+          target="_blank"
+        >
+          Terms of Use
+        </a>
+        <a className="footer-link" 
+          href="https://www.tripninja.io/legal/data-processing"
+          target="_blank"  
+        >
+          Data Processing
+        </a>
+        <a className="footer-link" 
+          href="https://www.tripninja.io/legal/gdpr"
+          target="_blank"
+        >
+          GDPR Data Protection
+        </a>
       </div>
       <div className="d-flex flex-row mx-auto text-center mt-2">
         <p>
