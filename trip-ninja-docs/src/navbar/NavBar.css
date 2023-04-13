@@ -70,3 +70,7 @@
 .vertical-align-middle {
   vertical-align: -8px;
 }
+
+.support-faq-link {
+  color: var(--grey-dark);
+}

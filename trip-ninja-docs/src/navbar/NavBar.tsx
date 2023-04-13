@@ -38,12 +38,11 @@ export default function NavBar() {
               Contact Sales
             </a>
           </div>
-      
         </div>
       </nav>
       <nav className="navbar navbar-bottom navbar-expand">
-        <div className="d-flex flex-row">
-          <div className="navbar-nav ms-4 mt-3">
+        <div className="d-flex flex-row container-fluid">
+          <div className="navbar-nav ms-3 mt-3">
             <a
               className={addNavLinkClass(NavLinkUrls.HOME)}
               aria-current="page"
@@ -70,6 +69,13 @@ export default function NavBar() {
               Dynamic Packaging
             </a>
           </div>
+          <a
+            className="support-faq-link mr-auto p-2 mt-3"
+            href="https://help.tripninja.io/"
+            target="_blank"
+          >
+            Support / FAQ
+          </a>
         </div>
       </nav>
     </>
