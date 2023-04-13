@@ -42,6 +42,8 @@
   height: 0%;
   width: 100%;
   bottom: -3px;
+  right: 1px;
+  left: 1px;
 }
 
 .nav-link:hover::before, .selected-link::before {
