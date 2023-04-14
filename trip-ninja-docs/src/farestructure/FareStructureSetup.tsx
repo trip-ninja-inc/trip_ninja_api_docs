@@ -29,7 +29,7 @@ export default function FareStructureSetup() {
           For security, Trip Ninja’s servers are only accessible from whitelisted IPs. Please contact 
           your account manager to whitelist the IPs you will be using.
         </p>
-        <p className="fw-bold mb-0">Before you start, please ensure that:</p>
+        <p className="fw-semibold mb-0">Before you start, please ensure that:</p>
         <p className="mb-0">1. You have sent us your IP addresses to be whitelisted for Trip Ninja's servers.</p>
         <p>2. You have been provided with an API username and password by Trip Ninja.</p>
         <div className="info-chip-teal">
@@ -44,7 +44,7 @@ export default function FareStructureSetup() {
           The following diagram shows the typical data flow of API calls to Trip Ninja for a typical 
           OTA integration using our core non-emulation architecture.
         </p>
-        <p className="fw-bold mb-0">Step 1 - /get-searches/</p>
+        <p className="fw-semibold mb-0">Step 1 - /get-searches/</p>
         <ul>
           <li>
             A traveller makes a search request on your platform for an itinerary and you send this request 
@@ -56,14 +56,14 @@ export default function FareStructureSetup() {
             search queries to you.
           </li>
         </ul>
-        <p className="fw-bold mb-0">Your Infrastructure</p>
+        <p className="fw-semibold mb-0">Your Infrastructure</p>
         <ul>
           <li>
             You make the queries to the content providers identified in the set of content search queries 
             from Step 1 (via your existing API connections to these providers).
           </li>
         </ul>
-        <p className="fw-bold mb-0">
+        <p className="fw-semibold mb-0">
           Step 2 - /generate-solutions/
         </p>
         <ul>
