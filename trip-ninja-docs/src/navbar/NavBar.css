@@ -1,0 +1,11 @@
+
+.navbar {
+  background-color: var(--grey-lighter);
+  border-bottom: 1px solid var(--grey-mid);
+}
+
+.logo-text {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 22px; 
+}
