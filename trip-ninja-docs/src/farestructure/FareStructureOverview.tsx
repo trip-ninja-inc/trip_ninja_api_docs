@@ -18,7 +18,7 @@ export default function FareStructureOverview() {
           </p>
           <a className="link-text primary-text" href="/farestructure/setup/">
             Get Started with Setup
-            <i className="bi bi-chevron-right ms-1 right-arrow"></i>
+            <i className="bi bi-chevron-right ms-1 arrow"></i>
           </a>
         </div>
         <div className="col-md-6">

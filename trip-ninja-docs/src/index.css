@@ -85,7 +85,7 @@ p > code, li > code {
   color: var(--primary);
 }
 
-.right-arrow {
+.arrow {
   font-size: 12px;
   -webkit-text-stroke: 1px;
 }

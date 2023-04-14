@@ -18,7 +18,7 @@ export default function ConnectWithSales() {
           className="link-text primary-text"
         >
           Connect with Sales
-          <i className="bi bi-chevron-right ms-1 right-arrow"></i>
+          <i className="bi bi-chevron-right ms-1 arrow"></i>
         </a>
       </div>
     </div>
