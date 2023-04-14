@@ -1,5 +1,6 @@
 import React from "react";
 import getSearchesFlow from "../assets/core-get-searches-flow.png"
+import getSearchesDocs from "../openapi/farestructure_core_get_searches.json";
 import { redocConfig } from "../common/RedocConfig";
 import { RedocStandalone } from 'redoc';
 import "./Redoc.css";
@@ -29,7 +30,7 @@ export default function GetSearches() {
         <hr className="mt-5 mb-0"/>
       </div>
       <RedocStandalone 
-        specUrl="https://api.redocly.com/registry/bundle/trip-ninja/FareStructure%20-%20Core/v0/openapi.yaml?branch=main" 
+        spec={getSearchesDocs}
         options={redocConfig}
       />
       <Pagination
