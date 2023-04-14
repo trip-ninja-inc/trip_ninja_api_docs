@@ -43,10 +43,6 @@ export default function DynamicPackagingSetup() {
       </div>
       <hr className="my-4" />
       <Authentication />
-      <hr className="my-4" />
-      <div>
-        <h3>Error Codes</h3>
-      </div>
     </div>
   );
 }
