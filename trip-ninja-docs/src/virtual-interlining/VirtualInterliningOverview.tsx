@@ -8,7 +8,7 @@ export default function VirtualInterliningOverview() {
   return(
     <div className="min-vh-100">
       <div className="row mb-3">
-        <div className="col-md-6">
+        <div className="col-md-6 mt-3">
           <h2 className="mt-3">Virtual Interlining</h2>
           <p className="body-text">
             Trip Ninja’s Virtual Interlining (VI) API creates connections 
@@ -28,26 +28,30 @@ export default function VirtualInterliningOverview() {
       <div className="row mb-4">
         <div className="col-md-4">
           <p className="subtitle">
-            
+            VI with your Content
           </p>
           <p className="body-text">
-            
+            Trip Ninja is the only solution worldwide to 
+            provide you Virtual Interlining 
+            connections with all your content sources.
           </p>
         </div>
         <div className="col-md-4">
           <p className="subtitle">
-            
+            More Options
           </p>
           <p className="body-text">
-            
+            Accessing a wider range of flights and airline combinations 
+            gives travellers more travel options and flexibility.
           </p>
         </div>
         <div className="col-md-4">
           <p className="subtitle">
-            
+            Cheaper Fares/Itineraries
           </p>
           <p className="body-text">
-            
+            Our machine-learning algorithms analyze flight data and pricing 
+            to find the most cost-effective solutions for travellers.
           </p>
         </div>
       </div>
