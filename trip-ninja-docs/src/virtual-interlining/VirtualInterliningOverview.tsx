@@ -2,7 +2,7 @@ import React from "react";
 import ConnectWithSales from "../common/ConnectWithSales";
 import virtualInterliningOverviewImage from "../assets/virtual-interlining-overview.png"
 import Pagination from "../common/Pagination";
-
+import vennIcon from "../assets/venn-icon.svg";
 
 export default function VirtualInterliningOverview() {
   return(
@@ -27,6 +27,7 @@ export default function VirtualInterliningOverview() {
       <hr className="my-4" />
       <div className="row mb-4">
         <div className="col-md-4">
+          <i className="bi bi-airplane-fill icon"></i>
           <p className="subtitle">
             VI with your Content
           </p>
@@ -37,6 +38,7 @@ export default function VirtualInterliningOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <img src={vennIcon} alt="venn diagram icon" className="venn-icon" />
           <p className="subtitle">
             More Options
           </p>
@@ -46,6 +48,7 @@ export default function VirtualInterliningOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <i className="bi bi-arrow-repeat icon"></i>
           <p className="subtitle">
             Cheaper Fares/Itineraries
           </p>
