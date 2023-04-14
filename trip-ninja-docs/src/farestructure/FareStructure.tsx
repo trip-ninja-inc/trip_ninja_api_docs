@@ -18,7 +18,7 @@ export default function FareStructure() {
       </div>
       <div className="col-md-9">
         <div className="row justify-content-center my-4">
-          <div className="col-md-9">
+          <div className="col-md-10">
             {view === "overview" &&
               <FareStructureOverview />
             }
