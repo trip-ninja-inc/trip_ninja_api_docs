@@ -100,3 +100,7 @@ p > code, li > code {
 .table-striped>tbody>tr:nth-of-type(odd)>* {
   --bs-table-accent-bg: var(--grey-lighter);
 }
+
+.api-details {
+  padding: 0px 40px;
+}

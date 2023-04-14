@@ -6,7 +6,7 @@ import ErrorCodes from "../common/ErrorCodes";
 
 export default function FareStructureSetup() {
   return(
-    <div className="">
+    <div>
       <h2 className="mt-3">FareStructure Setup</h2>
       <p>
         FareStructure is the infrastructure base for all of Trip Ninja’s API products. 
