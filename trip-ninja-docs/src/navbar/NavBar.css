@@ -37,7 +37,7 @@
 .nav-link::before {
   content: "";
   transition: 300ms;
-  height: 3px;
+  height: 4px;
   position: absolute;
   background-color: var(--primary);
   height: 0%;
@@ -49,7 +49,7 @@
 
 .nav-link:hover::before, #selected-link::before {
   content: "";
-  height: 3px;
+  height: 4px;
   bottom: -3px;
 }
 
