@@ -8,13 +8,12 @@ export default function NavBar() {
 
   history.listen((location: any, _: any) => setPathName(location.pathname));
   useEffect(() => setPathName(history.location.pathname), []);
-  useEffect(() => console.log(pathName), [pathName]);
 
-  const addNavLinkClass = (navType: string) =>
-    `nav-link ${navType == pathName ? "selected-link" : ""}`;
+  const addActiveLinkId = (navType: string) => 
+    navType == pathName ? "selected-link" : ""
 
   return (
-    <>
+    <nav className="sticky-top">
       <nav className="navbar navbar-top navbar-expand">
         <div className="d-flex flex-row container-fluid">
           <a className="navbar-brand ms-3" href="/">
@@ -44,27 +43,31 @@ export default function NavBar() {
         <div className="d-flex flex-row container-fluid">
           <div className="navbar-nav ms-3 mt-3">
             <a
-              className={addNavLinkClass(NavLinkUrls.HOME)}
+              className="nav-link"
               aria-current="page"
               href={NavLinkUrls.HOME}
+              id={addActiveLinkId(NavLinkUrls.HOME)}
             >
               Home
             </a>
             <a
-              className={addNavLinkClass(NavLinkUrls.FARESTRUCTURE)}
+              className="nav-link"
               href={NavLinkUrls.FARESTRUCTURE}
+              id={addActiveLinkId(NavLinkUrls.FARESTRUCTURE)}
             >
               Farestructure
             </a>
             <a
-              className={addNavLinkClass(NavLinkUrls.VI)}
+              className="nav-link"
               href={NavLinkUrls.VI}
+              id={addActiveLinkId(NavLinkUrls.VI)}
             >
               Virtual Interlining
             </a>
             <a
-              className={addNavLinkClass(NavLinkUrls.MSDP)}
+              className="nav-link"
               href={NavLinkUrls.MSDP}
+              id={addActiveLinkId(NavLinkUrls.MSDP)}
             >
               Dynamic Packaging
             </a>
@@ -78,6 +81,6 @@ export default function NavBar() {
           </a>
         </div>
       </nav>
-    </>
+    </nav>
   );
 }
