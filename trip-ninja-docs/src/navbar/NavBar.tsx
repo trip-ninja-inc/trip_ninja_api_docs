@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./NavBar.css";
 import history from "../History";
 import { NavLinkUrls } from "../common/GeneralConstants";
