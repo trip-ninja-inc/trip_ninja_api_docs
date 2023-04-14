@@ -15,6 +15,9 @@
 }
 
 body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   margin: 0;
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -58,4 +61,8 @@ h3 {
 
 .secondary-text {
   color: var(--grey-dark);
+}
+
+footer {
+  margin-top: 65vh;
 }

@@ -9,21 +9,23 @@ import Footer from "./common/Footer";
 
 export default function App() {
   return (
-    <div>
-      <NavBar />
-      <Router history={history}>
-        <Switch>
-          <Route 
-            exact path="/" 
-            component={() => <HomePage /> } 
-          />
-          <Route 
-            exact path="/farestructure/:view" 
-            component={() => <FareStructure /> } 
-          />
-        </Switch>
-      </Router>
+    <body>
+      <div>
+        <NavBar />
+        <Router history={history}>
+          <Switch>
+            <Route 
+              exact path="/" 
+              component={() => <HomePage /> } 
+            />
+            <Route 
+              exact path="/farestructure/:view" 
+              component={() => <FareStructure /> } 
+            />
+          </Switch>
+        </Router>
+      </div>
       <Footer/>
-    </div>
+    </body>
   );
 }
