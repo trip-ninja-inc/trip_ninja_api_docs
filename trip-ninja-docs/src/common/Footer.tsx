@@ -5,8 +5,8 @@ import "./../index.css"
 
 export default function Footer() {
   return(
-    <nav className="navbar container-fluid body-text secondary-text">
-      <div className="d-flex flex-row mx-auto">
+    <nav className="navbar container-fluid body-text secondary-text flex-column">
+      <nav className="d-flex flex-row mx-auto">
         <a className="footer-link" 
           href="https://quicktrip-documents.s3-us-west-2.amazonaws.com/Privacy+Policy.pdf"
           target="_blank"
@@ -31,8 +31,8 @@ export default function Footer() {
         >
           GDPR Data Protection
         </a>
-      </div>
-      <div className="d-flex flex-row mx-auto text-center mt-2">
+      </nav>
+      <nav className="d-flex flex-row mx-auto text-center mt-2">
         <p>
           2023 Trip Ninja Inc. Trip Ninja is a division of 
           Webjet Limited (ASX: WEB) – an ASX 200 listed company. 
@@ -41,7 +41,7 @@ export default function Footer() {
             www.webjetlimited.com
           </a>
         </p>
-      </div>
+      </nav>
     </nav>
   );
 }
