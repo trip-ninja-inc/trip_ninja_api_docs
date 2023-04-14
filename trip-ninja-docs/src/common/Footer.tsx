@@ -3,7 +3,6 @@ import './Common.css';
 import "./../index.css"
 
 
-
 export default function Footer() {
   return(
     <nav className="navbar container-fluid body-text secondary-text">
@@ -42,7 +41,6 @@ export default function Footer() {
             www.webjetlimited.com
           </a>
         </p>
-
       </div>
     </nav>
   );
