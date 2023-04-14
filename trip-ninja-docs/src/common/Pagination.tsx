@@ -10,7 +10,7 @@ interface PaginationProps {
 
 export default function Pagination(props: PaginationProps) {
   return(
-    <div className="pb-4">
+    <div className="pb-4 pt-3">
       <hr/>
       <div className="d-flex justify-content-between">
         <div>
