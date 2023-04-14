@@ -48,6 +48,10 @@ a:hover {
   opacity: 0.8;
 }
 
+code {
+  color: inherit;
+}
+
 p > code, li > code {
   color: var(--primary);
   background-color: var(--primary-light);

@@ -1,5 +1,5 @@
 import React from "react";
-import { CodeBlock, dracula } from "react-code-blocks";
+import { CodeBlock, tomorrowNightBlue } from "react-code-blocks";
 
 
 export default function Authentication() {
@@ -7,7 +7,7 @@ export default function Authentication() {
   const authExample = `
     import base64
     auth = base64.b64encode("USERNAME:PASSWORD")
-    headers = {'authorization': "Basic "+ auth}
+    headers = {"authorization": "Basic "+ auth}
     response = requests.post(url, headers=headers, data=json.dumps(payload))
   `
 
@@ -23,7 +23,7 @@ export default function Authentication() {
       <CodeBlock
           language={"python"}
           text={authExample}
-          theme={dracula}
+          theme={tomorrowNightBlue}
           wrapLines={true}
           showLineNumbers={false}
           codeBlock
