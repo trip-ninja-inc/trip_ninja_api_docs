@@ -54,3 +54,8 @@
   background-color: #EDF5F0;
   border-color: #00762B;
 }
+
+/* Hide redocly logo */
+.scrollbar-container > div > a {
+  display: none;
+}
