@@ -32,12 +32,3 @@
 .sidebar-border {
   border-bottom: 1px solid var(--grey-mid);
 }
-
-.icon {
-  color: var(--primary);
-  font-size: x-large;
-}
-
-.venn-icon {
-  padding: 10px 0px 10px 0px;
-}
