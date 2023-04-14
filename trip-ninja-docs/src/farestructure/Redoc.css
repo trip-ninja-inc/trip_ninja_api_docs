@@ -36,20 +36,15 @@
   display: none;
 }
 
-/* Endpoint sub header desription */
-.fndPYm > p {
-  display: none;
-}
-
 /* Failure code buttons */
-.kgoSle > ul > li.tab-error {
+ul.react-tabs__tab-list > li.tab-error {
   color: var(--secondary);
   background-color: #FCEFEF;
   border-color: #FCEFEF;
 }
 
 /* Success code button */
-.kgoSle > ul > li.tab-success {
+ul.react-tabs__tab-list > li.tab-success {
   color: #00762B;
   background-color: #EDF5F0;
   border-color: #00762B;
