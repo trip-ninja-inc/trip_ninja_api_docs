@@ -73,9 +73,9 @@ export default function NavBar() {
             </a>
           </div>
           <a
-            className="support-faq-link mr-auto p-2 mt-3"
-            href="https://help.tripninja.io/"
-            target="_blank"
+            className="nav-link mr-auto p-2 mt-3"
+            href={NavLinkUrls.SUPPORT}
+            id={addActiveLinkId(NavLinkUrls.SUPPORT)}
           >
             Support/FAQ
           </a>

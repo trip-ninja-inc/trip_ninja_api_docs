@@ -26,6 +26,7 @@
   display: inline-block;
   position: relative;
   white-space: nowrap;
+  color: var(--grey-dark);
 }
 
 .nav-link:hover, #selected-link {
@@ -77,8 +78,4 @@
 .support-faq-link {
   color: var(--grey-dark);
   margin-right: 30px;
-}
-
-.support-faq-link:hover {
-  color: var(--primary-dark);
 }
