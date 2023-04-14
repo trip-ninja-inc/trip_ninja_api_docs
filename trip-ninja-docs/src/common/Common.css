@@ -11,9 +11,24 @@
 }
 
 .sidebar-link {
-  color: var(--grey-dark)
+  color: var(--grey-dark);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .sidebar-link:hover {
   color: var(--grey-darker)
+}
+
+.sidebar-link.active {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.sidebar-item {
+  padding: 25px 60px;
+}
+
+.sidebar-border {
+  border-bottom: 1px solid var(--grey-mid);
 }

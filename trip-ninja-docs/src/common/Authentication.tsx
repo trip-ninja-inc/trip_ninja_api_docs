@@ -4,10 +4,12 @@ import { CodeBlock, dracula } from "react-code-blocks";
 
 export default function Authentication() {
 
-  const authExample = `import base64
+  const authExample = `
+    import base64
     auth = base64.b64encode("USERNAME:PASSWORD")
     headers = {'authorization': "Basic "+ auth}
-    response = requests.post(url, headers=headers, data=json.dumps(payload))`
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+  `
 
   return(
     <div>

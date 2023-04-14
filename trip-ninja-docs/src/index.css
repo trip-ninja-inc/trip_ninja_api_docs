@@ -38,7 +38,7 @@ h3 {
   font-weight: 600;
 }
 
-p, li {
+p, li, table {
   font-size: 14px;
   font-weight: 400;
 }
@@ -91,4 +91,12 @@ p > code, li > code {
   border-radius: 8px;
   padding: 10px;
   font-size: 14px;
+}
+
+.table>:not(caption)>*>* {
+  padding: 15px;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+  --bs-table-accent-bg: var(--grey-lighter);
 }
