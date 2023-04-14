@@ -2,6 +2,7 @@ import React from "react";
 import fareStructureFlow from "../assets/farestructure-flow.png"
 import Authentication from "../common/Authentication";
 import ErrorCodes from "../common/ErrorCodes";
+import Pagination from "../common/Pagination";
 
 
 export default function FareStructureSetup() {
@@ -81,6 +82,12 @@ export default function FareStructureSetup() {
       <Authentication />
       <hr className="my-4" />
       <ErrorCodes />
+      <Pagination
+        prevPageText="Overview"
+        prevPageUrl="/farestructure/overview/"
+        nextPageText="Get Searches"
+        nextPageUrl="/farestructure/get-searches/"
+      />
     </div>
   );
 }

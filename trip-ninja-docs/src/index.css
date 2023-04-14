@@ -66,8 +66,18 @@ p > code, li > code {
   text-decoration: none;
 }
 
+.link-text-alt {
+  font-size: 14px;
+  font-weight: 600;;
+}
+
 .body-text {
   font-size: 14px;
+  font-weight: 500;
+}
+
+.small-text {
+  font-size: 12px;
   font-weight: 500;
 }
 

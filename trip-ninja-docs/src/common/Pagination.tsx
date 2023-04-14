@@ -2,23 +2,36 @@ import React from "react";
 
 
 interface PaginationProps {
-  nextPageText: string;
-  nextPageUrl: string;
-  prevPageText: string;
-  prevPageUrl: string;
+  nextPageText?: string;
+  nextPageUrl?: string;
+  prevPageText?: string;
+  prevPageUrl?: string;
 }
 
 export default function Pagination(props: PaginationProps) {
   return(
-    <div>
+    <div className="pb-4">
       <hr/>
       <div className="d-flex justify-content-between">
         <div>
-          <p>Previous Page</p>
+          {props.prevPageText && props.prevPageUrl &&
+            <div>
+              <p className="small-text mb-0">Previous Page</p>
+              <a href={props.prevPageUrl} className="link-text-alt primary-text">
+                {props.prevPageText}
+              </a>
+            </div>
+          }
         </div>
         <div>
-          <p>Next Page</p>
-          
+          {props.nextPageText && props.nextPageUrl &&
+            <div>
+              <p className="small-text text-end mb-0">Next Page</p>
+              <a href={props.nextPageUrl} className="link-text-alt primary-text">
+                {props.nextPageText}
+              </a>
+            </div>
+          }
         </div>
       </div>
     </div>

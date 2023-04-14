@@ -3,6 +3,7 @@ import generateSolutionsFlow from "../assets/core-generate-solutions-flow.png"
 import { redocConfig } from "../common/RedocConfig";
 import { RedocStandalone } from 'redoc';
 import "./Redoc.css";
+import Pagination from "../common/Pagination";
 
 
 export default function GenerateSolutions() {
@@ -62,6 +63,10 @@ export default function GenerateSolutions() {
       <RedocStandalone 
         specUrl="https://api.redocly.com/registry/bundle/trip-ninja/FareStructure%20-%20Core%20-%20Generate%20Solutions/v0/openapi.yaml?branch=main" 
         options={redocConfig}
+      />
+      <Pagination
+        prevPageText="Get Searches"
+        prevPageUrl="/farestructure/get-searches/"
       />
     </div>
   );

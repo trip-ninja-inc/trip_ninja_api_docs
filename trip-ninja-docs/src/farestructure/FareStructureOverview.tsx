@@ -1,10 +1,12 @@
 import React from "react";
 import ConnectWithSales from "../common/ConnectWithSales";
 import fareStructureOverviewImage from "../assets/farestructure-overview.png"
+import Pagination from "../common/Pagination";
+
 
 export default function FareStructureOverview() {
   return(
-    <div>
+    <div className="min-vh-100">
       <div className="row mb-3">
         <div className="col-md-6">
           <h2 className="mt-3">FareStructure</h2>
@@ -58,6 +60,10 @@ export default function FareStructureOverview() {
         </div>
       </div>
       <ConnectWithSales />
+      <Pagination 
+        nextPageText="Setup"
+        nextPageUrl="/farestructure/setup/"
+      />
     </div>
   );
 }
