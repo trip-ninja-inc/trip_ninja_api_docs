@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import SideBarNav from "../common/SideBar";
 import DynamicPackagingOverview from "./DynamicPackagingOverview";
 import DynamicPackagingSetup from "./DynamicPackagingSetup";
+import DynamicPackagingSearch from "./DynamicPackagingSearch";
+import DynamicPackagingGetFlightResults from "./DynamicPackagingGetFlightResults";
+import DynamicPackagingGetHotelResults from "./DynamicPackagingGetHotelResults";
+import DynamicPackagingRemoveHotel from "./DynamicPackagingRemoveHotel";
 
 export default function DynamicPackaging() {
   const { view } = useParams<{ view: string }>();
@@ -17,6 +21,10 @@ export default function DynamicPackaging() {
           <div className="col-md-9">
             {view === "overview" && <DynamicPackagingOverview />}
             {view === "setup" && <DynamicPackagingSetup />}
+            {view === "search" && <DynamicPackagingSearch />}
+            {view === "get-flight-results" && <DynamicPackagingGetFlightResults />}
+            {view === "get-hotel-results" && <DynamicPackagingGetHotelResults />}
+            {view === "remove-hotel-results" && <DynamicPackagingRemoveHotel />}
           </div>
         </div>
       </div>

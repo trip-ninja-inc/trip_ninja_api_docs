@@ -4,7 +4,7 @@ import history from "./History";
 import NavBar from "./navbar/NavBar";
 import HomePage from "./home/HomePage";
 import FareStructure from "./farestructure/FareStructure";
-import DynamicPackaging from "./msdp/DynamicPackaging";
+import DynamicPackaging from "./dynamicpackaging/DynamicPackaging";
 
 
 export default function App() {
