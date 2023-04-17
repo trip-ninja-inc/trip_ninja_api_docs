@@ -2,6 +2,7 @@ import React from "react";
 import MetricLabel from "./MetricLabel";
 import ConnectWithSales from "../common/ConnectWithSales";
 import homepageImage from "../assets/homepage-image.png";
+import Footer from "../common/Footer";
 
 export default function HomePage() {
   return(
@@ -46,6 +47,7 @@ export default function HomePage() {
           <ConnectWithSales />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
