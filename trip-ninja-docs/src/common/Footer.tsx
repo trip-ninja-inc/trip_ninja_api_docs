@@ -35,9 +35,8 @@ export default function Footer() {
       <footer className="d-flex flex-row mx-3 text-center mt-2">
         <p>
           2023 Trip Ninja Inc. Trip Ninja is a division of 
-          Webjet Limited (ASX: WEB) – an ASX 200 listed company. 
-          For more information, visit
-          <a href="http://webjetlimited.com" target="_blank" className="footer-link">
+          Webjet Limited (ASX: WEB) – an ASX 200 listed company. For more information, 
+          visit <a href="http://webjetlimited.com" target="_blank" className="footer-link mx-0">
             www.webjetlimited.com
           </a>
         </p>
