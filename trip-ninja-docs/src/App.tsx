@@ -1,10 +1,8 @@
-import React from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import history from "./History";
 import NavBar from "./navbar/NavBar";
 import HomePage from "./home/HomePage";
 import FareStructure from "./farestructure/FareStructure";
-import Footer from "./common/Footer";
 
 
 export default function App() {
