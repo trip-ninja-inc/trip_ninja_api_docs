@@ -3,6 +3,7 @@ import React from "react";
 interface SideBarNavProps {
   currentView: string;
   product: string;
+  endpoints: any;
 }
 
 export default function SideBarNav(props: SideBarNavProps) {
@@ -29,18 +30,17 @@ export default function SideBarNav(props: SideBarNavProps) {
       </div>
       <div className="sidebar-item">
         <p className="fw-semibold sidebar-link">Endpoints</p>
-        <a 
-          className={`nav-link sidebar-link mb-2 ${getActiveLink("get-searches")}`} 
-          href={`/${props.product}/get-searches/`}
-        >
-          Get Searches
-        </a>
-        <a 
-          className={`nav-link sidebar-link ${getActiveLink("generate-solutions")}`} 
-          href={`/${props.product}/generate-solutions/`}
-        >
-          Generate Solutions
-        </a>
+        <>{Object.keys(props.endpoints).map(function(key: string, index) {
+            return (
+              <a
+                className={`nav-link sidebar-link mb-2 ${getActiveLink(key)}`}
+                href={`/${props.product}/${key}/`}
+              >
+                {props.endpoints[key]}
+              </a>
+            );
+          })
+        }</>
       </div>
     </div>
   );

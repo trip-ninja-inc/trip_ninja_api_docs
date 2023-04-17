@@ -1,5 +1,9 @@
 import React from "react";
 import ConnectWithSales from "../common/ConnectWithSales";
+import dynamicPackagingOverview from "../assets/dynamic-packaging-overview.png";
+import vennIcon from "../assets/venn-icon.svg";
+import simpleUpkeepIcon from "../assets/simple-upkeep-icon.svg"
+import easyIntegrationIcon from "../assets/easy-integration.svg"
 
 export default function DynamicPackagingOverview() {
   return (
@@ -18,12 +22,13 @@ export default function DynamicPackagingOverview() {
           </a>
         </div>
         <div className="col-md-6">
-
+          <img src={dynamicPackagingOverview} alt="great savings on complex itineraries" className="image" />
         </div>
       </div>
       <hr className="my-4" />
       <div className="row mb-4">
         <div className="col-md-4">
+          <img src={vennIcon} alt="venn diagram icon" className="venn-icon" />
           <p className="subtitle">
             Revenue Share
           </p>
@@ -34,6 +39,7 @@ export default function DynamicPackagingOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <img src={easyIntegrationIcon} alt="easy integration icon" className="venn-icon" />
           <p className="subtitle">
             Easy Integration
           </p>
@@ -44,6 +50,7 @@ export default function DynamicPackagingOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <img src={simpleUpkeepIcon} alt="simple upkeep icon" className="venn-icon" />
           <p className="subtitle">
             Simple UpKeep
           </p>

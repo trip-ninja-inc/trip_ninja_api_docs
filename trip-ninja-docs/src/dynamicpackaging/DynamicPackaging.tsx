@@ -10,11 +10,17 @@ import DynamicPackagingRemoveHotel from "./DynamicPackagingRemoveHotel";
 
 export default function DynamicPackaging() {
   const { view } = useParams<{ view: string }>();
+  const endpoints = {
+    "search": "MSDP Search",
+    "get-flight-results": "MSDP Get Flight Results",
+    "get-hotel-results": "MSDP Get Hotel Results",
+    "remove-hotel-results": "MSDP Remove Hotel Results"
+  };
 
   return (
     <div className="row">
       <div className="col-md-3">
-        <SideBarNav />
+        <SideBarNav currentView={view} product="dynamic_packaging" endpoints={endpoints}/>
       </div>
       <div className="col-md-9">
         <div className="row justify-content-center my-5">

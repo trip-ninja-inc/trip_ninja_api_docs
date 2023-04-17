@@ -10,11 +10,15 @@ import SideBarNav from "../common/SideBar";
 export default function VirtualInterlining() {
 
   const { view } = useParams<{ view: string }>();
+  const endpoints = {
+    "get-searches": "Get Searches",
+    "generate-solutions": "Generate Solutions"
+  };
 
   return(
     <div className="row">
       <div className="col-md-3">
-        <SideBarNav currentView={view} product="virtual-interlining"/>
+        <SideBarNav currentView={view} product="virtual-interlining" endpoints={endpoints}/>
       </div>
       <div className="col-md-9">
         <div className="row justify-content-center my-4">

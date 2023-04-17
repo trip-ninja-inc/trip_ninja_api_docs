@@ -1,4 +1,7 @@
 import React from "react";
+import msdpSearchDocs from "../openapi/dynamic_packaging_search.json";
+import { redocConfig } from "../common/RedocConfig";
+import { RedocStandalone } from "redoc";
 
 export default function DynamicPackagingSearch() {
   return (
@@ -16,7 +19,11 @@ export default function DynamicPackagingSearch() {
           </p>
         </div>
       </div>
-      <hr className="my-4" />
+      <hr className="mt-5 mb-0"/>
+      <RedocStandalone
+        spec={msdpSearchDocs}
+        options={redocConfig}
+      />
     </div>
   );
 }
