@@ -3,6 +3,7 @@ import ConnectWithSales from "../common/ConnectWithSales";
 import virtualInterliningOverviewImage from "../assets/virtual-interlining-overview.png"
 import Pagination from "../common/Pagination";
 import vennIcon from "../assets/venn-icon.svg";
+import './VirtualInterlining.css'
 
 export default function VirtualInterliningOverview() {
   return(
