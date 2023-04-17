@@ -6,12 +6,12 @@
   overflow-x: auto;
 }
 
-
 .navbar-bottom {
   background-color: var(--grey-lighter);
   border-bottom: 1px solid var(--grey-mid);
   height: 60px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .logo-text {
@@ -26,6 +26,7 @@
   display: inline-block;
   position: relative;
   white-space: nowrap;
+  color: var(--grey-dark);
 }
 
 .nav-link:hover, #selected-link {
@@ -36,7 +37,7 @@
 .nav-link::before {
   content: "";
   transition: 300ms;
-  height: 3px;
+  height: 4px;
   position: absolute;
   background-color: var(--primary);
   height: 0%;
@@ -48,7 +49,7 @@
 
 .nav-link:hover::before, #selected-link::before {
   content: "";
-  height: 3px;
+  height: 4px;
   bottom: -3px;
 }
 
@@ -77,8 +78,4 @@
 .support-faq-link {
   color: var(--grey-dark);
   margin-right: 30px;
-}
-
-.support-faq-link:hover {
-  color: var(--primary-dark);
 }
