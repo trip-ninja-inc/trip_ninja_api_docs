@@ -1,6 +1,7 @@
 import React from "react";
 import Pagination from "../common/Pagination";
 
+
 export default function VirtualInterliningGenerateSolutions() {
   return (
     <div>
@@ -23,9 +24,7 @@ export default function VirtualInterliningGenerateSolutions() {
 					Please refer to <a href="/farestructure/generate-solutions/">
 						FareStructure Generate Solutions</a> for the rest of the request schema.
 				</p>
-				<div className="d-flex flex-row">
-          <h3 className="mb-2">Response</h3>
-        </div>
+				<h3 className="mb-2">Response</h3>
 				<p>
 				In each segment returned in the response, there is a boolean property
 				called <code>virtual_interline</code> that displays whether the segment is a Virtually Interlined 
@@ -33,9 +32,21 @@ export default function VirtualInterliningGenerateSolutions() {
 				 to <a href="/farestructure/generate-solutions/">FareStructure Generate Solutions</a> for 
 				the rest of the response schema. 
 				</p>
+				<hr className="mt-3 mb-0" />
 
-        
-        <hr className="mt-3 mb-0" />
+        <hr className="mt-3 mb-3" />
+				<h3 className="mb-2">Booking Tips</h3>
+				<p>
+					If booking an itinerary that has a combination of  Low Cost Carrier (LCC) and Global Distribution System
+					(GDS) flights, it is recommended that you process the booking for the LCC flight first. If the LCC booking 
+					is successful, then proceed with booking the GDS flight. This is because oftentimes LCCs do not have good 
+					cancellation policies and can be more prone to booking failure. 
+				</p>
+				<div className="info-chip-teal">
+					If you have questions about how Virtual Interlining works, or need any other help, please reach out 
+					to us at support@tripninja.io.
+				</div>
+
       </div>
       <Pagination
         prevPageText="Setup"
