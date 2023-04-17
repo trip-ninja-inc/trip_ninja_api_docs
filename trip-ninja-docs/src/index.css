@@ -66,8 +66,18 @@ p > code, li > code {
   text-decoration: none;
 }
 
+.link-text-alt {
+  font-size: 14px;
+  font-weight: 600;;
+}
+
 .body-text {
   font-size: 14px;
+  font-weight: 500;
+}
+
+.small-text {
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -75,7 +85,7 @@ p > code, li > code {
   color: var(--primary);
 }
 
-.right-arrow {
+.arrow {
   font-size: 12px;
   -webkit-text-stroke: 1px;
 }
@@ -99,4 +109,8 @@ p > code, li > code {
 
 .table-striped>tbody>tr:nth-of-type(odd)>* {
   --bs-table-accent-bg: var(--grey-lighter);
+}
+
+.api-details {
+  padding: 0px 40px;
 }

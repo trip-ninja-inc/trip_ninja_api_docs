@@ -17,7 +17,7 @@ export default function HomePage() {
             </p>
             <a className="link-text primary-text" href="/farestructure/overview/">
               Get Started with FareStructure
-              <i className="bi bi-chevron-right ms-1 right-arrow"></i>
+              <i className="bi bi-chevron-right ms-1 arrow"></i>
             </a>
           </div>
           <div className="col-md-6">

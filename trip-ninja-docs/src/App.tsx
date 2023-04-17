@@ -5,6 +5,7 @@ import NavBar from "./navbar/NavBar";
 import HomePage from "./home/HomePage";
 import FareStructure from "./farestructure/FareStructure";
 import DynamicPackaging from "./dynamicpackaging/DynamicPackaging";
+import VirtualInterlining from "./virtual-interlining/VirtualInterlining";
 
 
 export default function App() {
@@ -20,6 +21,10 @@ export default function App() {
           <Route 
             exact path="/farestructure/:view" 
             component={() => <FareStructure /> } 
+          />
+          <Route
+            exact path="/virtual-interlining/:view"
+            component={() => <VirtualInterlining /> }
           />
           <Route
             exact path="/dynamic_packaging/:view"

@@ -1,0 +1,15 @@
+.icon {
+    color: var(--primary);
+    font-size: x-large;
+  }
+  
+  .venn-icon {
+    padding: 10px 0px 10px 0px;
+  }
+  
+  .vi-overview-flightpath {
+    position: relative;
+    right: 150px;
+    top: 150px;
+    z-index: -1;
+  }
