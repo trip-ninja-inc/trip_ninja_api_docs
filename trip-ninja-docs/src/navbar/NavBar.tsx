@@ -10,7 +10,7 @@ export default function NavBar() {
   useEffect(() => setPathName(history.location.pathname), []);
 
   const addActiveLinkId = (navType: string) => 
-    navType == pathName ? "selected-link" : ""
+    navType === pathName ? "selected-link" : ""
 
   return (
     <nav className="sticky-top">
