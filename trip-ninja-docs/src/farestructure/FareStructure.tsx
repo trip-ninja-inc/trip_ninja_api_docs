@@ -5,6 +5,7 @@ import FareStructureSetup from "./FareStructureSetup";
 import GetSearches from "./GetSearches";
 import GenerateSolutions from "./GenerateSolutions";
 import SideBarNav from "../common/SideBar";
+import Footer from "../common/Footer";
 
 
 export default function FareStructure() {
@@ -32,6 +33,7 @@ export default function FareStructure() {
               <GenerateSolutions />
             }
           </div>
+          <Footer />
         </div>
       </div>
     </div>
