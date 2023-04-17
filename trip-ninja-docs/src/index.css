@@ -22,6 +22,7 @@ body {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--grey-dark);
 }
 
 h1 {
@@ -39,13 +40,18 @@ h3 {
   font-weight: 600;
 }
 
+a:hover {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
 .subtitle {
   font-size: 16px;
   font-weight: 600;
 }
 
 .link-text {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: none;
 }
@@ -59,10 +65,19 @@ h3 {
   color: var(--primary);
 }
 
+.right-arrow {
+  font-size: 12px;
+  -webkit-text-stroke: 1px;
+}
+
+.image {
+  width: 100%;
+}
+
 .secondary-text {
   color: var(--grey-dark);
 }
 
 footer {
-  margin-top: 65vh;
+  margin-top: 75px;
 }

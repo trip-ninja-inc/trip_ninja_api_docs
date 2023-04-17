@@ -1,3 +1,10 @@
+.connect-banner {
+  padding: 20px;
+  border-radius: 6px;
+  background-color: var(--grey-lighter);
+  border: 1px solid var(--grey-mid);
+}
+
 .footer-link {
     margin: 0px 12px 0px 12px;
     color: var(--grey-dark);
