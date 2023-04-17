@@ -8,7 +8,7 @@ export default function VirtualInterliningGenerateSolutions() {
         <h2 className="mt-3">Generate Solutions</h2>
         <p>
 					After your infrastructure has made the queries to your content sources that Trip Ninja defined 
-					in <code>/get-searches/</code>, the <code>generate-solutions/</code> endpoint will 
+					in <code>/get-searches/</code>, the <code>/generate-solutions/</code> endpoint will 
 					generate a set of optimal itineraries including the ideal markup and virtually 
 					interlined itineraries and then return them to you. You can then present those 
 					itineraries on the front end of your platform to your customers.
