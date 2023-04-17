@@ -1,4 +1,6 @@
 import React from "react";
+import "./Common.css";
+
 
 interface SideBarNavProps {
   currentView: string;
@@ -12,7 +14,7 @@ export default function SideBarNav(props: SideBarNavProps) {
     <div className="sidebar">
       <div className="sidebar-item sidebar-border">
         <a 
-          className={`nav-link sidebar-link ${getActiveLink("overview")}`} 
+          className={`sidebar-link ${getActiveLink("overview")}`} 
           href="/farestructure/overview/"
         >
           Overview
@@ -20,22 +22,22 @@ export default function SideBarNav(props: SideBarNavProps) {
       </div>
       <div className="sidebar-item sidebar-border">
         <a 
-          className={`nav-link sidebar-link ${getActiveLink("setup")}`} 
+          className={`sidebar-link ${getActiveLink("setup")}`} 
           href="/farestructure/setup/"
         >
           Setup
         </a>
       </div>
-      <div className="sidebar-item">
-        <p className="fw-semibold sidebar-link">Endpoints</p>
+      <div className="sidebar-item d-flex flex-column">
+        <p className="fw-semibold mb-3">Endpoints</p>
         <a 
-          className={`nav-link sidebar-link mb-2 ${getActiveLink("get-searches")}`} 
+          className={`sidebar-link mb-2 ${getActiveLink("get-searches")}`} 
           href="/farestructure/get-searches/"
         >
           Get Searches
         </a>
         <a 
-          className={`nav-link sidebar-link ${getActiveLink("generate-solutions")}`} 
+          className={`sidebar-link ${getActiveLink("generate-solutions")}`} 
           href="/farestructure/generate-solutions/"
         >
           Generate Solutions

@@ -14,9 +14,11 @@
   color: var(--grey-dark);
   font-size: 14px;
   font-weight: 500;
+  text-decoration: none;
 }
 
 .sidebar-link:hover {
+  font-weight: 700;
   color: var(--grey-darker)
 }
 
