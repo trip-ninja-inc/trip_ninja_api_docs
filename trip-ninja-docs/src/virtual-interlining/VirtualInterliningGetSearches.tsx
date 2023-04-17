@@ -27,6 +27,25 @@ export default function GetSearches() {
 					to <a href="/farestructure/get-searches">FareStructure Get Searches</a> for the rest of the request schema.
         </p>
         <hr className="mt-3 mb-0"/>
+        <div></div>
+        <hr className="mt-3 mb-3"/>
+        <h3 className="mb-0">Request Sample</h3>
+        <div></div>
+        <hr className="mt-3 mb-3"/>
+        <h3 className="mb-3">Response</h3>
+        <p>
+          If virtual_interlining is true, you will get virtual interlining itineraries in a 
+          successful /get-searches/ response. Please refer to FareStructure Get Searches 
+          for the rest of the response schema. 
+        </p>
+        <p>
+          One thing to note, is that in the datasource_request response under datasource_segment, 
+          the id for virtually interlined segments can be represented as an integer. 
+          See below for the specific response parameter
+        </p>
+        <hr className="mt-3 mb-0"/>
+        <div></div>
+        <hr className="mt-3 mb-3"/>
       </div>
       <Pagination
         prevPageText="Setup"
