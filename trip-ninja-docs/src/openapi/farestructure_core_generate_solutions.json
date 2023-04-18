@@ -1,0 +1,687 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Trip Ninja API Documentation",
+    "description": "<h2>Generate Solutions/h2>\nAfter your infrastructure has made the queries to your content sources that Trip Ninja defined in /get-searches/, the \ngenerate-solutions/ endpoint will generate a set of optimal itineraries including the ideal markup on those itineraries and then return them to you. You can then present those itineraries on the front end of your platform to your customers.\n\nThe /generate-solutions/ endpoint contains an optional metadata field that exists on each query that your infrastructure performs. This field contains any metadata that you want to pass in (branded fares, tax info, etc.). \n\n<b>1. Include Metadata Field</b>\nIf you choose to include the metadata field, we will pass you these values in a list inside the corresponding itinerary when we have finished generating the itineraries for the search.\nPros -The benefit of this extra metadata data is that the response from the /generate-solutions/ endpoint will be ready to be displayed on the front end of your platform.\nCons - This will inflate the request/response size considerably which can result in longer loading times.\n\n<b>2. Ignore MetaData Field</b>\nIn approach, your infrastructure will only send the required fields listed in our docs.\nPros - This will result in a much smaller request/response.\nCons - It will be up to your infrastructure and platform to process the data and add any additional metadata to the itineraries returned.\n\n![Workflow diagram](https://s3.amazonaws.com/tn-api-docs/core-generate-solutions-flow.png)\n"
+  },
+  "servers": [
+    {
+      "url": "https://preprodapi.tripninja.io",
+      "description": "Pre-Production server for development and testing"
+    }
+  ],
+  "paths": {
+    "/generate-solutions/": {
+      "post": {
+        "summary": "Generate Solutions",
+        "description": "",
+        "operationId": "GenerateSolutionsRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/FullGenerateSolutionsRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSolutionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "Error code and 0 for success response",
+                      "example": "IE38"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Contains the error message",
+                      "example": "Trip ID not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "Error code and 0 for success response",
+                      "example": "IE44"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Contains the error message",
+                      "example": "User is not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FullGenerateSolutionsRequest": {
+        "type": "object",
+        "title": "Generate Solutions Request",
+        "properties": {
+          "trip_id": {
+            "description": "The trip id of the search. This will be used in all future requests relating to this search.",
+            "type": "string",
+            "example": "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+          },
+          "datasource_responses": {
+            "description": "The list of datasource responses to be used to generate solutions.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FullDatasourceResponse"
+              }
+            ]
+          }
+        }
+      },
+      "MinimalDatasourceResponse": {
+        "type": "object",
+        "properties": {
+          "4f499298b303c55a1ee522118afce28abe2f68e4": {
+            "description": "The ID of the datasource request. The ID varies between requests.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BasicGenerateDatasourceRequest"
+            }
+          }
+        }
+      },
+      "FullDatasourceResponse": {
+        "type": "object",
+        "properties": {
+          "4f499298b303c55a1ee522118afce28abe2f68e4": {
+            "description": "The datasource_request_id of a datasource request returned from the first get-searches call after the OTA has performed the flight searches requested. The value of this id will be the formatted results from that search.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FullGenerateDatasourceRequest"
+            }
+          }
+        }
+      },
+      "MinimalDatasourceLegDetails": {
+        "description": "A list of required info for each leg of this segment.",
+        "type": "object",
+        "required": [
+          "departure_time",
+          "arrival_time",
+          "flight_number",
+          "operating_carrier",
+          "transportation_type",
+          "fare_type",
+          "cabin_class"
+        ],
+        "properties": {
+          "departure_time": {
+            "type": "string",
+            "description": "Departure time.",
+            "example": "2023-03-15T08:00:00"
+          },
+          "arrival_time": {
+            "type": "string",
+            "description": "Arrival time.",
+            "example": "2023-03-15T10:29:00"
+          },
+          "flight_number": {
+            "type": "string",
+            "description": "Flight number.",
+            "example": "391"
+          },
+          "operating_carrier": {
+            "type": "string",
+            "description": "Operating carrier.",
+            "example": "WS"
+          },
+          "transportation_type": {
+            "type": "string",
+            "description": "Transportation vehicle used for this segment.",
+            "example": "flight"
+          },
+          "fare_type": {
+            "type": "string",
+            "description": "Fare Type of the segment",
+            "example": "Published"
+          },
+          "cabin_class": {
+            "type": "string",
+            "description": "The cabin class of the leg.",
+            "example": "BC",
+            "enum": [
+              "E",
+              "PE",
+              "BC",
+              "FC",
+              "PFC"
+            ]
+          }
+        }
+      },
+      "DatasourceLegDetails": {
+        "description": "Information for each leg of this segment.",
+        "type": "object",
+        "properties": {
+          "OriginName": {
+            "type": "string",
+            "description": "Full name of the origin airport.",
+            "example": "Halifax, NS, Canada (YHZ)"
+          },
+          "Origin": {
+            "type": "string",
+            "description": "Origin airport code.",
+            "example": "YHZ"
+          },
+          "DestinationName": {
+            "type": "string",
+            "description": "Full name of the destination airport.",
+            "example": "Vancouver, BC, Canada (YVR)"
+          },
+          "Destination": {
+            "type": "string",
+            "description": "Destination airport code.",
+            "example": "YVR"
+          },
+          "DepartureTime": {
+            "type": "string",
+            "description": "Departure time.",
+            "example": "2023-03-15T08:00:00"
+          },
+          "ArrivalTime": {
+            "type": "string",
+            "description": "Arrival time.",
+            "example": "2023-03-15T10:29:00"
+          },
+          "FlightNumber": {
+            "type": "string",
+            "description": "Flight number.",
+            "example": "391"
+          },
+          "Carrier": {
+            "type": "string",
+            "description": "Carrier code.",
+            "example": "WS"
+          },
+          "CarrierFullName": {
+            "type": "string",
+            "description": "Carrier full name.",
+            "example": "Westjet"
+          },
+          "FlightTime": {
+            "type": "integer",
+            "description": "Flight time in minutes.",
+            "example": 329
+          },
+          "AircraftType": {
+            "type": "string",
+            "description": "Aircraft type.",
+            "example": "73H"
+          },
+          "Key": {
+            "type": "string",
+            "description": "Leg key.",
+            "example": "DDN3UXYAuDKAaiphxoAAAA=="
+          },
+          "BookingCode": {
+            "type": "string",
+            "description": "Booking code.",
+            "example": "L"
+          },
+          "cabin_class": {
+            "type": "string",
+            "description": "Cabin class.",
+            "example": "Economy"
+          },
+          "fare_info_ref": {
+            "type": "string",
+            "description": "Fare info reference.",
+            "example": "DDN3UXYAuDKAkiphxoAAAA=="
+          },
+          "fare_rule_key": {
+            "type": "string",
+            "description": "Fare rule key.",
+            "example": "gws-eJxNj8EOAiEMRD+GzL1ASdwbuKsxWcJBzRo8+P+f4VA17pQ2baa8QM45SIgS5JD3cni5xw1zWYCGwOzbFT6JCDynBhltnbez1uMKg0SfzPqHR7dFrtph6Yw29K398qTxIT"
+          }
+        }
+      },
+      "DatasourcePriceBreakdownDetails": {
+        "type": "object",
+        "description": "Displays the pricing for each passenger type",
+        "properties": {
+          "passenger_type_code": {
+            "type": "string",
+            "description": "Passenger type code.",
+            "example": "ADT"
+          },
+          "base_price": {
+            "type": "number"
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "taxes": {
+            "type": "number"
+          },
+          "tax_breakdown": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatasourceTaxBreakdownDetails"
+            }
+          }
+        }
+      },
+      "DatasourceTaxBreakdownDetails": {
+        "type": "object",
+        "description": "Breakdown of taxes amount into their categories",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Tax category.",
+            "example": "FR"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Tax amount."
+          }
+        }
+      },
+      "GenerateSolutionsResponse": {
+        "title": "Generate Solutions Response",
+        "type": "object",
+        "properties": {
+          "trip_id": {
+            "type": "string",
+            "description": "A unique key used for identification and when booking a trip.",
+            "example": "fb3d8eff432a329dc21fad8449c686fa93e5ce24"
+          },
+          "itineraries": {
+            "$ref": "#/components/schemas/DatasourceItineraryInfo"
+          },
+          "metadata_details": {
+            "$ref": "#/components/schemas/MetaDataDetails"
+          }
+        }
+      },
+      "DatasourceItineraryInfo": {
+        "type": "array",
+        "description": "Array of itineraries sorted by weight.",
+        "items": {
+          "properties": {
+            "weight": {
+              "type": "number",
+              "description": "Weight of the segment (time-value considered).",
+              "example": 239
+            },
+            "total_price": {
+              "type": "number",
+              "description": "Price of the itinerary (fare and tax included).",
+              "example": 197.1
+            },
+            "transportation_time": {
+              "type": "integer",
+              "description": "Total transportation time for the itinerary",
+              "example": 425
+            },
+            "structure": {
+              "type": "array",
+              "description": "\"Array representing the structure of the trip in terms of one-ways and open-jaw segments. \nFor example: [(0, 1), (3, 4), 2] means there would be three bookings. One openjaw with key “01”, \none with key “34” and a one-way with key ‘2”.\"\nSee Price Confirm Report segment_ids field for more detail.\n",
+              "example": "[(0, 1), 2]"
+            },
+            "metadata": {
+              "type": "array",
+              "description": "Contains extra information about the segment that was sent by the OTA. This field is completely optional and we will not alter the data within this object. Whatever passed within this object will be returned as-is back to the OTA.<br/> This array contains all the metadata that correlates with the related itineraries. This will not be populated if no metadata is passed in the generate solutions request.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "metadata_id": {
+                    "type": "string",
+                    "description": "A unique identifier that matches objects within metadata_details",
+                    "example": "c2f59ef0eeec039233d60e694fed09edc4dfa954"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "DatasourceItinerarySegmentInfo": {
+        "type": "object",
+        "properties": {
+          "segment_id": {
+            "type": "string",
+            "description": "String if one-way, Array of 2 Strings if open-jaw. Used for booking.",
+            "example": "344d73be0d61f820aa9a6ace300742fed0672f2e"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price of the segment (fare and tax included)",
+            "example": 72.3
+          }
+        }
+      },
+      "PercentageWithExtraInfo": {
+        "type": "object",
+        "description": "Information about penalty percentage and amount",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Penalty amount",
+            "example": 78
+          },
+          "percentage": {
+            "type": "number",
+            "description": "Penalty percentage",
+            "example": 0
+          }
+        }
+      },
+      "ChangePenaltyWithExtraInfo": {
+        "type": "object",
+        "description": "Information about changing.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Change penalty amount",
+            "example": 78
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/PercentageWithExtraInfo"
+          },
+          "applies_at": {
+            "type": "string",
+            "description": "When will the change penality apply at",
+            "example": "Anytime"
+          }
+        }
+      },
+      "CancelPenaltyWithExtraInfo": {
+        "type": "object",
+        "description": "Information about cancelling.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Cancel penalty amount",
+            "example": 78
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/PercentageWithExtraInfo"
+          },
+          "applies_at": {
+            "type": "string",
+            "description": "When will the cancel penality apply at",
+            "example": "Anytime"
+          }
+        }
+      },
+      "FareInfoBrandDetails": {
+        "type": "object",
+        "description": "Contains brand information for the fare",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the brand",
+            "example": "STANDARD"
+          },
+          "brand_description": {
+            "type": "string",
+            "description": "Description of the brand",
+            "example": "Standard: Carry on baggage only"
+          },
+          "tag_line": {
+            "type": "string",
+            "description": "Tag line of the brand",
+            "example": "Low Fares for Carefee Travel"
+          },
+          "brand_services": {
+            "type": "object",
+            "description": "Contains information of what the brand offers",
+            "properties": {
+              "carry_on_hand_baggage": {
+                "type": "string",
+                "description": "Are carry on bags permitted on this ticket. True/False or \"$\"",
+                "example": true
+              },
+              "checked_baggage": {
+                "type": "string",
+                "description": "Are checked bags permitted on this ticket. True/False or \"$\"",
+                "example": true
+              },
+              "rebooking": {
+                "type": "string",
+                "description": "Rebooking available on this ticket.",
+                "example": "$"
+              },
+              "refund": {
+                "type": "boolean",
+                "description": "Refundability of the ticket.",
+                "example": true
+              },
+              "seat_assignment": {
+                "type": "string",
+                "description": "Seat assignment availability on this ticket.",
+                "example": "$"
+              },
+              "meals_and_beverages": {
+                "type": "boolean",
+                "description": "Are meals and beverages provided as part of this ticket.",
+                "example": true
+              },
+              "wifi": {
+                "type": "string",
+                "description": "Wifi availability on the flight.",
+                "example": "$"
+              }
+            }
+          },
+          "tier": {
+            "type": "string",
+            "description": "Brand tier",
+            "example": "0002"
+          }
+        }
+      },
+      "BrandFareInfo": {
+        "type": "array",
+        "description": "Contains fare info for the brand",
+        "items": {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "description": "Origin of the segment",
+              "type": "string",
+              "example": "YHZ"
+            },
+            "destination": {
+              "description": "Destination of the segment",
+              "type": "string",
+              "example": "YVR"
+            },
+            "fare_basis": {
+              "description": "Fare Basis Code for the segment.",
+              "type": "string",
+              "example": "QUSDSI0E"
+            },
+            "booking_code": {
+              "description": "Booking code for the segment",
+              "type": "string",
+              "example": "12S3TI3P"
+            },
+            "cabin_class": {
+              "description": "Cabin class of the segment",
+              "type": "string",
+              "example": "E"
+            },
+            "brand": {
+              "$ref": "#/components/schemas/FareInfoBrandDetails"
+            }
+          }
+        }
+      },
+      "DatasourceBrandDetails": {
+        "type": "array",
+        "description": "List of branded fares for the current segment",
+        "items": {
+          "type": "object",
+          "properties": {
+            "base_price": {
+              "description": "Base price of the segment (tax excluded)",
+              "type": "number",
+              "example": 0
+            },
+            "taxes": {
+              "description": "Tax price of the segment",
+              "type": "number",
+              "example": 119.1
+            },
+            "fees": {
+              "description": "Fees for the segment *Travelport customers only*",
+              "type": "number",
+              "example": 0
+            },
+            "price": {
+              "description": "Price of the segment (fare and tax included).",
+              "type": "number",
+              "example": 197.1
+            },
+            "change_penalty": {
+              "$ref": "#/components/schemas/ChangePenaltyWithExtraInfo"
+            },
+            "cancel_penalty": {
+              "$ref": "#/components/schemas/CancelPenaltyWithExtraInfo"
+            },
+            "baggage_info": {
+              "description": "Contains baggage information.",
+              "type": "object",
+              "properties": {
+                "pieces": {
+                  "description": "Number of baggages included",
+                  "type": "integer",
+                  "example": 1
+                },
+                "units": {
+                  "description": "Unit of the baggage",
+                  "type": "string",
+                  "example": "pc"
+                }
+              }
+            },
+            "fare_info": {
+              "$ref": "#/components/schemas/BrandFareInfo"
+            }
+          }
+        }
+      },
+      "BasicGenerateDatasourceRequest": {
+        "type": "object",
+        "description": "blah",
+        "required": [
+          "pricing_solution_id",
+          "total_price",
+          "segment_source",
+          "legs"
+        ],
+        "properties": {
+          "pricing_solution_id": {
+            "type": "string",
+            "description": "A unqiue identifier that represents the itinerary details.",
+            "example": "40495f0f293b54ffe64c833d987cd80ecdb5aca5"
+          },
+          "total_price": {
+            "type": "number",
+            "description": "Total price of the segment (fare and tax included).",
+            "example": 197.1
+          },
+          "segment_source": {
+            "type": "string",
+            "description": "GDS or LCC provider source for segment.",
+            "example": "travelport"
+          },
+          "segments": {
+            "type": "array",
+            "description": "A list of segments for this itinerary",
+            "items": {
+              "type": "array",
+              "description": "A list of required legs information for this segment",
+              "items": {
+                "$ref": "#/components/schemas/MinimalDatasourceLegDetails"
+              }
+            }
+          },
+          "refundable": {
+            "type": "boolean",
+            "description": "Explains whether the booking will be refundable.",
+            "example": true
+          }
+        }
+      },
+      "FullGenerateDatasourceRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicGenerateDatasourceRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "type": "object",
+                "description": "Contains extra information about the segment that was sent by the OTA. This field is completely optional and we will not alter the data within this object. Whatever passed within this object will be returned as-is back to the OTA.",
+                "example": {}
+              }
+            }
+          }
+        ]
+      },
+      "MetaDataDetails": {
+        "type": "array",
+        "description": "Contains a list of metadata for data mapping, this will not be populated if no metadata is passed in the generate solutions request.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "metadata_id": {
+              "type": "string",
+              "description": "A unique identifier that matches the metadata within each itinerary",
+              "example": "c2f59ef0eeec039233d60e694fed09edc4dfa954"
+            }
+          }
+        }
+      }
+    }
+  }
+}

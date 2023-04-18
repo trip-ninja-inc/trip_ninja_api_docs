@@ -5,6 +5,36 @@
   border: 1px solid var(--grey-mid);
 }
 
+.sidebar {
+  height: 100%;
+  border-right: 1px solid var(--grey-mid);
+}
+
+.sidebar-link {
+  color: var(--grey-dark);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  font-weight: 700;
+  color: var(--grey-darker)
+}
+
+.sidebar-link.active {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.sidebar-item {
+  padding: 25px 60px;
+}
+
+.sidebar-border {
+  border-bottom: 1px solid var(--grey-mid);
+}
+
 .footer-link {
     margin: 0px 12px 0px 12px;
     color: var(--grey-dark);
