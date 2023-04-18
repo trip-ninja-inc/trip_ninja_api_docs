@@ -16,6 +16,9 @@
 }
 
 body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   margin: 0;
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -92,6 +95,14 @@ p > code, li > code {
 
 .image {
   width: 100%;
+}
+
+.secondary-text {
+  color: var(--grey-dark);
+}
+
+footer {
+  margin-top: 75px;
 }
 
 .info-chip-teal {

@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "../common/Footer";
 import { useParams } from "react-router-dom";
 import FareStructureOverview from "./FareStructureOverview";
 import FareStructureSetup from "./FareStructureSetup";
@@ -34,6 +35,7 @@ export default function FareStructure() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
