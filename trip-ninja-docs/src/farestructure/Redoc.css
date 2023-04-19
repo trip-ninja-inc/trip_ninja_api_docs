@@ -21,12 +21,12 @@
 }
 
 /* Request Body Schema header text */
-h5.eLjKpN {
+.api-content > div > div > div > h5 {
   color: var(--grey-darker);
   font-weight: 600;
 }
 
-h5.eLjKpN > span {
+.api-content > div > div > div > h5 > span {
   color: var(--grey-dark);
   font-weight: 400;
 }
@@ -36,21 +36,21 @@ h5.eLjKpN > span {
   display: none;
 }
 
-/* Endpoijt sub header desription */
-.fndPYm > p {
-  display: none;
-}
-
 /* Failure code buttons */
-.kgoSle > ul > li.tab-error {
+ul.react-tabs__tab-list > li.tab-error {
   color: var(--secondary);
   background-color: #FCEFEF;
   border-color: #FCEFEF;
 }
 
 /* Success code button */
-.kgoSle > ul > li.tab-success {
+ul.react-tabs__tab-list > li.tab-success {
   color: #00762B;
   background-color: #EDF5F0;
   border-color: #00762B;
+}
+
+/* Hide redocly logo */
+.scrollbar-container > div > a {
+  display: none;
 }

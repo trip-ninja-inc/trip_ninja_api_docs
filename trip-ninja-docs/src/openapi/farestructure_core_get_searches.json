@@ -9,7 +9,7 @@
     "/get-searches/": {
       "post": {
         "summary": "Get Searches",
-        "description": "This endpoint carries out FareStructure and if applicable Virtual Interlining logic to determine the optimal searches predicted to provide the best flight search results. The response contains a list of searches to be done by the OTA, which are then passed in the next\nendpoint (generate-solutions) to get the results.\n",
+        "description": "",
         "operationId": "GetSearchesRequest",
         "requestBody": {
           "content": {

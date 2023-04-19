@@ -1,4 +1,6 @@
 import React from "react";
+import "./Common.css";
+
 
 interface SideBarNavProps {
   currentView: string;
@@ -27,8 +29,8 @@ export default function SideBarNav(props: SideBarNavProps) {
           Setup
         </a>
       </div>
-      <div className="sidebar-item">
-        <p className="fw-semibold sidebar-link">Endpoints</p>
+      <div className="sidebar-item d-flex flex-column">
+        <p className="fw-semibold mb-3">Endpoints</p>
         <a 
           className={`nav-link sidebar-link mb-2 ${getActiveLink("get-searches")}`} 
           href={`/${props.product}/get-searches/`}

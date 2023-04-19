@@ -51,6 +51,10 @@ a:hover {
   opacity: 0.8;
 }
 
+code {
+  color: inherit;
+}
+
 p > code, li > code {
   color: var(--primary);
   background-color: var(--primary-light);
@@ -97,14 +101,6 @@ p > code, li > code {
   width: 100%;
 }
 
-.secondary-text {
-  color: var(--grey-dark);
-}
-
-footer {
-  margin-top: 75px;
-}
-
 .info-chip-teal {
   background-color: var(--secondary-teal);
   color: var(--grey-darker);
@@ -124,4 +120,12 @@ footer {
 
 .api-details {
   padding: 0px 40px;
+}
+
+.secondary-text {
+  color: var(--grey-dark);
+}
+
+footer {
+  margin-top: 75px;
 }

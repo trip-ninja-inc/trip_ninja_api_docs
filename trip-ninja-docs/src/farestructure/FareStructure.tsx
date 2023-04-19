@@ -1,12 +1,11 @@
 import React from "react";
-import Footer from "../common/Footer";
 import { useParams } from "react-router-dom";
 import FareStructureOverview from "./FareStructureOverview";
 import FareStructureSetup from "./FareStructureSetup";
 import GetSearches from "./GetSearches";
 import GenerateSolutions from "./GenerateSolutions";
 import SideBarNav from "../common/SideBar";
-
+import Footer from "../common/Footer";
 
 export default function FareStructure() {
 
@@ -19,7 +18,7 @@ export default function FareStructure() {
       </div>
       <div className="col-md-9">
         <div className="row justify-content-center my-4">
-          <div className="col-md-9">
+          <div className="col-md-10">
             {view === "overview" &&
               <FareStructureOverview />
             }
@@ -33,6 +32,7 @@ export default function FareStructure() {
               <GenerateSolutions />
             }
           </div>
+          <Footer />
         </div>
       </div>
       <Footer />

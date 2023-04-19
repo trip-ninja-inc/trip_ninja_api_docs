@@ -28,6 +28,7 @@ export default function FareStructureOverview() {
       <hr className="my-4" />
       <div className="row mb-4">
         <div className="col-md-4">
+          <i className="bi bi-currency-dollar primary-text fs-3"></i>
           <p className="subtitle">
             Revenue Share
           </p>
@@ -38,6 +39,7 @@ export default function FareStructureOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <i className="bi bi-arrow-repeat primary-text fs-3"></i>
           <p className="subtitle">
             Easy Integration
           </p>
@@ -48,6 +50,7 @@ export default function FareStructureOverview() {
           </p>
         </div>
         <div className="col-md-4">
+          <i className="bi bi-patch-check-fill primary-text fs-3"></i>
           <p className="subtitle">
             Simple UpKeep
           </p>
