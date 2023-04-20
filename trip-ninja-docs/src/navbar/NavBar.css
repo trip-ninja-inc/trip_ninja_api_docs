@@ -1,11 +1,81 @@
 
-.navbar {
+.navbar-top {
+  background-color: var(--grey-lighter);
+  height: 90px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.navbar-bottom {
   background-color: var(--grey-lighter);
   border-bottom: 1px solid var(--grey-mid);
+  height: 60px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .logo-text {
   color: var(--primary);
   font-weight: 800;
   font-size: 22px; 
+}
+
+.nav-link {
+  margin-right: 10px;
+  font-weight: 500;
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  color: var(--grey-dark);
+}
+
+.nav-link:hover, #selected-link {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.nav-link::before {
+  content: "";
+  transition: 300ms;
+  height: 4px;
+  position: absolute;
+  background-color: var(--primary);
+  height: 0%;
+  width: 100%;
+  bottom: -3px;
+  right: 1px;
+  left: 1px;
+}
+
+.nav-link:hover::before, #selected-link::before {
+  content: "";
+  height: 4px;
+  bottom: -3px;
+}
+
+#contact-sales-button {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+  height: 40px;
+  margin-right: 40px;
+}
+
+#contact-sales-button:hover {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+#contact-sales-button:active {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+.vertical-align-middle {
+  vertical-align: -8px;
+}
+
+.support-faq-link {
+  color: var(--grey-dark);
+  margin-right: 30px;
 }

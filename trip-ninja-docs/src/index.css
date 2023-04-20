@@ -16,6 +16,9 @@
 }
 
 body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   margin: 0;
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -46,6 +49,10 @@ p, li, table {
 a:hover {
   color: var(--primary);
   opacity: 0.8;
+}
+
+code {
+  color: inherit;
 }
 
 p > code, li > code {
@@ -113,4 +120,12 @@ p > code, li > code {
 
 .api-details {
   padding: 0px 40px;
+}
+
+.secondary-text {
+  color: var(--grey-dark);
+}
+
+footer {
+  margin-top: 75px;
 }

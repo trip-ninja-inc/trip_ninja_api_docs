@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import history from "./History";
 import NavBar from "./navbar/NavBar";

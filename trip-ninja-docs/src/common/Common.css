@@ -14,9 +14,11 @@
   color: var(--grey-dark);
   font-size: 14px;
   font-weight: 500;
+  text-decoration: none;
 }
 
 .sidebar-link:hover {
+  font-weight: 700;
   color: var(--grey-darker)
 }
 
@@ -31,4 +33,13 @@
 
 .sidebar-border {
   border-bottom: 1px solid var(--grey-mid);
+}
+
+.footer-link {
+    margin: 0px 12px 0px 12px;
+    color: var(--grey-dark);
+}
+
+.footer-link:hover {
+    color: var(--primary-dark);
 }

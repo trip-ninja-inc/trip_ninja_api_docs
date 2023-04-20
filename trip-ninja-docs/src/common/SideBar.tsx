@@ -1,4 +1,6 @@
 import React from "react";
+import "./Common.css";
+
 
 interface SideBarNavProps {
   currentView: string;
