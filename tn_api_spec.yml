@@ -1188,9 +1188,9 @@ components:
           vi_solution_id:
             type: string
             description: |
-            ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position. 
-            Will be composed of each segment's segment_id joined together with two underscores. For oneway VI this 
-            will be two segments, for openjaw VI will be 4 segments. 
+              ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position. 
+              Will be composed of each segment's segment_id joined together with two underscores. For oneway VI this 
+              will be two segments, for openjaw VI will be 4 segments. 
             example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
             nullable: true
           itinerary_index:
@@ -1208,17 +1208,17 @@ components:
             example: 1
             nullable: true
           itinerary_structure:
-            type:  Array of ints and/or Array of arrays
+            type:  String
             description: |
-              "Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
+              "String Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
               For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
               one with key “34” and a one-way with key ‘2”."
               See Price Confirm Report segment_ids field for more detail.
-            example: [[0, 1], 2]
+            example: "[[0, 1], 2]"
           vi_pattern:
             type: String
             description: "OpenJaw VI only: String Array representing the structue of the OpenJaw VI solution that was found."
-            example: [[0, 3], 1, 2]
+            example: "[[0, 3], 1, 2]"
           vi_segment_base_price:
             type: float
             description: The base price of the VI PNR not including taxes and fees.
@@ -1581,8 +1581,10 @@ components:
               type: boolean
           should_compress_itinerary:
               description: | 
-                Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
-                **Currenly being phased out, we are testing a new compression approach that is more effective**
+                Return only a segment_id, segment_source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, 
+                the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
+                If virtual_interlining is passed as true, only segment_id, segment_souce and price are returned. Additionally for successfully virtually_interlined options a 
+                vi_position field is returned. This is the segments position in the virtually interlined itinerary. 
               default: false
               type: boolean
           mix_structures:
