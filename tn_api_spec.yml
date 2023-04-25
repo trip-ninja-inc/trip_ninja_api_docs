@@ -526,14 +526,14 @@ components:
           itinerary_index:
             type: int
             description: |
-              position of the virtual interlining option in itinerary(PNR). Starts from 0
+              Position of the virtual interlining option in itinerary(PNR). Starts from 0
               Helps ordering parts of the VI solution in the itinerary
             example: 0
             nullable: true
           vi_position:
             type: integer
             description: |
-              position of the virtual interlining option in itinerary. Starts from 0
+              Position of the virtual interlining option in itinerary. Starts from 0
             example: 1
             nullable: true
           weight:
@@ -1196,14 +1196,14 @@ components:
           itinerary_index:
             type: int
             description: |
-              position of the virtual interlining option in itinerary(PNR). Starts from 0
+              Position of the virtual interlining option in itinerary(PNR). Starts from 0
               Helps ordering parts of the VI solution in relation to the itinerary as a whole
             example: 0
             nullable: true
           vi_position:
             type: integer
             description: |
-              position of the virtual interlining option in the VI itinerary. Starts from 0. For OneWay VI will be either of [0, 1]. 
+              Position of the virtual interlining option in the VI itinerary. Starts from 0. For OneWay VI will be either of [0, 1]. 
               For OpenJaw VI will be one of [0, 1, 2, 3]
             example: 1
             nullable: true
