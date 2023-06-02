@@ -325,6 +325,10 @@ components:
         title: Search Response
         type: object
         properties:
+          path_sequence:
+            type: array
+            description: An array of IATA codes representing the chronological order of your trip.
+            example: [ 'LON-CDG', 'CDG-YUL', 'YUL-LON' ]
           currency:
             type: string
             description: Currency
@@ -443,9 +447,11 @@ components:
               properties:
                 category:
                   type: string
+                  description: Category
                   example: "CA"
                 amount:
                   type: float
+                  description: Amount of tax
                   example: 7.12
 
     SegmentOptions:
@@ -754,57 +760,65 @@ components:
             description: Full name of the flight origin
             example: "London, United Kingdom (LHR)"
           Origin:
-              type: string
-              description: IATA code of the leg origin
-              example: "LHR"
+            type: string
+            description: IATA code of the leg origin
+            example: "LHR"
           DestinationName:
-              type: string
-              description: Full name of the leg destination
-              example: "Paris, France (CDG)"
+            type: string
+            description: Full name of the leg destination
+            example: "Paris, France (CDG)"
           Destination:
-              type: string
-              description: IATA code of the leg destination
-              example: "CDG"
+            type: string
+            description: IATA code of the leg destination
+            example: "CDG"
           DepartureTime:
-              type: string
-              description: Departure time of the leg
-              example: "2019-04-05T13:25:00.000+01:00"
+            type: string
+            description: Departure time of the leg
+            example: "2019-04-05T13:25:00.000+01:00"
+          DepartureTimestamp:
+            type: number
+            description: Departure timestamp of the leg
+            example: 1692138300
           ArrivalTime:
-              type: string
-              description: Arrival time of the leg
-              example: "2019-04-05T15:40:00.000+02:00"
+            type: string
+            description: Arrival time of the leg
+            example: "2019-04-05T15:40:00.000+02:00"
+          ArrivalTimestamp:
+            type: number
+            description: Arrival timestamp of the leg
+            example: 1692160260
           FlightNumber:
-              type: string
-              description: Leg's flight number
-              example: 111
+            type: string
+            description: Leg's flight number
+            example: "111"
           Carrier:
-              type: string
-              description: Leg's carrier code
-              example: "BA"
-          OperatingCarrier:
-              type: string
-              description: Leg's operating carrier code
-              example: "WS"    
+            type: string
+            description: Leg's carrier code
+            example: "BA"
+          CarrierFullName:
+            type: string
+            description: Leg's operating carrier name
+            example: "British Airlines"
           FlightTime:
-              type: integer
-              description: Flight duration in minutes
-              example: 75
+            type: integer
+            description: Flight duration in minutes
+            example: 75
           AircraftType:
             type: string
             description: IATA type code for aircraft model.
             example: "7M8"
           Key:
-              type: string
-              description: Leg’s string identifier
-              example: "oHzo6pBAAA/B1d6hPLAAAA=="
+            type: string
+            description: Leg’s string identifier
+            example: "oHzo6pBAAA/B1d6hPLAAAA=="
           BookingCode:
-              type: string
-              description: The airline booking code that describes the flight cabin class
-              example: "X"
+            type: string
+            description: The airline booking code that describes the flight cabin class
+            example: "X"
           cabin_class:
-              type: string
-              description: Leg’s cabin class *Travelport customers only*
-              example: "Economy"
+            type: string
+            description: Leg’s cabin class *Travelport customers only*
+            example: "Economy"
           fare_info_ref:
             type: string
             description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
@@ -814,9 +828,9 @@ components:
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
             example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
           fare_type:
-              type: string
-              description: Leg's fare type 
-              example: "PublicFare"
+            type: string
+            description: Leg's fare type
+            example: "PublicFare"
 
 
     FareStructureResponse:
@@ -1111,6 +1125,14 @@ components:
     BasicSegmentInfo:
         type: object
         properties:
+          segment_id:
+            type: string
+            description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
+            example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
+          segment_source:
+            type: string
+            description: Data source that returned the segment.
+            example: "travelport"
           segment_origin_full:
             type: string
             description: "Origin of the segment."
@@ -1119,14 +1141,14 @@ components:
             type: string
             description: "Destination of the segment."
             example: "Berlin, Germany (TXL)"
+          travel_mode:
+            type: string
+            description: "Mode of travel (air, ground, etc.)"
+            example: "air"
           weight:
             type: string
             description: Weight of the segment (time-value considered).
             example: 96
-          segment_id:
-            type: string
-            description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
-            example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
           price:
             type: float
             description: Price of the segment (fare and tax included)
@@ -1159,6 +1181,12 @@ components:
             type: string
             description: “open_jaw” or “one_way”
             example: "open_jaw"
+          brands:
+            type: string
+            description: Brands returned
+            example: null
+          price_breakdown_with_passenger_type_code:
+            $ref: "#/components/schemas/PriceBreakdownWithPassengerTypeCode"
           legs:
             $ref: '#/components/schemas/LegDetails'
           baggage:
@@ -1180,7 +1208,35 @@ components:
           fare_info_ref:
             type: string
             description: Fare Info reference for this segment
-            example: 3RxQ6ylJ0BKAhQAbnbAAAA==
+            example: "3RxQ6ylJ0BKAhQAbnbAAAA=="
+          private_fare:
+            type: boolean
+            description: True if segment is a private fare, otherwise False *Travelport customers only*
+            example: false
+          private_type:
+            type: string
+            description: Private type
+            example: null
+          plating_carrier:
+            type: string
+            description: Plating carrier of segment
+            example: "AC"
+          intermediate_stops:
+            type: string
+            description: Intermediate stops in the segment
+            example: null
+          itinerary_type:
+            type: string
+            description: Type of itinerary
+            example: "ONE_WAY"
+          virtual_interline:
+            type: boolean
+            description: Denotes if segment is VI
+            example: false
+          segment_position:
+            type: number
+            description: Position of segment in response
+            example: 0
 
     Segments:
         allOf:
