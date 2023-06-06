@@ -462,6 +462,10 @@ components:
         properties:
           credential_info:
             $ref: '#/components/schemas/CredentialInfo'
+          segment_id:
+            type: string
+            description: Segment ID
+            example: "0b736e4ff0d8b16bb5e83b9afe5204c0471d6e9b"
           origin:
             type: string
             description: IATA code of the segment origin
@@ -493,7 +497,15 @@ components:
             description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
             example: 7
           itinerary_structure:
-            type:  Array of ints and/or Array of arrays
+            type:  String
+            description: |
+              "String representing the structure of the trip in terms of one-ways and open-jaw segments. 
+              For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
+              one with key “34” and a one-way with key ‘2”."
+              See Price Confirm Report segment_ids field for more detail.
+            example: "[[0, 1], 2]"
+          literal_itinerary_structure:
+            type: Array of ints and/or Array of arrays
             description: |
               "Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
               For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
@@ -629,6 +641,22 @@ components:
             required: false
             type: string
             example: "*A"
+          plating_carrier:
+            type: string
+            description: Plating carrier for segment
+            example: "SK"
+          fare_info_ref:
+            type: string
+            description: Flight identifier required to make a Travelport fare rule request. *Travelport Only*
+            example: "ZNqWNiVqWDKAyf27CAAAAA=="
+          fare_basis_code:
+            type: string
+            description: Fare Basis Code for the segment.
+            example: "OEOGHT"
+          fare_rule_key:
+            type: string
+            description: Key corresponding to above fare_info_ref also required to make a Travelport fare rule request. *Travelport Only*
+            example: "gws-eJxNjrEOwyAMRD8mut2mQFaokyZSVRiaDln6/5/RAxSpluw7eGA7peTE3SRKTP8x4Tu9nygfAwoc85WpwQcoDydENKCuddsPjA5OCEqHQ7U/W6I5CkxtHqgFzl4fVsmk96Uq2lw0yx+4zLrTlrwc9Z43Ee+VlwPJDK75AwvZKug="
           private_fare:
             type: boolean
             description: True if segment is a private fare, otherwise False *Travelport customers only*
@@ -670,6 +698,17 @@ components:
           brands:
             type: array
             description: list of branded fares for the current segment
+          source:
+            type: string
+            description: Data source of the segment
+            example: "travelport"
+          travel_mode:
+            type: string
+            description: Travel mode of the segment (air, ground, etc.)
+            example: "air"
+          availability_source:
+            type: string
+            example: "S"
 
 
     FlightDetails:
@@ -721,16 +760,6 @@ components:
             type: string
             description: Full name of the carrier
             example: "Air Canada"
-          operating_carrier:
-            type: string
-            minLength: 2
-            maxLength: 2
-            description: "Operating airline of the flight."
-            example: "WS"
-          operating_carrier_fullname:
-            type: string
-            description: Full name of the operating carrier
-            example: "Westjet"
           reference:
             type: string
             description: reference to flight in flight_details list.
@@ -741,12 +770,20 @@ components:
             example: "7M8"
           fare_info_ref:
             type: string
-            description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
+            description: Flight identifier required to make a travelport fare rule request. *Travelport Only*
             example: "WPADWJK0nDKATShj2JAAAA=="
           fare_rule_key:
             type: string
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
             example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
+          departure_timestamp:
+            type: number
+            description: Departure date and time in Unix timestamp form.
+            example: 1687271700
+          arrival_timestamp:
+            type: number
+            description: Arrival date and time in Unix timestamp form.
+            example: 1687281000
 
     LegDetails:
       title: Leg Details
