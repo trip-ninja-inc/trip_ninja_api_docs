@@ -1689,8 +1689,8 @@ components:
         description: |
             Array of segment_id's for the booked segments - These will be strings for one-ways, arrays of strings for open-jaws and joined strings for VI flights.
 
-            For the booking of oneway virtually interlined tickets there will be two segment_id's for example segment_id_0_1 and segment_id_0_2. 
-            When being booked, the segment_id's should be joined together by two underscores **segment_id_0_1__segment_id_0_2** and the resulting string should be sent in the position of the original search.
+            For the booking of oneway virtually interlined tickets there will be two segment_id's. For example segment_id_0_1 and segment_id_0_2. 
+            When being booked the segment_id's should be joined together by two underscores **segment_id_0_1__segment_id_0_2** and the resulting string should be sent in the position of the original search.
             
             e.g. `18fd1992fd90e6e2cf44d49308a1482b2ecd7f67__59e15240be759a023c950e66379dca775fd8aaf1`
 
