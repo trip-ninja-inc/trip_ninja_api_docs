@@ -1629,6 +1629,11 @@ components:
                 example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
             segment_ids:
                 $ref: "#/components/schemas/segment_ids"
+            is_retry:
+                type: boolean
+                description: Optional parameter that allows pre-booking for trips that have expired from our cache.
+                default: false
+                example: false
 
     BookingReportRequest:
       title: Request
@@ -1682,19 +1687,28 @@ components:
     segment_ids:
         type: Array of strings and/or Array of arrays
         description: |
-            Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
+            Array of segment_id's for the booked segments - These will be strings for one-ways, arrays of strings for open-jaws and joined strings for VI flights.
 
-            This is the example structure but should be generalized for all combinations as Trip Ninja’s technology handles more than just 3-segment trips.
+            For the booking of oneway virtually interlined tickets there will be two segment_id's. For example segment_id_0_1 and segment_id_0_2. 
+            When being booked the segment_id's should be joined together by two underscores **segment_id_0_1__segment_id_0_2** and the resulting string should be sent in the position of the original search.
+            
+            e.g. `18fd1992fd90e6e2cf44d49308a1482b2ecd7f67__59e15240be759a023c950e66379dca775fd8aaf1`
+
+            This is the example structure but should be generalized for all combinations as Trip Ninja's technology handles more than just 3-segment trips.
             1) structure: [0, 1]
                 - `segment_ids: ["segment_id_0", "segment_id_1"]`
             2) structure: [(0, 1)]
                 - `segment_ids: [["segment_id_0", "segment_id_1"]]`
-            3) structure: [0, 1, 2]
+            3) VI structure: [0, 1.1, 1.2]
+                - `segment_ids: [["segment_id_0", "segment_id_1_1__segment_id_1_2"]]`
+            4) structure: [0, 1, 2]
                 - `segment_ids: ["segment_id_0", "segment_id_1", "segment_id_2"]`
-            4) structure: [(0, 1), 2]
+            5) structure: [(0, 1), 2]
                 - `segment_ids: [["segment_id_0", "segment_id_1"], "segment_id_2"]`
-            5) structure: [(0, 2), 1]
+            6) structure: [(0, 2), 1]
                 - `segment_ids: [["segment_id_0", "segment_id_2"], "segment_id_1"]`
-            6) structure: [0, (1, 2)]
+            7) structure: [0, (1, 2)]
                 - `segment_ids: ["segment_id_0", ["segment_id_1", "segment_id_2"]]`
+            8) structure: [0.1, 0.2, (1, 2), 3.1. 3.2]
+                - `segment_ids: ["segment_id_0_1__segment_id_0_2", ["segment_id_1", "segment_id_2"]], "segment_id_3_1__segment_id_3_2]"`
         example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
