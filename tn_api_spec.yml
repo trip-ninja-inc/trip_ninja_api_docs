@@ -339,6 +339,7 @@ components:
               $ref: '#/components/schemas/ErrorDetails'
           trip_id:
               type: string
+              example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
               description: A unique key used for identification and when booking a trip.
           tn_net_fare_markup:
               type: float
@@ -363,6 +364,7 @@ components:
               example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
           trip_id:
               type: string
+              example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
               description: A unique key used for identification and when booking a trip.
           segments:
               $ref: '#/components/schemas/TripOptions'
@@ -664,6 +666,9 @@ components:
           priced_passengers:
             type: array
             example: ['ADT','INF']
+          priced_passengers_standard_code:
+            type: array
+            example: ['ADT','INF']
           price_breakdown_with_passenger_type_code:
             $ref: '#/components/schemas/PriceBreakdownWithPassengerTypeCode'
           segment_time_w_connections:
@@ -689,9 +694,6 @@ components:
                 fare_type:
                   type: string
                   example: Published fare
-                fare_basis_code:
-                  type: string
-                  example: LP7J2LBS
                 cabin_class:
                   type: string
                   example: Economic Standard
@@ -922,6 +924,7 @@ components:
                     example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
                 trip_id:
                     type: string
+                    example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
                     description: A unique key used for identification and when booking a trip.
                 total_transportation_minutes:
                     type: integer
@@ -1058,7 +1061,7 @@ components:
           - type: array
             description: Array of itineraries sorted by weight.
             items:
-                $ref: '#/components/schemas/ItineraryInfoWithCreds'
+                $ref: '#/components/schemas/ItineraryInfo'
 
     ItineraryInfoWithCreds:
       allOf:
@@ -1196,11 +1199,11 @@ components:
             properties:
               amount:
                 type: float
-                description: Cancellation penalty amount
+                description: Cancellation penalty amount (Optional)
                 example: 0
               percentage:
                 type: float
-                description: Cancellation penalty percentage
+                description: Cancellation penalty percentage (Optional)
                 example: 100
           change_penalty:
             type: object
@@ -1208,11 +1211,11 @@ components:
             properties:
               amount:
                 type: float
-                description: Change penalty amount
+                description: Change penalty amount (Optional)
                 example: 78
               percentage:
                 type: float
-                description: Change penalty percentage
+                description: Change penalty percentage (Optional)
                 example: 0
           flight_type:
             type: string
@@ -1426,11 +1429,6 @@ components:
                 required: false
                 type: string
                 example: americas
-            itx:
-                description: toggles if this is an itx search
-                required: false
-                type: bool
-                example: true
             pcc_currency:
                 description: Indicates the currency that the PCC is charged in.
                 required: false
