@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 
 info:
-  version: "4.13.0"
+  version: "4.15.0"
   title: Trip Ninja API Documentation
   description: |
     <h2>Introduction</h2>
@@ -64,7 +64,7 @@ info:
       <tr><td>IE10</td><td>Incorrect city_type, expected one of ['C', 'A']</td></tr>
       <tr><td>IE16</td><td>Please provide a PCC</td></tr>
       <tr><td>IE17</td><td>Invalid carrier</td></tr>
-      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas'</td></tr>
+      <tr><td>IE19</td><td>Incorrect region, expected one of 'emea', 'apac', 'americas', 'edge'</td></tr>
       <tr><td>IE20</td><td>Incorrect provider, expected one of '1V','1G','1P','1A'</td></tr>
       <tr><td>IE21</td><td>Wrong currency</td></tr>
       <tr><td>IE22</td><td>Not a valid cabin option. expected one of 'E' , 'PE', 'SE', 'BC','FC', 'PFC'</td></tr>
@@ -509,7 +509,7 @@ components:
           literal_itinerary_structure:
             type: Array of ints and/or Array of arrays
             description: |
-              "Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
+              Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
               For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
               one with key “34” and a one-way with key ‘2”."
               See Price Confirm Report segment_ids field for more detail.
@@ -546,14 +546,13 @@ components:
           itinerary_index:
             type: int
             description: |
-              position of the virtual interlining option in itinerary(PNR). Starts from 0
-              Helps ordering parts of the VI solution in the itinerary
+              Position of the virtual interlining option in itinerary(PNR). Starts from 0
             example: 0
             nullable: true
           vi_position:
             type: integer
             description: |
-              position of the virtual interlining option in itinerary. Starts from 0
+              Position of the virtual interlining option in itinerary. Starts from 0
             example: 1
             nullable: true
           weight:
@@ -885,7 +884,6 @@ components:
             num_results: 50
             cabin_class: E
             exclude_carriers: []
-            region: "americas"
             refundable: false
             currency: USD
             time_value: 0
@@ -993,7 +991,7 @@ components:
                 description: Time Value (Original Alpha) outside of expected range [$0,$200]/hr
             IE19:
                 type: string
-                description: Incorrect region - expected one of ‘emea’,’apac’,’americas’
+                description: Incorrect region - expected one of ‘emea’, ’apac’, ’americas’, ’edge’
             IE20:
                 type: string
                 description: Incorrect provider - expected one of '1V','1G','1P','1A'
@@ -1269,14 +1267,63 @@ components:
             type: string
             description: Type of itinerary
             example: "ONE_WAY"
-          virtual_interline:
-            type: boolean
-            description: Denotes if segment is VI
-            example: false
           segment_position:
             type: number
             description: Position of segment in response
             example: 0
+          virtual_interline:
+            type: boolean
+            description: |
+              true if option is a vi solution
+            example: true
+          vi_solution_id:
+            type: string
+            description: |
+              ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position. 
+              Will be composed of each segment's segment_id joined together with two underscores. For oneway VI this 
+              will be two segments, for openjaw VI will be 4 segments. 
+            example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
+            nullable: true
+          itinerary_index:
+            type: int
+            description: |
+              Position of the virtual interlining option in itinerary(PNR). Starts from 0
+            example: 0
+            nullable: true
+          vi_position:
+            type: integer
+            description: |
+              Position of the virtual interlining option in the VI itinerary. Starts from 0. For OneWay VI will be either of [0, 1]. 
+              For OpenJaw VI will be one of [0, 1, 2, 3]
+            example: 1
+            nullable: true
+          itinerary_structure:
+            type:  String
+            description: |
+              String Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
+              For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
+              one with key “34” and a one-way with key “2”.
+              See Price Confirm Report segment_ids field for more detail.
+            example: "[[0, 1], 2]"
+          vi_pattern:
+            type: String
+            description: "OpenJaw VI only: String Array representing the structue of the OpenJaw VI solution that was found."
+            example: "[[0, 3], 1, 2]"
+          vi_segment_base_price:
+            type: float
+            description: The base price of the VI PNR not including taxes and fees.
+            example: 106.40
+            nullable: true
+          vi_segment_taxes:
+            type: float
+            description: The taxes associated with this VI PNR.
+            example: 24.12
+            nullable: true
+          vi_segment_fees:
+            type: float
+            description: The fees associated with this individual VI PNR.
+            example: 14.56
+            nullable: true
 
     Segments:
         allOf:
@@ -1428,6 +1475,8 @@ components:
                 description: Parameter toggles which travelport regional service endpoint you hit *Travelport Only*
                 required: false
                 type: string
+                enum: ["emea", "apac", "americas", "edge"]
+                default: "americas"
                 example: americas
             pcc_currency:
                 description: Indicates the currency that the PCC is charged in.
@@ -1596,11 +1645,6 @@ components:
               description: Parameter toggles query to only return fully refundable flights. *Travelport Only*
               default: false
               type: boolean
-          region:
-              description: Parameter toggles which travelport endpoint you hit *Travelport Only*
-              default: "americas"
-              type: string
-              enum: ["emea","apac","americas"]
           num_results:
               description: Parameter sets the number of segments in the response *Travelport Only*
               default: 50
@@ -1621,8 +1665,10 @@ components:
               type: boolean
           should_compress_itinerary:
               description: | 
-                Return only a segment_id, source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
-                **Currenly being phased out, we are testing a new compression approach that is more effective**
+                Return only a segment_id, segment_source, price, weight for a segment inside an Itineraries object. A segment_details list will now be returned with the full segment details, 
+                the segment_id should be used to map a segment to the full details. Only works with include_itineraries also passed as true. Significantly reduces response size.
+                If virtual_interlining is passed as true, only segment_id, segment_souce and price are returned. Additionally for successfully virtually_interlined options a 
+                vi_position field is returned. This is the segments position in the virtually interlined itinerary. 
               default: false
               type: boolean
           mix_structures:
@@ -1669,6 +1715,11 @@ components:
                 example: "6be6e72c60102bd489ac46434d4ac6c11e047ee8"
             segment_ids:
                 $ref: "#/components/schemas/segment_ids"
+            is_retry:
+                type: boolean
+                description: Optional parameter that allows pre-booking for trips that have expired from our cache.
+                default: false
+                example: false
 
     BookingReportRequest:
       title: Request
@@ -1722,19 +1773,28 @@ components:
     segment_ids:
         type: Array of strings and/or Array of arrays
         description: |
-            Array of segment_id’s for the booked segments - These will be strings for one-ways and arrays of strings for open-jaws.
+            Array of segment_id's for the booked segments - These will be strings for one-ways, arrays of strings for open-jaws and joined strings for VI flights.
 
-            This is the example structure but should be generalized for all combinations as Trip Ninja’s technology handles more than just 3-segment trips.
+            For the booking of oneway virtually interlined tickets there will be two segment_id's. For example segment_id_0_1 and segment_id_0_2. 
+            When being booked the segment_id's should be joined together by two underscores **segment_id_0_1__segment_id_0_2** and the resulting string should be sent in the position of the original search.
+            
+            e.g. `18fd1992fd90e6e2cf44d49308a1482b2ecd7f67__59e15240be759a023c950e66379dca775fd8aaf1`
+
+            This is the example structure but should be generalized for all combinations as Trip Ninja's technology handles more than just 3-segment trips.
             1) structure: [0, 1]
                 - `segment_ids: ["segment_id_0", "segment_id_1"]`
             2) structure: [(0, 1)]
                 - `segment_ids: [["segment_id_0", "segment_id_1"]]`
-            3) structure: [0, 1, 2]
+            3) VI structure: [0, 1.1, 1.2]
+                - `segment_ids: [["segment_id_0", "segment_id_1_1__segment_id_1_2"]]`
+            4) structure: [0, 1, 2]
                 - `segment_ids: ["segment_id_0", "segment_id_1", "segment_id_2"]`
-            4) structure: [(0, 1), 2]
+            5) structure: [(0, 1), 2]
                 - `segment_ids: [["segment_id_0", "segment_id_1"], "segment_id_2"]`
-            5) structure: [(0, 2), 1]
+            6) structure: [(0, 2), 1]
                 - `segment_ids: [["segment_id_0", "segment_id_2"], "segment_id_1"]`
-            6) structure: [0, (1, 2)]
+            7) structure: [0, (1, 2)]
                 - `segment_ids: ["segment_id_0", ["segment_id_1", "segment_id_2"]]`
+            8) structure: [0.1, 0.2, (1, 2), 3.1. 3.2]
+                - `segment_ids: ["segment_id_0_1__segment_id_0_2", ["segment_id_1", "segment_id_2"]], "segment_id_3_1__segment_id_3_2]"`
         example: [ "18fd1992fd90e6e2cf44d49308a1482b2ecd7f67", "59e15240be759a023c950e66379dca775fd8aaf1" ]
