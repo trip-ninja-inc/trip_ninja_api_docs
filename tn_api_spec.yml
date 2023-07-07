@@ -171,13 +171,17 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
                                         type: string
                                         description: Contains the error message
                                         example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
+                                    search_criteria:
+                                        type: string
+                                        description: Contains the routes that failed to produce flights.
+                                        example: "[YYZ,YQS]"
                 500:
                     description: Server Error
 
@@ -325,6 +329,10 @@ components:
         title: Search Response
         type: object
         properties:
+          path_sequence:
+            type: array
+            description: An array of IATA codes representing the chronological order of your trip.
+            example: [ 'LON-CDG', 'CDG-YUL', 'YUL-LON' ]
           currency:
             type: string
             description: Currency
@@ -335,6 +343,7 @@ components:
               $ref: '#/components/schemas/ErrorDetails'
           trip_id:
               type: string
+              example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
               description: A unique key used for identification and when booking a trip.
           tn_net_fare_markup:
               type: float
@@ -359,6 +368,7 @@ components:
               example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
           trip_id:
               type: string
+              example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
               description: A unique key used for identification and when booking a trip.
           segments:
               $ref: '#/components/schemas/TripOptions'
@@ -443,9 +453,11 @@ components:
               properties:
                 category:
                   type: string
+                  description: Category
                   example: "CA"
                 amount:
                   type: float
+                  description: Amount of tax
                   example: 7.12
 
     SegmentOptions:
@@ -456,6 +468,10 @@ components:
         properties:
           credential_info:
             $ref: '#/components/schemas/CredentialInfo'
+          segment_id:
+            type: string
+            description: Segment ID
+            example: "0b736e4ff0d8b16bb5e83b9afe5204c0471d6e9b"
           origin:
             type: string
             description: IATA code of the segment origin
@@ -487,7 +503,15 @@ components:
             description: Markup for the itinerary. Trip markup and Itinerary markup parameters are mutualy exclusive
             example: 7
           itinerary_structure:
-            type:  Array of ints and/or Array of arrays
+            type:  String
+            description: |
+              "String representing the structure of the trip in terms of one-ways and open-jaw segments. 
+              For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
+              one with key “34” and a one-way with key ‘2”."
+              See Price Confirm Report segment_ids field for more detail.
+            example: "[[0, 1], 2]"
+          literal_itinerary_structure:
+            type: Array of ints and/or Array of arrays
             description: |
               Array representing the structure of the trip in terms of one-ways and open-jaw segments. 
               For example: [[0, 1], [3, 4], 2] means there would be three segments. One openjaw with key “01”, 
@@ -622,11 +646,30 @@ components:
             required: false
             type: string
             example: "*A"
+          plating_carrier:
+            type: string
+            description: Plating carrier for segment
+            example: "SK"
+          fare_info_ref:
+            type: string
+            description: Flight identifier required to make a Travelport fare rule request. *Travelport Only*
+            example: "ZNqWNiVqWDKAyf27CAAAAA=="
+          fare_basis_code:
+            type: string
+            description: Fare Basis Code for the segment.
+            example: "OEOGHT"
+          fare_rule_key:
+            type: string
+            description: Key corresponding to above fare_info_ref also required to make a Travelport fare rule request. *Travelport Only*
+            example: "gws-eJxNjrEOwyAMRD8mut2mQFaokyZSVRiaDln6/5/RAxSpluw7eGA7peTE3SRKTP8x4Tu9nygfAwoc85WpwQcoDydENKCuddsPjA5OCEqHQ7U/W6I5CkxtHqgFzl4fVsmk96Uq2lw0yx+4zLrTlrwc9Z43Ee+VlwPJDK75AwvZKug="
           private_fare:
             type: boolean
             description: True if segment is a private fare, otherwise False *Travelport customers only*
             example: false
           priced_passengers:
+            type: array
+            example: ['ADT','INF']
+          priced_passengers_standard_code:
             type: array
             example: ['ADT','INF']
           price_breakdown_with_passenger_type_code:
@@ -654,15 +697,23 @@ components:
                 fare_type:
                   type: string
                   example: Published fare
-                fare_basis_code:
-                  type: string
-                  example: LP7J2LBS
                 cabin_class:
                   type: string
                   example: Economic Standard
           brands:
             type: array
             description: list of branded fares for the current segment
+          source:
+            type: string
+            description: Data source of the segment
+            example: "travelport"
+          travel_mode:
+            type: string
+            description: Travel mode of the segment (air, ground, etc.)
+            example: "air"
+          availability_source:
+            type: string
+            example: "S"
 
 
     FlightDetails:
@@ -714,16 +765,6 @@ components:
             type: string
             description: Full name of the carrier
             example: "Air Canada"
-          operating_carrier:
-            type: string
-            minLength: 2
-            maxLength: 2
-            description: "Operating airline of the flight."
-            example: "WS"
-          operating_carrier_fullname:
-            type: string
-            description: Full name of the operating carrier
-            example: "Westjet"
           reference:
             type: string
             description: reference to flight in flight_details list.
@@ -734,12 +775,20 @@ components:
             example: "7M8"
           fare_info_ref:
             type: string
-            description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
+            description: Flight identifier required to make a travelport fare rule request. *Travelport Only*
             example: "WPADWJK0nDKATShj2JAAAA=="
           fare_rule_key:
             type: string
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
             example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
+          departure_timestamp:
+            type: number
+            description: Departure date and time in Unix timestamp form.
+            example: 1687271700
+          arrival_timestamp:
+            type: number
+            description: Arrival date and time in Unix timestamp form.
+            example: 1687281000
 
     LegDetails:
       title: Leg Details
@@ -753,57 +802,65 @@ components:
             description: Full name of the flight origin
             example: "London, United Kingdom (LHR)"
           Origin:
-              type: string
-              description: IATA code of the leg origin
-              example: "LHR"
+            type: string
+            description: IATA code of the leg origin
+            example: "LHR"
           DestinationName:
-              type: string
-              description: Full name of the leg destination
-              example: "Paris, France (CDG)"
+            type: string
+            description: Full name of the leg destination
+            example: "Paris, France (CDG)"
           Destination:
-              type: string
-              description: IATA code of the leg destination
-              example: "CDG"
+            type: string
+            description: IATA code of the leg destination
+            example: "CDG"
           DepartureTime:
-              type: string
-              description: Departure time of the leg
-              example: "2019-04-05T13:25:00.000+01:00"
+            type: string
+            description: Departure time of the leg
+            example: "2019-04-05T13:25:00.000+01:00"
+          DepartureTimestamp:
+            type: number
+            description: Departure timestamp of the leg
+            example: 1692138300
           ArrivalTime:
-              type: string
-              description: Arrival time of the leg
-              example: "2019-04-05T15:40:00.000+02:00"
+            type: string
+            description: Arrival time of the leg
+            example: "2019-04-05T15:40:00.000+02:00"
+          ArrivalTimestamp:
+            type: number
+            description: Arrival timestamp of the leg
+            example: 1692160260
           FlightNumber:
-              type: string
-              description: Leg's flight number
-              example: 111
+            type: string
+            description: Leg's flight number
+            example: "111"
           Carrier:
-              type: string
-              description: Leg's carrier code
-              example: "BA"
-          OperatingCarrier:
-              type: string
-              description: Leg's operating carrier code
-              example: "WS"    
+            type: string
+            description: Leg's carrier code
+            example: "BA"
+          CarrierFullName:
+            type: string
+            description: Leg's operating carrier name
+            example: "British Airlines"
           FlightTime:
-              type: integer
-              description: Flight duration in minutes
-              example: 75
+            type: integer
+            description: Flight duration in minutes
+            example: 75
           AircraftType:
             type: string
             description: IATA type code for aircraft model.
             example: "7M8"
           Key:
-              type: string
-              description: Leg’s string identifier
-              example: "oHzo6pBAAA/B1d6hPLAAAA=="
+            type: string
+            description: Leg’s string identifier
+            example: "oHzo6pBAAA/B1d6hPLAAAA=="
           BookingCode:
-              type: string
-              description: The airline booking code that describes the flight cabin class
-              example: "X"
+            type: string
+            description: The airline booking code that describes the flight cabin class
+            example: "X"
           cabin_class:
-              type: string
-              description: Leg’s cabin class *Travelport customers only*
-              example: "Economy"
+            type: string
+            description: Leg’s cabin class *Travelport customers only*
+            example: "Economy"
           fare_info_ref:
             type: string
             description: Flight identifer required to make a travelport fare rule request. *Travelport Only*
@@ -813,9 +870,9 @@ components:
             description: Key corresponding to above fare_info_ref also required to make a travelport fare rule request. *Travelport Only*
             example: "gws-eJxNT0EKAjEMfMwy96SNxd5auqig7GFZlO7B/z/DaVR00oQOMxnaUkqQEOQosfxjwnOqDa3OwILA7pcdJkkESrZACFwf6ba37QwPyZpc+pWiu5FWPxx9CAOf2e8rBYvpbVBMiFZjVfIRYWK+Dmd13jxpqJrzN/y08g2EJ4odeOUPXvRTL2E="
           fare_type:
-              type: string
-              description: Leg's fare type 
-              example: "PublicFare"
+            type: string
+            description: Leg's fare type
+            example: "PublicFare"
 
 
     FareStructureResponse:
@@ -869,6 +926,7 @@ components:
                     example: ['LON-CDG', 'CDG-YUL', 'YUL-LON']
                 trip_id:
                     type: string
+                    example: "a2cf0bdf2ecca12f8dbbc139af58c99a561f21a1"
                     description: A unique key used for identification and when booking a trip.
                 total_transportation_minutes:
                     type: integer
@@ -1005,7 +1063,7 @@ components:
           - type: array
             description: Array of itineraries sorted by weight.
             items:
-                $ref: '#/components/schemas/ItineraryInfoWithCreds'
+                $ref: '#/components/schemas/ItineraryInfo'
 
     ItineraryInfoWithCreds:
       allOf:
@@ -1109,6 +1167,14 @@ components:
     BasicSegmentInfo:
         type: object
         properties:
+          segment_id:
+            type: string
+            description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
+            example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
+          segment_source:
+            type: string
+            description: Data source that returned the segment.
+            example: "travelport"
           segment_origin_full:
             type: string
             description: "Origin of the segment."
@@ -1117,14 +1183,14 @@ components:
             type: string
             description: "Destination of the segment."
             example: "Berlin, Germany (TXL)"
+          travel_mode:
+            type: string
+            description: "Mode of travel (air, ground, etc.)"
+            example: "air"
           weight:
             type: string
             description: Weight of the segment (time-value considered).
             example: 96
-          segment_id:
-            type: string
-            description: String if one-way, Array of 2 Strings if open-jaw. Used for booking.
-            example: "344d73be0d61f820aa9a6ace300742fed0672f2e"
           price:
             type: float
             description: Price of the segment (fare and tax included)
@@ -1135,11 +1201,11 @@ components:
             properties:
               amount:
                 type: float
-                description: Cancellation penalty amount
+                description: Cancellation penalty amount (Optional)
                 example: 0
               percentage:
                 type: float
-                description: Cancellation penalty percentage
+                description: Cancellation penalty percentage (Optional)
                 example: 100
           change_penalty:
             type: object
@@ -1147,16 +1213,22 @@ components:
             properties:
               amount:
                 type: float
-                description: Change penalty amount
+                description: Change penalty amount (Optional)
                 example: 78
               percentage:
                 type: float
-                description: Change penalty percentage
+                description: Change penalty percentage (Optional)
                 example: 0
           flight_type:
             type: string
             description: “open_jaw” or “one_way”
             example: "open_jaw"
+          brands:
+            type: string
+            description: Brands returned
+            example: null
+          price_breakdown_with_passenger_type_code:
+            $ref: "#/components/schemas/PriceBreakdownWithPassengerTypeCode"
           legs:
             $ref: '#/components/schemas/LegDetails'
           baggage:
@@ -1178,7 +1250,31 @@ components:
           fare_info_ref:
             type: string
             description: Fare Info reference for this segment
-            example: 3RxQ6ylJ0BKAhQAbnbAAAA==
+            example: "3RxQ6ylJ0BKAhQAbnbAAAA=="
+          private_fare:
+            type: boolean
+            description: True if segment is a private fare, otherwise False *Travelport customers only*
+            example: false
+          private_type:
+            type: string
+            description: Private type
+            example: null
+          plating_carrier:
+            type: string
+            description: Plating carrier of segment
+            example: "AC"
+          intermediate_stops:
+            type: string
+            description: Intermediate stops in the segment
+            example: null
+          itinerary_type:
+            type: string
+            description: Type of itinerary
+            example: "ONE_WAY"
+          segment_position:
+            type: number
+            description: Position of segment in response
+            example: 0
           virtual_interline:
             type: boolean
             description: |
@@ -1232,7 +1328,6 @@ components:
             description: The fees associated with this individual VI PNR.
             example: 14.56
             nullable: true
-
 
     Segments:
         allOf:
@@ -1387,11 +1482,6 @@ components:
                 enum: ["emea", "apac", "americas", "edge"]
                 default: "americas"
                 example: americas
-            itx:
-                description: toggles if this is an itx search
-                required: false
-                type: bool
-                example: true
             pcc_currency:
                 description: Indicates the currency that the PCC is charged in.
                 required: false
