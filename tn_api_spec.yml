@@ -171,13 +171,17 @@ paths:
                                 type: object
                                 properties:
                                     status:
-                                        type: sting
+                                        type: string
                                         description: Error code and 0 for success response
                                         example: IE23
                                     message:
                                         type: string
                                         description: Contains the error message
                                         example: "Flight(s) not found: Could not find all the flights required to make up this trip. Try changing dates, IATA codes, cabin class, etc."
+                                    search_criteria:
+                                        type: string
+                                        description: Contains the routes that failed to produce flights.
+                                        example: "[YYZ,YQS]"
                 500:
                     description: Server Error
 
