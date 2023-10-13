@@ -529,8 +529,13 @@ components:
             example: true
           vi_solution_id:
             type: string
-            description: ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position.
+            description: 
             example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
+            nullable: true
+          risk_profile:
+            type: float
+            description: The probability of missing the connection and not performing the self-transfer during the VI self-connection (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 8.42
             nullable: true
           vi_segment_base_price:
             type: float
@@ -789,6 +794,26 @@ components:
             type: number
             description: Arrival date and time in Unix timestamp form.
             example: 1687281000
+          cancellation_probability:
+            type: float
+            description: The probability percentage that this flight will be cancelled (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 7.86
+            nullable: true
+          average_delay_time:
+            type: string
+            description: The average delay time of this flight in minutes. A negative value indicates an average early arrival time. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: -5
+            nullable: true
+          self_transfer_time:
+            type: string
+            description: The self transfer time in minutes between this flights arrival time and the next segments departure time. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 134
+            nullable: true
+          is_international:
+            type: boolean
+            description: Indicates whether this flight is international. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: true
+            nullable: true
 
     LegDetails:
       title: Leg Details
@@ -1287,6 +1312,31 @@ components:
               Will be composed of each segment's segment_id joined together with two underscores. For oneway VI this 
               will be two segments, for openjaw VI will be 4 segments. 
             example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
+            nullable: true
+          risk_profile:
+            type: float
+            description: The probability of missing the connection and not performing the self-transfer during the VI self-connection (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 8.42
+            nullable: true
+          cancellation_probability:
+            type: float
+            description: The probability percentage that this flight will be cancelled (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 7.86
+            nullable: true
+          average_delay_time:
+            type: string
+            description: The average delay time of this flight in minutes. A negative value indicates an average early arrival time. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: -5
+            nullable: true
+          self_transfer_time:
+            type: string
+            description: The self transfer time in minutes between this flights arrival time and the next segments departure time. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: 134
+            nullable: true
+          is_international:
+            type: boolean
+            description: Indicates whether this flight is international. (only returned if you have our average delay time module enabled, and only for VI segments with a self transfer)
+            example: true
             nullable: true
           itinerary_index:
             type: int
