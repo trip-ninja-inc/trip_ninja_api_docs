@@ -529,7 +529,7 @@ components:
             example: true
           vi_solution_id:
             type: string
-            description: 
+            description: ID mapping VI parts of the option together. Helps finding VI solutions located in same segment position.
             example: fc906f39e5151f1bc5ef788b85f3d280770b5b7c__b9ebd56ff7bf07a65a3e4dc70e9551e4ae50f1da
             nullable: true
           risk_profile:
